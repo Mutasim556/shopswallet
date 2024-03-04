@@ -17,7 +17,7 @@
             </span>
             <span>
                 @if(Config::get('module.current_module_type') == 'services')
-                    {{ translate('messages.add_new_service') }} ssss
+                    {{ translate('messages.add_new_service') }}
                 @else
                     {{ translate('messages.add_new_item') }}
                 @endif
