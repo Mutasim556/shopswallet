@@ -23,7 +23,7 @@
         </div>
         <!-- End Page Header -->
 
-        <div class="row review--information-wrapper g-2 mb-3">
+        <div class="row review--information-wrapper g-2 mb-3"> 
             <div class="col-lg-9">
                 <div class="card h-100">
                     <!-- Body -->

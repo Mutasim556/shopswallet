@@ -344,7 +344,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <small class="nav-subtitle" title="{{ translate('messages.item_section') }}">{{ translate('messages.general_category_section') }}</small>
+                        <small class="nav-subtitle" title="{{ translate('messages.ervice_management') }}">{{ translate('messages.service_management') }}</small>
                         <small class="tio-more-horizontal nav-subtitle-replacer"></small>
                     </li>
 
@@ -382,22 +382,89 @@
                                     <span class="text-truncate">{{ translate('messages.add_on') }}</span>
                                 </a>
                             </li>
-                        {{-- <li class="nav-item {{ Request::is('admin/category/bulk-import') ? 'active' : '' }}">
-                            <a class="nav-link " href="{{ route('admin.category.bulk-import') }}" title="{{ translate('messages.bulk_import') }}">
-                                <span class="tio-circle nav-indicator-icon"></span>
-                                <span class="text-truncate text-capitalize">{{ translate('messages.bulk_import') }}</span>
-                            </a>
-                        </li>
-                        <li class="nav-item {{ Request::is('admin/category/bulk-export') ? 'active' : '' }}">
-                            <a class="nav-link " href="{{ route('admin.category.bulk-export-index') }}" title="{{ translate('messages.bulk_export') }}">
-                                <span class="tio-circle nav-indicator-icon"></span>
-                                <span class="text-truncate text-capitalize">{{ translate('messages.bulk_export') }}</span>
-                            </a>
-                        </li> --}}
+                        
+                        </ul>
+                        
+                    </li>
+                    @endif
+                    @if (\App\CentralLogics\Helpers::module_permission_check('attribute'))
+                    <li class="navbar-vertical-aside-has-menu {{ Request::is('admin/attribute*') ? 'active' : '' }}">
+                        <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{ route('admin.attribute.add-new') }}" title="{{ translate('messages.attributes') }}">
+                            <i class="tio-apps nav-icon"></i>
+                            <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                {{ translate('messages.attributes') }}
+                            </span>
+                        </a>
+                    </li>
+                    @endif
+                    
+                    @if (\App\CentralLogics\Helpers::module_permission_check('unit'))
+                    <li class="navbar-vertical-aside-has-menu {{ Request::is('admin/unit*') ? 'active' : '' }}">
+                        <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{ route('admin.unit.index') }}" title="{{ translate('messages.units') }}">
+                            <i class="tio-ruler nav-icon"></i>
+                            <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate text-capitalize">
+                                {{ translate('messages.units') }}
+                            </span>
+                        </a>
+                    </li>
+                    @endif
+                    
+                    @if (\App\CentralLogics\Helpers::module_permission_check('item'))
+                    <li class="navbar-vertical-aside-has-menu {{ Request::is('admin/item*') ? 'active' : '' }}">
+                        <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:" title="{{ translate('messages.service_setup') }}">
+                            <i class="tio-premium-outlined nav-icon"></i>
+                            <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate text-capitalize">{{ translate('messages.service_setup') }}</span>
+                        </a>
+                        <ul class="js-navbar-vertical-aside-submenu nav nav-sub" style="display:{{ Request::is('admin/item*') ? 'block' : 'none' }}">
+                            <li class="nav-item {{ Request::is('admin/item/add-new') || (Request::is('admin/item/edit/*') && strpos(request()->fullUrl(), 'product_gellary=1') !== false  )  ? 'active' : '' }}">
+                                <a class="nav-link " href="{{ route('admin.item.add-new') }}" title="{{ translate('messages.add_new') }}">
+                                    <span class="tio-circle nav-indicator-icon"></span>
+                                    <span class="text-truncate">{{ translate('messages.add_new') }}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item {{ Request::is('admin/item/list') || (Request::is('admin/item/edit/*') && (strpos(request()->fullUrl(), 'temp_product=1') == false && strpos(request()->fullUrl(), 'product_gellary=1') == false  ) ) ? 'active' : '' }}">
+                                <a class="nav-link " href="{{ route('admin.item.list') }}" title="{{ translate('messages.food_list') }}">
+                                    <span class="tio-circle nav-indicator-icon"></span>
+                                    <span class="text-truncate">{{ translate('messages.list') }}</span>
+                                </a>
+                            </li>
+                            {{-- @if (\App\CentralLogics\Helpers::get_mail_status('product_gallery')) --}}
+                            {{-- <li class="nav-item {{  Request::is('admin/item/product-gallery') ? 'active' : '' }}">
+                                <a class="nav-link " href="{{ route('admin.item.product_gallery') }}" title="{{ translate('messages.Product_Gallery') }}">
+                                    <span class="tio-circle nav-indicator-icon"></span>
+                                    <span class="text-truncate">{{ translate('messages.Product_Gallery') }}</span>
+                                </a>
+                            </li> --}}
+                            {{-- @endif --}}
+                            {{-- @if (\App\CentralLogics\Helpers::get_mail_status('product_approval'))
+                            <li class="nav-item {{ Request::is('admin/item/new/item/list') || (Request::is('admin/item/edit/*') && strpos(request()->fullUrl(), 'temp_product=1') !== false  ) ? 'active' : '' }}">
+                                <a class="nav-link " href="{{ route('admin.item.approval_list') }}" title="{{ translate('messages.New_Item_Request') }}">
+                                    <span class="tio-circle nav-indicator-icon"></span>
+                                    <span class="text-truncate">{{ translate('messages.New_Item_Request') }}</span>
+                                </a>
+                            </li>
+                            @endif
+                            <li class="nav-item {{ Request::is('admin/item/reviews') ? 'active' : '' }}">
+                                <a class="nav-link " href="{{ route('admin.item.reviews') }}" title="{{ translate('messages.review_list') }}">
+                                    <span class="tio-circle nav-indicator-icon"></span>
+                                    <span class="text-truncate">{{ translate('messages.review') }}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item {{ Request::is('admin/item/bulk-import') ? 'active' : '' }}">
+                                <a class="nav-link " href="{{ route('admin.item.bulk-import') }}" title="{{ translate('messages.bulk_import') }}">
+                                    <span class="tio-circle nav-indicator-icon"></span>
+                                    <span class="text-truncate text-capitalize">{{ translate('messages.bulk_import') }}</span>
+                                </a>
+                            </li>
+                            <li class="nav-item {{ Request::is('admin/item/bulk-export') ? 'active' : '' }}">
+                                <a class="nav-link " href="{{ route('admin.item.bulk-export-index') }}" title="{{ translate('messages.bulk_export') }}">
+                                    <span class="tio-circle nav-indicator-icon"></span>
+                                    <span class="text-truncate text-capitalize">{{ translate('messages.bulk_export') }}</span>
+                                </a>
+                            </li> --}}
                         </ul>
                     </li>
                     @endif
-
                     @if (\App\CentralLogics\Helpers::module_permission_check('timeslot'))
                     <li class="nav-item">
                         <small class="nav-subtitle" title="{{ translate('messages.time_slot_section') }}">{{ translate('messages.timeslot_section') }}</small>
@@ -433,8 +500,6 @@
                     </li>
                     @endif
 
-
-                    @if (\App\CentralLogics\Helpers::module_permission_check(''))
                     <li class="nav-item">
                         <small class="nav-subtitle" title="{{ translate('messages.promotion_management_section') }}">{{ translate('messages.promotion_management') }}</small>
                         <small class="tio-more-horizontal nav-subtitle-replacer"></small>
@@ -447,16 +512,15 @@
                             </span>
                         </a>
                     </li> --}}
-                        @if (\App\CentralLogics\Helpers::module_permission_check('banner'))
-                            <li class="navbar-vertical-aside-has-menu {{ Request::is('admin/banner*') ? 'show active' : '' }}">
-                                <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{ route('admin.banner.add-new') }}" title="{{ translate('messages.banners') }}">
-                                    <i class="tio-image nav-icon"></i>
-                                    <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
-                                        {{ translate('messages.banners') }}
-                                    </span>
-                                </a>
-                            </li>
-                        @endif
+                    @if (\App\CentralLogics\Helpers::module_permission_check('banner'))
+                        <li class="navbar-vertical-aside-has-menu {{ Request::is('admin/banner*') ? 'show active' : '' }}">
+                            <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{ route('admin.banner.add-new') }}" title="{{ translate('messages.banners') }}">
+                                <i class="tio-image nav-icon"></i>
+                                <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                    {{ translate('messages.banners') }}
+                                </span>
+                            </a>
+                        </li>
                     @endif
                 <!-- End Category -->
 

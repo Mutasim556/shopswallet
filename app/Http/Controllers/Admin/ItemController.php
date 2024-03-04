@@ -743,7 +743,9 @@ class ItemController extends Controller
 
     public function list(Request $request)
     {
+        
         $store_id = $request->query('store_id', 'all');
+        // dd($store_id);
         $category_id = $request->query('category_id', 'all');
         $sub_category_id = $request->query('sub_category_id', 'all');
         $zone_id = $request->query('zone_id', 'all');

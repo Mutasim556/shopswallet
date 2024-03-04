@@ -3692,4 +3692,13 @@
   'timeslot_removed!' => 'Timeslot removed!',
   'promotion_management' => 'Promotion management',
   'promotion_management_section' => 'Promotion management section',
+  'general_service_management' => 'General service management',
+  'ervice_management' => 'Ervice management',
+  'service_management' => 'Service management',
+  'Service Setup' => 'Service Setup',
+  'service_setup' => 'Service setup',
+  'add_new_service' => 'Add new service',
+  'select_childcategory' => 'Select childcategory',
+  'service_details' => 'Service details',
+  'store deleted!' => 'Store deleted!',
 );

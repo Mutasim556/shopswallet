@@ -1,6 +1,6 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('messages.add_new_item'))
+@section('title',   Config::get('module.current_module_type') == 'services'? translate('messages.add_new_service'):translate('messages.add_new_item'))
 
 @push('css_or_js')
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -16,7 +16,12 @@
                 <img src="{{ asset('public/assets/admin/img/items.png') }}" class="w--22" alt="">
             </span>
             <span>
-                {{ translate('messages.add_new_item') }}
+                @if(Config::get('module.current_module_type') == 'services')
+                    {{ translate('messages.add_new_service') }}
+                @else
+                    {{ translate('messages.add_new_item') }}
+                @endif
+                
             </span>
         </h1>
         <div class="d-flex align-items-end">
@@ -161,11 +166,12 @@
                             <span class="card-header-icon mr-2">
                                 <i class="tio-dashboard-outlined"></i>
                             </span>
-                            <span> {{ translate('item_details') }} </span>
+                            <span> {{ Config::get('module.current_module_type')=='services'?translate('service_details'):translate('item_details') }} </span>
                         </h5>
                     </div>
                     <div class="card-body">
                         <div class="row g-2">
+                            @if(Config::get('module.current_module_type')!='services')
                             <div class="col-sm-6 col-lg-3">
                                 <div class="form-group mb-0">
                                     <label class="input-label" for="store_id">{{ translate('messages.store') }}<span
@@ -175,10 +181,10 @@
                                         class="js-data-example-ajax form-control"
                                         onchange="getRestaurantData('{{ url('/') }}/admin/store/get-addons?data[]=0&store_id=',this.value,'add_on')"
                                         oninvalid="this.setCustomValidity('{{ translate('messages.please_select_store') }}')">
-
                                     </select>
                                 </div>
                             </div>
+                            @endif
                             <div class="col-sm-6 col-lg-3">
                                 <div class="form-group mb-0">
                                     <label class="input-label" for="category_id">{{ translate('messages.category')
@@ -204,7 +210,7 @@
                                     </select>
                                 </div>
                             </div>
-
+                            @if (Config::get('module.current_module_type')!='services')
                             <div class="col-sm-6 col-lg-3">
                                 <div class="form-group mb-0">
                                     <label class="input-label" for="sub_sub_categories">{{
@@ -218,6 +224,23 @@
                                     </select>
                                 </div>
                             </div>
+                            @endif
+                            @if (Config::get('module.current_module_type')=='services')
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="form-group mb-0">
+                                    <label class="input-label" for="child_categories">{{
+                                        translate('messages.child_category') }}<span class="input-label-secondary"
+                                            title="{{ translate('messages.category_required_warning') }}"><img
+                                                src="{{ asset('/public/assets/admin/img/info-circle.svg') }}"
+                                                alt="{{ translate('messages.category_required_warning') }}"></span></label>
+                                    <select name="sub_sub_category_id" class="js-data-example-ajax form-control"
+                                        data-placeholder="{{ translate('messages.select_childcategory') }}"
+                                        id="sub_sub_categories">
+                                    </select>
+                                </div>
+                            </div>
+                            @endif
+                            
 
 
 
@@ -271,6 +294,7 @@
                                         class="form-control" name="current_stock" min="0" id="quantity">
                                 </div>
                             </div>
+                            @if (Config::get('module.current_module_type')!='services')
                             <div class="col-sm-6 col-lg-3" id="maximum_cart_quantity">
                                 <div class="form-group mb-0">
                                     <label class="input-label" for="maximum_cart_quantity">{{
@@ -285,6 +309,7 @@
                                         class="form-control" name="maximum_cart_quantity" min="0" id="cart_quantity">
                                 </div>
                             </div>
+                            @endif
                             <div class="col-sm-6 col-lg-3" id="organic">
                                 <div class="form-check mb-0 p-6">
                                     <input class="form-check-input" name="organic" type="checkbox" value="1"
