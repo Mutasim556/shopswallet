@@ -132,7 +132,7 @@ class CategoryController extends Controller
                             'translationable_id'    => $category->id,
                             'locale'                => $key,
                             'key'                   => 'category_title',
-                            'value'                 => $request->category_title->title,
+                            'value'                 => $category->title,
                         ));
                     }
                 } else {
