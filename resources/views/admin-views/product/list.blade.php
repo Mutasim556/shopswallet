@@ -132,7 +132,7 @@
                     </div>
                 @endif
 
-                @if (Config::get('module.current_module_type')=='services')
+                @if (Config::get('module.current_module_type')=='services' )
                 <div class="row p-3 pb-5">
                     <div class="col-sm-6 mt-3">
                         <div class="select-item">
@@ -163,7 +163,35 @@
                     </div>
                 </div>
                 @elseif(Config::get('module.current_module_type')=='booking')
-                    
+                <div class="row p-3 pb-5">
+                    <div class="col-sm-6 mt-3">
+                        <div class="select-item">
+    
+                            <select name="category_id" id="category_id" data-placeholder="{{ translate('messages.select_category') }}"
+                                class="js-data-example-ajax form-control" id="category_id"
+                                onchange="set_filter('{{url()->full()}}',this.value,'category_id')">
+                                @if($category)
+                                <option value="{{$category->id}}" selected>{{$category->name}}</option>
+                                @else
+                                <option value="all" selected>{{translate('messages.all_category')}}</option>
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 mt-3">
+                        <div class="select-item">
+                            <select name="sub_category_id" class="form-control js-select2-custom" data-placeholder="{{ translate('messages.select_sub_category') }}" id="sub-categories" onchange="set_filter('{{url()->full()}}',this.value,'sub_category_id')">
+                                <option value="all" selected>{{translate('messages.all_sub_category')}}</option>
+                                @foreach($sub_categories as $z)
+                                <option
+                                    value="{{$z['id']}}" {{ request()?->sub_category_id == $z['id']?'selected':''}}>
+                                    {{$z['name']}}
+                                </option>
+                            @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 @endif
                     
 
