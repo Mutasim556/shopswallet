@@ -158,14 +158,14 @@
 
                         <ul class="dropdown-list">
                             <li>
-                                <a class="" href="/login/{{ $Adminlogin->value }}">
+                                <a class="" href="{{ Request::url() }}/login/{{ $Adminlogin->value }}">
                                     Admin
                                 </a>
                             </li>
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="" href="/login/{{ $Storelogin->value }}">Store</a>
+                            <li><a class="" href="{{ Request::url() }}/login/{{ $Storelogin->value }}">Store</a>
                             </li>
                         </ul>
                     </div>
