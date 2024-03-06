@@ -27,10 +27,13 @@
             </span>
         </h1>
         <div class="d-flex align-items-end">
+            
+            @if(Config::get('module.current_module_type') != 'services' && Config::get('module.current_module_type') != 'booking')
             <div class="text--primary-2 d-flex flex-wrap align-items-center mr-2">
                 <a href="{{ route('admin.item.product_gallery') }}"
                     class="btn btn--primary font-regular">{{translate('messages.Add_From_Product_Gallery')}}</a>
             </div>
+            @endif
 
             @if(Config::get('module.current_module_type') == 'food')
             <div class="text--primary-2 py-1 d-flex flex-wrap align-items-center " type="button"
@@ -40,6 +43,8 @@
                     <i class="tio-info-outined"></i>
                 </div>
             </div>
+            @elseif(Config::get('module.current_module_type') == 'services')
+            @elseif(Config::get('module.current_module_type') == 'booking')
             @else
             <div class="text--primary-2 py-1 d-flex flex-wrap align-items-center mb-3 " type="button"
                 onclick="attributeModalShow()">
