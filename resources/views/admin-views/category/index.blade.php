@@ -57,7 +57,7 @@
                                         oninvalid="document.getElementById('en-link').click()">
                                     {{-- {{ session()->get('current_module') }} --}}
                                     @php($mod_check = DB::table('modules')->where('id', session()->get('current_module'))->first())
-                                    @if ($mod_check->module_type == 'services')
+                                    @if ($mod_check->module_type == 'services' || $mod_check->module_type == 'booking')
                                         <label class="input-label mt-2"
                                             for="exampleFormControlInput1">{{ translate('messages.category_title') }}
                                             ({{ translate('messages.default') }})</label>
@@ -78,7 +78,7 @@
                                             placeholder="{{ translate('messages.new_category') }}" maxlength="191"
                                             oninvalid="document.getElementById('en-link').click()">
 
-                                        @if ($mod_check->module_type == 'services')
+                                        @if ($mod_check->module_type == 'services' || $mod_check->module_type == 'booking')
                                             <label class="input-label mt-2"
                                                 for="exampleFormControlInput1">{{ translate('messages.category_title') }}
                                                 ({{ translate('messages.default') }})</label>
@@ -133,11 +133,11 @@
 
                                 <small class="text-danger mt-1 d-none d-md-block">&nbsp;</small>
 
-                                @if ($mod_check->module_type == 'services')
-                                    <label class="mt-4">{{ translate('messages.video') }} *</label>
+                                @if ($mod_check->module_type == 'services' || $mod_check->module_type == 'booking')
+                                    <label class="mt-4">{{ translate('messages.video') }} </label>
                                     <div class="custom-file">
                                         <input type="file" name="video" id="customFileEg2" class="custom-file-input"
-                                            accept="video/*" required>
+                                            accept="video/*" >
                                         <label class="custom-file-label"
                                             for="customFileEg2">{{ translate('messages.choose_file') }}</label>
                                     </div>

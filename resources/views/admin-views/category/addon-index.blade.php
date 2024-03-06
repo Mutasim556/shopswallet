@@ -112,7 +112,7 @@
                             maxlength="191">
                     </div>
                     @php($mod_check = DB::table('modules')->where('id', session()->get('current_module'))->first())
-                    @if ($mod_check->module_type == 'services')
+                    @if ($mod_check->module_type == 'services' || $mod_check->module_type == 'booking')
                         <div class="col-md-12">
                             <div class="h-100 d-flex flex-column">
                                 <label class="m-0">{{ translate('messages.image') }} <small class="text-danger">* (

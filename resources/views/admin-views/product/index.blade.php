@@ -510,6 +510,8 @@
                     </div>
                 </div>
             </div>
+            
+            @endif
             <div class="col-md-12">
                 <div class="card shadow--card-2 border-0">
                     <div class="card-header">
@@ -530,7 +532,6 @@
                     </div>
                 </div>
             </div>
-            @endif
             <div class="col-md-12">
                 <div class="btn--container justify-content-end">
                     <button type="reset" id="reset_btn" class="btn btn--reset">{{ translate('messages.reset')

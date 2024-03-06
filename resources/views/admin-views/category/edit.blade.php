@@ -52,10 +52,10 @@
                                     <label class="input-label" for="exampleFormControlInput1">{{translate('messages.name')}} ({{ translate('messages.default') }})</label>
                                     <input type="text" name="name[]" class="form-control" placeholder="{{translate('messages.new_category')}}" maxlength="191" value="{{$category?->getRawOriginal('name')}}" oninvalid="document.getElementById('en-link').click()">
                                     @php($mod_check = DB::table('modules')->where('id', session()->get('current_module'))->first())
-                                    @if ($mod_check->module_type == 'services' && $category->position==0)
+                                    @if (($mod_check->module_type == 'services' && $category->position==0) || ($mod_check->module_type == 'booking' && $category->position==0))
                                         <label class="input-label mt-3" for="exampleFormControlInput1">{{translate('messages.category_title')}} ({{ translate('messages.default') }})</label>
                                         <input type="text" name="category_title[]" class="form-control" placeholder="{{translate('messages.category_title')}}" maxlength="191" value="{{$category?->getRawOriginal('title')}}" oninvalid="document.getElementById('en-link').click()">
-                                    @elseif($mod_check->module_type == 'services' && $category->position==3)
+                                    @elseif(($mod_check->module_type == 'services' && $category->position==3)||($mod_check->module_type == 'booking' && $category->position==3))
                                         <label class="input-label mt-2"
                                         for="exampleFormControlInput1">{{ translate('messages.Add_on_title') }}
                                         ({{ translate('messages.default') }})</label>
@@ -83,12 +83,12 @@
                                         <label class="input-label" for="exampleFormControlInput1">{{translate('messages.name')}} ({{strtoupper($lang)}})</label>
                                         <input type="text" name="name[]" class="form-control" placeholder="{{translate('messages.new_category')}}" maxlength="191" value="{{$translate[$lang]['name']??''}}" oninvalid="document.getElementById('en-link').click()">
 
-                                        @if ($mod_check->module_type == 'services'  && $category->position==0)
+                                        @if (($mod_check->module_type == 'services'  && $category->position==0)||($mod_check->module_type == 'booking' && $category->position==3))
                                         <label class="input-label mt-3" for="exampleFormControlInput1">{{translate('messages.category_title')}} ({{ translate('messages.default') }})</label>
                                         <input type="text" name="category_title[]" class="form-control" placeholder="{{translate('messages.category_title')}}" maxlength="191" value="{{$translate[$lang]['category_title']??''}}" oninvalid="document.getElementById('en-link').click()">
 
                                     
-                                    @elseif($mod_check->module_type == 'services' && $category->position==3)
+                                    @elseif(($mod_check->module_type == 'services' && $category->position==3)||($mod_check->module_type == 'booking' && $category->position==3))
                                         <label class="input-label mt-2"
                                         for="exampleFormControlInput1">{{ translate('messages.Add_on_title') }}
                                         ({{ translate('messages.default') }})</label>
@@ -141,7 +141,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            @elseif ($category->position == 3 && $mod_check->module_type == 'services')
+                            @elseif (($category->position == 3 && $mod_check->module_type == 'services')||($category->position == 3 && $mod_check->module_type == 'booking'))
                             <div class="form-group">
                                 <label class="input-label"
                                     for="exampleFormControlInput1">{{ translate('messages.add_on_price') }}</label>
@@ -169,7 +169,7 @@
                                     <label class="custom-file-label mb-0" for="customFileEg1">{{translate('messages.choose_file')}}</label>
                                 </div>
                             </div>
-                            @elseif ($category->position == 1 && $mod_check->module_type == 'services')
+                            @elseif (($category->position == 1 && $mod_check->module_type == 'services')||($category->position == 1 && $mod_check->module_type == 'booking'))
                             <div class="col-md-12">
                                 <div class="h-100 d-flex flex-column">
                                     <label class="m-0">{{ translate('messages.image') }} <small class="text-danger">* (
@@ -201,7 +201,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if ($category->position == 2 && $mod_check->module_type == 'services')
+                            @if (($category->position == 2 && $mod_check->module_type == 'services') ||$category->position == 2 && $mod_check->module_type == 'booking')
                             <div class="col-md-12">
                                 <div class="h-100 d-flex flex-column">
                                     <label class="m-0">{{ translate('messages.image') }} <small class="text-danger">* (
@@ -223,7 +223,7 @@
 
 
                                     <small class="text-danger mt-1 d-none d-md-block">&nbsp;</small>
-                                        <label class="mt-4">{{ translate('messages.video') }} *</label>
+                                        <label class="mt-4">{{ translate('messages.video') }} </label>
                                         <div class="custom-file">
                                             <input type="file" name="video" id="customFileEg2" class="custom-file-input"
                                                 accept="video/*" >
@@ -234,7 +234,7 @@
                             </div>
                             @endif
 
-                            @if ($category->position == 3 && $mod_check->module_type == 'services')
+                            @if (($category->position == 3 && $mod_check->module_type == 'services')||($category->position == 3 && $mod_check->module_type == 'booking'))
                             <div class="col-md-12">
                                 <div class="h-100 d-flex flex-column">
                                     <label class="m-0">{{ translate('messages.image') }} <small class="text-danger">* (

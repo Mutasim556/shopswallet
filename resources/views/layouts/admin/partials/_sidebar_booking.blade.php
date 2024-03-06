@@ -466,6 +466,11 @@
                     </li>
                     @endif
 
+                    <li class="nav-item">
+                        <small class="nav-subtitle" title="{{ translate('messages.store_section') }}">{{ translate('messages.store_management') }}</small>
+                        <small class="tio-more-horizontal nav-subtitle-replacer"></small>
+                    </li>
+    
                     @if (\App\CentralLogics\Helpers::module_permission_check('store'))
     
                         <li class="navbar-vertical-aside-has-menu {{ Request::is('admin/store/pending-requests') ? 'active' : '' }}">

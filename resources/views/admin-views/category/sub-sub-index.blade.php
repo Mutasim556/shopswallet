@@ -68,7 +68,7 @@
                         <input type="hidden" name="lang[]" value="default">
                     @endif
                     @php( $mod_check = DB::table('modules')->where('id', session()->get('dash_params')['module_id'])->first())
-                    @if ($mod_check->module_type == 'services')
+                    @if ($mod_check->module_type == 'services' || $mod_check->module_type == 'booking')
                         <div class="form-group">
                             <label class="input-label" for="exampleFormControlSelect1">Categories
                                 <span class="input-label-secondary">*</span></label>
@@ -107,10 +107,10 @@
 
 
                                 <small class="text-danger mt-1 d-none d-md-block">&nbsp;</small>
-                                    <label class="mt-4">{{ translate('messages.video') }} *</label>
+                                    <label class="mt-4">{{ translate('messages.video') }} </label>
                                     <div class="custom-file">
                                         <input type="file" name="video" id="customFileEg2" class="custom-file-input"
-                                            accept="video/*" required>
+                                            accept="video/*" >
                                         <label class="custom-file-label"
                                             for="customFileEg2">{{ translate('messages.choose_file') }}</label>
                                     </div>
@@ -236,7 +236,7 @@
                                                 </button>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                     <a class="dropdown-item"
-                                                        href="{{ route('admin.category.edit', [$category['id'],$mod_check->module_type == 'services'?'Child Category':'Sub Sub']) }}">Edit</a>
+                                                        href="{{ route('admin.category.edit', [$category['id'],($mod_check->module_type == 'services'||$mod_check->module_type == 'booking')?'Child Category':'Sub Sub']) }}">Edit</a>
                                                     <a class="dropdown-item" href="javascript:"
                                                         onclick="$('#category-{{ $category['id'] }}').submit()">Delete</a>
                                                     <form action="{{ route('admin.category.delete', [$category['id']]) }}"
