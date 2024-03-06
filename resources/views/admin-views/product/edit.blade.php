@@ -213,6 +213,8 @@
                     </div>
                     <div class="card-body">
                         <div class="row g-2">
+                            
+                            @if (Config::get('module.current_module_type')!='services' && Config::get('module.current_module_type')!='booking')
                             <div class="col-sm-6 col-lg-3">
                                 <div class="form-group mb-0">
                                     <label class="input-label" for="store_id">{{ translate('messages.store') }}<span
@@ -265,7 +267,6 @@
                                     </select>
                                 </div>
                             </div>
-
                             <div class="col-sm-6 col-lg-3">
                                 <div class="form-group mb-0">
                                     <label class="input-label" for="sub_sub_categories">{{
@@ -276,9 +277,86 @@
                                     <select name="sub_sub_category_id" class="js-data-example-ajax form-control"
                                         data-placeholder="{{ translate('messages.select_sub_sub_category') }}"
                                         id="sub_sub_categories">
+                                        
                                     </select>
                                 </div>
                             </div>
+                            @else
+                            {{-- <div class="col-sm-6 col-lg-3 d-none">
+                                <div class="form-group mb-0">
+                                    <label class="input-label" for="store_id">{{ translate('messages.store') }}<span
+                                            class="input-label-secondary"></span></label>
+                                    <select name="store_id" data-placeholder="{{ translate('messages.select_store') }}"
+                                        id="store_id" class="js-data-example-ajax form-control"
+                                        onchange="getStoreData('{{ url('/') }}/admin/store/get-addons?data[]=0&store_id=', this.value,'add_on')"
+                                        title="{{ translate('messages.select_store') }}" {{
+                                        isset(request()->product_gellary) == false ?'required' : '' }}
+                                        oninvalid="this.setCustomValidity('{{ translate('messages.please_select_store')
+                                        }}')">
+
+                                        @if (isset($product->store) && request()->product_gellary != 1)
+                                        <option value="{{ $product->store_id }}" selected="selected">
+                                            {{ $product->store->name }}</option>
+                                        @endif
+
+                                    </select>
+                                </div>
+                            </div> --}}
+                            <input type="hidden" name="store_id" value="0">
+                            <input type="hidden" name="price" value="1">
+                            <input type="hidden" name="discount_type" value="amount">
+                            <input type="hidden" name="discount" value="0">
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="form-group mb-0">
+                                    <label class="input-label" for="category_id">{{ translate('messages.category')
+                                        }}<span class="input-label-secondary">*</span></label>
+                                    <select name="category_id" class="js-data-example-ajax form-control"
+                                        id="category_id" onchange="categoryChange(this.value)">
+                                        @if ($category)
+                                        <option value="{{ $category->parent()->first()['id'] }}">{{ $category->parent()->first()['name'] }}</option>
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="form-group mb-0">
+                                    <label class="input-label" for="exampleFormControlSelect1">{{
+                                        translate('messages.sub_category') }}<span class="form-label-secondary"
+                                            data-toggle="tooltip" data-placement="right"
+                                            data-original-title="{{ translate('messages.category_required_warning') }}"><img
+                                                src="{{ asset('/public/assets/admin/img/info-circle.svg') }}"
+                                                alt="{{ translate('messages.category_required_warning') }}"></span></label>
+                                    <select name="sub_category_id" class="js-data-example-ajax form-control"
+                                        id="sub-categories" onchange="SubcategoryChange(this.value)">
+                                        @if (isset($category))
+                                        <option value="{{ $category['id'] }}">{{ $category['name'] }}
+                                        </option>
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="form-group mb-0">
+                                    <label class="input-label" for="child_categories">{{
+                                        translate('messages.child_category') }}<span class="input-label-secondary"
+                                            title="{{ translate('messages.category_required_warning') }}"><img
+                                                src="{{ asset('/public/assets/admin/img/info-circle.svg') }}"
+                                                alt="{{ translate('messages.category_required_warning') }}"></span></label>
+                                    <select name="sub_sub_category_id" class="js-data-example-ajax form-control"
+                                        data-placeholder="{{ translate('messages.child_categories') }}"
+                                        id="sub_sub_categories">
+                                        @if (isset($sub_category))
+                                        <option value="{{ $sub_category['id'] }}">{{ $sub_category['name'] }}
+                                        </option>
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                            @endif
+                           
 
 
 
@@ -341,6 +419,7 @@
                                         value="{{ $product->stock }}" id="quantity">
                                 </div>
                             </div>
+                            @if (Config::get('module.current_module_type')!='services' && Config::get('module.current_module_type')!='booking') 
                             <div class="col-sm-6 col-lg-3" id="maximum_cart_quantity">
                                 <div class="form-group mb-0">
                                     <label class="input-label" for="maximum_cart_quantity">{{
@@ -356,6 +435,7 @@
                                         value="{{ $product->maximum_cart_quantity }}" id="cart_quantity">
                                 </div>
                             </div>
+                            @endif
                             <div class="col-sm-6 col-lg-3" id="organic">
                                 <div class="form-check mb-0 p-6">
                                     <input class="form-check-input" name="organic" type="checkbox" value="1"
@@ -434,6 +514,7 @@
                     </div>
                 </div>
             </div>
+            @if (Config::get('module.current_module_type')!='services' && Config::get('module.current_module_type')!='booking') 
             <div class="col-md-12">
                 <div class="card shadow--card-2 border-0">
                     <div class="card-header">
@@ -530,7 +611,9 @@
                     @endif
                 </div>
             </div>
+            @endif
         </div>
+        @if (Config::get('module.current_module_type')!='services' && Config::get('module.current_module_type')!='booking') 
         <div class="col-md-12" id="attribute_section">
             <div class="card shadow--card-2 border-0">
                 <div class="card-header">
@@ -567,6 +650,7 @@
                                 </div>
                             </div>
                         </div>
+                        @if (Config::get('module.current_module_type')!='services' && Config::get('module.current_module_type')!='booking') 
                         <div class="col-md-12">
                             <div class="variant_combination" id="variant_combination">
                                 @include('admin-views.product.partials._edit-combinations', [
@@ -575,6 +659,7 @@
                                 ])
                             </div>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -609,6 +694,7 @@
                 </div>
             </div>
         </div>
+        @endif
         <div class="col-md-12">
             <div class="btn--container justify-content-end">
                 <button type="reset" id="reset_btn" class="btn btn--reset">{{ translate('messages.reset') }}</button>
@@ -891,7 +977,12 @@
 <script>
     var module_id = {{ $product->module_id }};
     var module_type = "{{ $product->module->module_type }}";
-    var parent_category_id = {{ $category ? $category->id : 0 }};
+    if(module_type=='services' || module_type=='booking'){
+        var parent_category_id = {{ $category ? $category->parent()->first()->id : 0 }};
+    }else{
+        var parent_category_id = {{ $category ? $category->id : 0 }};
+    }
+    
     var selected_sub_category_id = document.getElementById('sub-categories').value;
     <?php
     $module_data = config('module.' . $product->module->module_type);
@@ -1074,7 +1165,7 @@
             }
         }
     });
-
+    
     $('#sub-categories').select2({
         ajax: {
             url: '{{ url('/') }}/admin/item/get-categories',

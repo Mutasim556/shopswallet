@@ -292,13 +292,14 @@ class ItemController extends Controller
         $temp = $product->category;
         if ($temp?->position) {
             $sub_category = $temp;
+            $sub_sub_category =
             $category = $temp->parent;
         } else {
             $category = $temp;
             $sub_category = null;
         }
 
-        // dd($sub_category->parents);
+        // dd($product->category,$category->parent()->first(),$sub_category);
 
 
         return view('admin-views.product.edit', compact('product', 'sub_category', 'category','temp_product'));
@@ -653,7 +654,8 @@ class ItemController extends Controller
         return array('price' => Helpers::format_currency(($price * $request->quantity) + $addon_price));
     }
     public function get_categories(Request $request)
-    {        
+    { 
+        // return $request->parent_id;       
         $key = explode(' ', $request['q']);
         $cat = Category::when(isset($request->module_id), function ($query) use ($request) {
             $query->where('module_id', $request->module_id);
@@ -793,7 +795,7 @@ class ItemController extends Controller
         $category = $category_id != 'all' ? Category::findOrFail($category_id) : null;
         $sub_categories = $category_id != 'all' ? Category::where('parent_id', $category_id)->get(['id','name']) : [];
         $condition = $condition_id != 'all' ? CommonCondition::findOrFail($condition_id) : [];
-
+            
         return view('admin-views.product.list', compact('items', 'store', 'category', 'type','sub_categories', 'condition'));
     }
 

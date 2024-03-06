@@ -18,6 +18,8 @@
             <span>
                 @if(Config::get('module.current_module_type') == 'services')
                     {{ translate('messages.add_new_service') }}
+                @elseif(Config::get('module.current_module_type') == 'booking')
+                    {{ translate('messages.add_new_booking_service') }}
                 @else
                     {{ translate('messages.add_new_item') }}
                 @endif
@@ -166,12 +168,13 @@
                             <span class="card-header-icon mr-2">
                                 <i class="tio-dashboard-outlined"></i>
                             </span>
-                            <span> {{ Config::get('module.current_module_type')=='services'?translate('service_details'):translate('item_details') }} </span>
+                            <span> {{ Config::get('module.current_module_type')=='services'?translate('service_details'):(Config::get('module.current_module_type')=='booking'?translate('booking_details'):translate('item_details')) }} </span>
+                            {{-- <span> {{ Config::get('module.current_module_type')=='services'?translate('service_details'):translate('item_details') }} </span> --}}
                         </h5>
                     </div>
                     <div class="card-body">
                         <div class="row g-2">
-                            @if(Config::get('module.current_module_type')!='services')
+                            @if(Config::get('module.current_module_type')!='services' && Config::get('module.current_module_type')!='booking')
                             <div class="col-sm-6 col-lg-3">
                                 <div class="form-group mb-0">
                                     <label class="input-label" for="store_id">{{ translate('messages.store') }}<span
@@ -210,7 +213,7 @@
                                     </select>
                                 </div>
                             </div>
-                            @if (Config::get('module.current_module_type')!='services')
+                            @if (Config::get('module.current_module_type')!='services' && Config::get('module.current_module_type')!='booking')
                             <div class="col-sm-6 col-lg-3">
                                 <div class="form-group mb-0">
                                     <label class="input-label" for="sub_sub_categories">{{
@@ -225,7 +228,11 @@
                                 </div>
                             </div>
                             @endif
-                            @if (Config::get('module.current_module_type')=='services')
+                            @if (Config::get('module.current_module_type')=='services' || Config::get('module.current_module_type')=='booking')
+                            <input type="hidden" name="store_id" value="0">
+                            <input type="hidden" name="price" value="1">
+                            <input type="hidden" name="discount_type" value="amount">
+                            <input type="hidden" name="discount" value="0">
                             <div class="col-sm-6 col-lg-3">
                                 <div class="form-group mb-0">
                                     <label class="input-label" for="child_categories">{{
@@ -294,7 +301,7 @@
                                         class="form-control" name="current_stock" min="0" id="quantity">
                                 </div>
                             </div>
-                            @if (Config::get('module.current_module_type')!='services')
+                            @if (Config::get('module.current_module_type')!='services' && Config::get('module.current_module_type')!='booking')
                             <div class="col-sm-6 col-lg-3" id="maximum_cart_quantity">
                                 <div class="form-group mb-0">
                                     <label class="input-label" for="maximum_cart_quantity">{{
@@ -385,6 +392,7 @@
                     </div>
                 </div>
             </div>
+            @if (Config::get('module.current_module_type')!='services' && Config::get('module.current_module_type')!='booking')     
             <div class="col-md-12">
                 <div class="card shadow--card-2 border-0">
                     <div class="card-header">
@@ -433,6 +441,7 @@
                     </div>
                 </div>
             </div>
+            @endif
             <div class="col-lg-12" id="food_variation_section">
                 <div class="card shadow--card-2 border-0">
                     <div class="card-header flex-wrap">
@@ -460,6 +469,7 @@
                     </div>
                 </div>
             </div>
+            @if (Config::get('module.current_module_type')!='services' && Config::get('module.current_module_type')!='booking')     
             <div class="col-md-12" id="attribute_section">
                 <div class="card shadow--card-2 border-0">
                     <div class="card-header">
@@ -520,6 +530,7 @@
                     </div>
                 </div>
             </div>
+            @endif
             <div class="col-md-12">
                 <div class="btn--container justify-content-end">
                     <button type="reset" id="reset_btn" class="btn btn--reset">{{ translate('messages.reset')

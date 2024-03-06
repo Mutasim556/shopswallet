@@ -17,7 +17,14 @@
                             <img src="{{asset('public/assets/admin/img/items.png')}}" class="w--22" alt="">
                         </span>
                         <span>
-                            {{translate('messages.item_list')}} <span class="badge badge-soft-dark ml-2" id="foodCount">{{$items->total()}}</span>
+                            @if (Config::get('module.current_module_type') == 'services')
+                            {{translate('messages.service_list')}}
+                            @elseif (Config::get('module.current_module_type') == 'booking')
+                            {{translate('messages.booking_list')}}
+                            @else
+                            {{translate('messages.item_list')}}
+                            @endif
+                             <span class="badge badge-soft-dark ml-2" id="foodCount">{{$items->total()}}</span>
                         </span>
                     </h1>
                 </div>
@@ -49,6 +56,7 @@
                 <div class="card-header py-2 border-0">
                     <h1>{{ translate('search_data') }}</h1>
                 </div>
+                @if (Config::get('module.current_module_type')!='services' && Config::get('module.current_module_type')!='booking')  
                     <div class="row mr-1 ml-2 mb-5">
                         <div class="col-sm-6 col-md-3   ">
                             <div class="select-item">
@@ -122,6 +130,42 @@
                         @endif
 
                     </div>
+                @endif
+
+                @if (Config::get('module.current_module_type')=='services')
+                <div class="row p-3 pb-5">
+                    <div class="col-sm-6 mt-3">
+                        <div class="select-item">
+    
+                            <select name="category_id" id="category_id" data-placeholder="{{ translate('messages.select_category') }}"
+                                class="js-data-example-ajax form-control" id="category_id"
+                                onchange="set_filter('{{url()->full()}}',this.value,'category_id')">
+                                @if($category)
+                                <option value="{{$category->id}}" selected>{{$category->name}}</option>
+                                @else
+                                <option value="all" selected>{{translate('messages.all_category')}}</option>
+                                @endif
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 mt-3">
+                        <div class="select-item">
+                            <select name="sub_category_id" class="form-control js-select2-custom" data-placeholder="{{ translate('messages.select_sub_category') }}" id="sub-categories" onchange="set_filter('{{url()->full()}}',this.value,'sub_category_id')">
+                                <option value="all" selected>{{translate('messages.all_sub_category')}}</option>
+                                @foreach($sub_categories as $z)
+                                <option
+                                    value="{{$z['id']}}" {{ request()?->sub_category_id == $z['id']?'selected':''}}>
+                                    {{$z['name']}}
+                                </option>
+                            @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                @elseif(Config::get('module.current_module_type')=='booking')
+                    
+                @endif
+                    
 
             </div>
 
@@ -261,7 +305,7 @@
                         </div>
                     </div> --}}
                     <!-- End Unfold -->
-                    @if (Config::get('module.current_module_type') != 'food')
+                    @if (Config::get('module.current_module_type') != 'food' && Config::get('module.current_module_type')!='services' && Config::get('module.current_module_type')!='booking')
                     <div>
                         <a href="{{ route('admin.report.stock-report') }}" class="btn btn--primary font-regular">{{translate('messages.limited_stock')}}</a>
                     </div>
@@ -301,8 +345,11 @@
                         <th class="border-0">{{translate('sl')}}</th>
                         <th class="border-0">{{translate('messages.name')}}</th>
                         <th class="border-0">{{translate('messages.category')}}</th>
+                        @if (Config::get('module.current_module_type')!='services' && Config::get('module.current_module_type')!='booking')     
                         <th class="border-0">{{translate('messages.store')}}</th>
                         <th class="border-0 text-center">{{translate('messages.price')}}</th>
+                        @endif
+                        
                         <th class="border-0 text-center">{{translate('messages.status')}}</th>
                         <th class="border-0 text-center">{{translate('messages.action')}}</th>
                     </tr>
@@ -313,17 +360,29 @@
                         <tr>
                             <td>{{$key+$items->firstItem()}}</td>
                             <td>
+                                @if (Config::get('module.current_module_type')!='services' && Config::get('module.current_module_type')!='booking')  
                                 <a class="media align-items-center" href="{{route('admin.item.view',[$item['id']])}}">
                                     <img class="avatar avatar-lg mr-3" src="{{asset('storage/app/public/product')}}/{{$item['image']}}"
                                             onerror="this.src='{{asset('public/assets/admin/img/160x160/img2.jpg')}}'" alt="{{$item->name}} image">
                                     <div class="media-body">
                                         <h5 class="text-hover-primary mb-0">{{Str::limit($item['name'],20,'...')}}</h5>
                                     </div>
-                                </a>
+                                </a>   
+                                @else
+                                    <a class="media align-items-center">
+                                        <img class="avatar avatar-lg mr-3" src="{{asset('storage/app/public/product')}}/{{$item['image']}}"
+                                                onerror="this.src='{{asset('public/assets/admin/img/160x160/img2.jpg')}}'" alt="{{$item->name}} image">
+                                        <div class="media-body">
+                                            <h5 class="text-hover-primary mb-0">{{$item->name}}</h5>
+                                        </div>
+                                    </a>
+                                @endif
+                               
                             </td>
                             <td>
                             {{Str::limit($item->category?$item->category->name:translate('messages.category_deleted'),20,'...')}}
                             </td>
+                            @if (Config::get('module.current_module_type')!='services' && Config::get('module.current_module_type')!='booking')     
                             <td>
                                 @if ($item->store)
                                 <a href="{{route('admin.store.view', $item->store->id)}}" class="table-rest-info" alt="view store"> {{  Str::limit($item->store->name, 20, '...') }}</a>
@@ -337,6 +396,7 @@
                                     {{\App\CentralLogics\Helpers::format_currency($item['price'])}}
                                 </div>
                             </td>
+                            @endif
                             <td>
                                 <label class="toggle-switch toggle-switch-sm" for="stocksCheckbox{{$item->id}}">
                                     <input type="checkbox" onclick="location.href='{{route('admin.item.status',[$item['id'],$item->status?0:1])}}'"class="toggle-switch-input" id="stocksCheckbox{{$item->id}}" {{$item->status?'checked':''}}>

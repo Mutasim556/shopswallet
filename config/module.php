@@ -2,7 +2,7 @@
 
 return [
     'module_type'=>[
-        'grocery', 'food', 'pharmacy', 'ecommerce','parcel','services'
+        'grocery', 'food', 'pharmacy', 'ecommerce','parcel','services','booking'
     ],
 
     'grocery'=>[
@@ -106,6 +106,10 @@ return [
     ],
     'services'=>[
         'category_title'=>true,
+        'description'=>'',
+    ],
+    'booking'=>[
+        'booking_title'=>true,
         'description'=>'',
     ],
 ];
