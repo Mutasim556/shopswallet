@@ -3711,4 +3711,5 @@
   'booking_setup' => 'Booking setup',
   'add_new_booking_service' => 'Add new booking service',
   'booking_details' => 'Booking details',
+  'coordinates_out_of_zone' => 'Coordinates out of zone',
 );

@@ -17,6 +17,8 @@ use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
 
 Route::group(['namespace' => 'Api\V1', 'middleware' => 'localization'], function () {
     Route::get('zone/list', 'ZoneController@get_zones');
+    require __DIR__.'/service/serviceApi.php';
+    // Route::get('service/test', 'ZoneController@get_zones');
     Route::get('offline_payment_method_list', 'ConfigController@offline_payment_method_list');
     Route::group(['prefix' => 'auth', 'namespace' => 'Auth'], function () {
         Route::post('sign-up', 'CustomerAuthController@register');
@@ -249,6 +251,11 @@ Route::group(['namespace' => 'Api\V1', 'middleware' => 'localization'], function
             Route::get('details', 'ConversationController@messages');
             Route::post('send', 'ConversationController@messages_store');
         });
+
+
+        //service vendor api
+        
+        // Route::resource('service/test','ScategoryController');
     });
 
     Route::group(['prefix' => 'config'], function () {
