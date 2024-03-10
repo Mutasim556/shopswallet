@@ -10,12 +10,17 @@
     <div class="content container-fluid">
         <!-- Page Header -->
         <div class="page-header">
-            <h1 class="page-header-title">
+            <h1 class="page-header-title"> 
                 <span class="page-header-icon">
                     <img src="{{asset('public/assets/admin/img/store.png')}}" class="w--26" alt="">
                 </span>
                 <span>
+                    @if (Config::get('module.current_module_type')=='services')
+                    {{translate('messages.add_new_vendor')}}
+                    @else
                     {{translate('messages.add_new_store')}}
+                    @endif
+                    
                 </span>
             </h1>
         </div>
@@ -111,7 +116,14 @@
                         <div class="card-header">
                             <h5 class="card-title">
                                 <span class="card-header-icon mr-1"><i class="tio-dashboard"></i></span>
-                                <span>{{translate('Store Logo & Covers')}}</span>
+                                <span>
+                                    @if (Config::get('module.current_module_type')=='services')
+                                    {{translate('Vendor Logo & Covers')}}
+                                    @else
+                                    {{translate('Store Logo & Covers')}}
+                                    @endif
+                                    
+                                </span>
                             </h5>
                         </div>
                         <div class="card-body">
@@ -136,7 +148,13 @@
                                     @php($icon = \App\Models\BusinessSetting::where('key', 'icon')->first())
                                     @php($icon = $icon->value ?? '')
                                     <label class="form-label">
-                                        {{ translate('Store Cover') }}  <span class="text--primary">({{ translate('2:1') }})</span>
+                                        @if (Config::get('module.current_module_type')=='services')
+                                        {{ translate('Vendor Cover') }} 
+                                        @else
+                                        {{ translate('Store Cover') }} 
+                                        @endif
+                                         
+                                        <span class="text--primary">({{ translate('2:1') }})</span>
                                     </label>
                                     <center>
                                         <img class="img--vertical min-height-170px min-width-170px" id="coverImageViewer"
@@ -156,7 +174,14 @@
                         <div class="card-header">
                             <h4 class="card-title m-0 d-flex align-items-center">
                                 <img class="mr-2 align-self-start w--20" src="{{asset('public/assets/admin/img/resturant.png')}}" alt="instructions">
-                                <span>{{translate('store_information')}}</span>
+                                <span>
+                                    @if (Config::get('module.current_module_type')=='services')
+                                    {{translate('vendor_information')}}
+                                    @else
+                                    {{translate('store_information')}}
+                                    @endif
+                                    
+                                </span>
                             </h4>
                         </div>
                         <div class="card-body">

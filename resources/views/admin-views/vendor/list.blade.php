@@ -1,7 +1,12 @@
 @extends('layouts.admin.app')
 
-@section('title',translate('Store List'))
-
+@section('title')
+    @if (Config::get('module.current_module_type')=='services')
+    {{translate('Vendor List')}}
+    @else
+    {{translate('Store List')}}
+    @endif
+@endsection
 @push('css_or_js')
     <meta name="csrf-token" content="{{ csrf_token() }}">
 @endpush
@@ -10,7 +15,7 @@
     <div class="content container-fluid">
         <!-- Page Header -->
         <div class="page-header">
-            <h1 class="page-header-title"><i class="tio-filter-list"></i> {{translate('messages.stores')}} <span class="badge badge-soft-dark ml-2" id="itemCount">{{$stores->total()}}</span></h1>
+            <h1 class="page-header-title"><i class="tio-filter-list"></i> @if (Config::get('module.current_module_type')=='services')  {{translate('messages.vendors')}} @else {{translate('messages.stores')}} @endif<span class="badge badge-soft-dark ml-2" id="itemCount">{{$stores->total()}}</span></h1>
             <div class="page-header-select-wrapper">
 
                 {{-- <div class="select-item">
@@ -53,7 +58,12 @@
                     })->where('module_id', Config::get('module.current_module_id'))->count())
                     @php($total_store = isset($total_store) ? $total_store : 0)
                     <h4 class="title">{{$total_store}}</h4>
+                    @if (Config::get('module.current_module_type')=='services')
+                    <span class="subtitle">{{translate('messages.total_vendors')}}</span>
+                    @else
                     <span class="subtitle">{{translate('messages.total_stores')}}</span>
+                    @endif
+                    
                     <img class="resturant-icon" src="{{asset('/public/assets/admin/img/total-store.png')}}" alt="store">
                 </div>
             </div>
@@ -62,7 +72,12 @@
                     @php($active_stores = \App\Models\Store::where(['status'=>1])->where('module_id', Config::get('module.current_module_id'))->count())
                     @php($active_stores = isset($active_stores) ? $active_stores : 0)
                     <h4 class="title">{{$active_stores}}</h4>
+                    @if (Config::get('module.current_module_type')=='services')
+                    <span class="subtitle">{{translate('messages.active_vendors')}}</span>
+                    @else
                     <span class="subtitle">{{translate('messages.active_stores')}}</span>
+                    @endif
+                    
                     <img class="resturant-icon" src="{{asset('/public/assets/admin/img/active-store.png')}}" alt="store">
                 </div>
             </div>
@@ -73,7 +88,11 @@
                     })->where(['status'=>0])->where('module_id', Config::get('module.current_module_id'))->count())
                     @php($inactive_stores = isset($inactive_stores) ? $inactive_stores : 0)
                     <h4 class="title">{{$inactive_stores}}</h4>
+                    @if (Config::get('module.current_module_type')=='services')
+                    <span class="subtitle">{{translate('messages.inactive_vendors')}}</span>
+                    @else
                     <span class="subtitle">{{translate('messages.inactive_stores')}}</span>
+                    @endif
                     <img class="resturant-icon" src="{{asset('/public/assets/admin/img/close-store.png')}}" alt="store">
                 </div>
             </div>
@@ -81,7 +100,11 @@
                 <div class="resturant-card card--bg-4">
                     @php($data = \App\Models\Store::where('created_at', '>=', now()->subDays(30)->toDateTimeString())->where('module_id', Config::get('module.current_module_id'))->count())
                     <h4 class="title">{{$data}}</h4>
+                    @if (Config::get('module.current_module_type')=='services')
+                    <span class="subtitle">{{translate('messages.newly_joined_vendors')}}</span>
+                    @else
                     <span class="subtitle">{{translate('messages.newly_joined_stores')}}</span>
+                    @endif
                     <img class="resturant-icon" src="{{asset('/public/assets/admin/img/add-store.png')}}" alt="store">
                 </div>
             </div>
@@ -112,7 +135,12 @@
                 <div>
                     @php($store_withdraws = \App\Models\WithdrawRequest::where(['approved'=>1])->sum('amount'))
                     @php($store_withdraws = isset($store_withdraws) ? $store_withdraws : 0)
+                    @if (Config::get('module.current_module_type')=='services')
+                    <span>{{translate('messages.total_vendor_withdraws')}}</span> <strong>{{\App\CentralLogics\Helpers::format_currency($store_withdraws)}}</strong>
+                    @else
                     <span>{{translate('messages.total_store_withdraws')}}</span> <strong>{{\App\CentralLogics\Helpers::format_currency($store_withdraws)}}</strong>
+                    @endif
+                    
                 </div>
             </li>
         </ul>
@@ -181,7 +209,12 @@
                     <thead class="thead-light">
                     <tr>
                         <th class="border-0">{{translate('sl')}}</th>
+                        @if (Config::get('module.current_module_type')=='services')
+                        <th class="border-0">{{translate('messages.vendor_information')}}</th>
+                        @else
                         <th class="border-0">{{translate('messages.store_information')}}</th>
+                        @endif
+                        
                         <th class="border-0">{{translate('messages.module')}}</th>
                         <th class="border-0">{{translate('messages.owner_information')}}</th>
                         <th class="border-0">{{translate('messages.zone')}}</th>
@@ -240,7 +273,12 @@
                                 @if(isset($store->vendor->status))
                                     @if($store->vendor->status)
                                     <label class="toggle-switch toggle-switch-sm" for="stocksCheckbox{{$store->id}}">
+                                        @if (Config::get('module.current_module_type')=='services')
+                                        <input type="checkbox" onclick="status_change_alert('{{route('admin.store.status',[$store->id,$store->status?0:1])}}', '{{translate('messages.you_want_to_change_this_vendor_status')}}', event)" class="toggle-switch-input" id="stocksCheckbox{{$store->id}}" {{$store->status?'checked':''}}>
+                                        @else
                                         <input type="checkbox" onclick="status_change_alert('{{route('admin.store.status',[$store->id,$store->status?0:1])}}', '{{translate('messages.you_want_to_change_this_store_status')}}', event)" class="toggle-switch-input" id="stocksCheckbox{{$store->id}}" {{$store->status?'checked':''}}>
+                                        @endif
+                                        
                                         <span class="toggle-switch-label">
                                             <span class="toggle-switch-indicator"></span>
                                         </span>

@@ -210,7 +210,6 @@
                     </li>
                     <!-- End Order -->
                     @endif
-
                     @if (in_array($store_data->module->module_type , [ 'grocery', 'ecommerce'])  )
                     <li class="navbar-vertical-aside-has-menu {{ Request::is('store-panel/item/flash-sale*') ? 'active' : '' }}">
                         <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{ route('vendor.item.flash_sale') }}" title="{{ translate('messages.flash_sales') }}">
@@ -245,11 +244,19 @@
                     <!-- End AddOn -->
                     @if(\App\CentralLogics\Helpers::employee_module_permission_check('item'))
                     <!-- Food -->
+                    
                     <li class="navbar-vertical-aside-has-menu {{Request::is('store-panel/item*')?'active':''}}">
                         <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:" title="{{translate('messages.items')}}"
                         >
                             <i class="tio-premium-outlined nav-icon"></i>
-                            <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('messages.items')}}</span>
+                            <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                @if (\App\CentralLogics\Helpers::get_vendor_module_id()=='services')
+                                {{translate('messages.services')}}
+                                @else
+                                {{translate('messages.items')}}
+                                @endif
+                                
+                            </span>
                         </a>
                         <ul class="js-navbar-vertical-aside-submenu nav nav-sub" style="display: {{Request::is('store-panel/item*')?'block':'none'}}">
                             <li class="nav-item {{Request::is('store-panel/item/add-new')?'active':''}}">
@@ -452,8 +459,13 @@
                         <a class="nav-link " href="{{route('vendor.business-settings.store-setup')}}" title="{{translate('messages.store_config')}}"
                         >
                             <span class="tio-settings nav-icon"></span>
+                            @if (\App\CentralLogics\Helpers::get_vendor_module_id()=='services')
+                            <span
+                                class="text-truncate">{{translate('messages.vendor_config')}}</span>
+                            @else
                             <span
                                 class="text-truncate">{{translate('messages.store_config')}}</span>
+                            @endif
                         </a>
                     </li>
                     @endif

@@ -1,6 +1,12 @@
 @extends('layouts.admin.app')
 
-@section('title','Update restaurant info')
+@section('title')
+@if (Config::get('module.current_module_type')=='services')
+{{ translate('messages.Update vendor info') }}
+@else
+{{ translate('messages.Update store info') }}
+@endif
+@endsection
 @push('css_or_js')
     <link rel="stylesheet" href="{{asset('/public/assets/admin/css/intlTelInput.css')}}" />
 @endpush
@@ -13,7 +19,12 @@
                 <span class="page-header-icon">
                     <img src="{{asset('public/assets/admin/img/edit.png')}}" class="w--26" alt="">
                 </span>
+                @if (Config::get('module.current_module_type')=='services')
+                <span>{{translate('messages.update_vendor')}}</span>
+                @else
                 <span>{{translate('messages.update_store')}}</span>
+                @endif
+                
             </h1>
         </div>
         @php
@@ -128,7 +139,11 @@
                         <div class="card-header">
                             <h5 class="card-title">
                                 <span class="card-header-icon mr-1"><i class="tio-dashboard"></i></span>
+                                @if (Config::get('module.current_module_type')=='services')
+                                <span>{{ translate('Vendor Logo & Covers') }}</span>
+                                @else
                                 <span>{{translate('Store Logo & Covers')}}</span>
+                                @endif
                             </h5>
                         </div>
                         <div class="card-body">
@@ -137,7 +152,8 @@
                                     @php($logo = \App\Models\BusinessSetting::where('key', 'logo')->first())
                                     @php($logo = $logo->value ?? '')
                                     <label class="form-label">
-                                        {{ translate('logo') }} <span class="text--primary">({{ translate('1:1') }})</span>
+                                        {{ translate('logo') }} 
+                                        <span class="text--primary">({{ translate('1:1') }})</span>
                                     </label>
                                     <center>
                                         <img class="img--110 min-height-170px min-width-170px" id="viewer"
@@ -153,7 +169,14 @@
                                     @php($icon = \App\Models\BusinessSetting::where('key', 'icon')->first())
                                     @php($icon = $icon->value ?? '')
                                     <label class="form-label">
-                                        {{ translate('Store Cover') }}  <span class="text--primary">({{ translate('2:1') }})</span>
+                                        @if (Config::get('module.current_module_type')=='services')
+                                        {{ translate('Vendor Cover') }}
+                                        @else
+
+                                        {{ translate('Store Cover') }}  
+                                        @endif
+                                        
+                                        <span class="text--primary">({{ translate('2:1') }})</span>
                                     </label>
                                     <center>
                                         <img class="img--vertical min-height-170px min-width-170px" id="coverImageViewer"
@@ -173,7 +196,11 @@
                         <div class="card-header">
                             <h4 class="card-title m-0 d-flex align-items-center">
                                 <img class="mr-2 align-self-start w--20" src="{{asset('public/assets/admin/img/resturant.png')}}" alt="instructions">
+                                @if (Config::get('module.current_module_type')=='services')
+                                <span>{{translate('vendor_information')}}</span>
+                                @else
                                 <span>{{translate('store_information')}}</span>
+                                @endif
                             </h4>
                         </div>
                         <div class="card-body">

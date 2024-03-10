@@ -19,9 +19,11 @@ class DashboardController extends Controller
         $params = [
             'statistics_type' => $request['statistics_type'] ?? 'overall'
         ];
+        
         session()->put('dash_params', $params);
 
         $data = self::dashboard_order_stats_data();
+       
         $earning = [];
         $commission = [];
         $from = Carbon::now()->startOfYear()->format('Y-m-d');
@@ -41,7 +43,7 @@ class DashboardController extends Controller
                 }
             }
         }
-
+       
         $top_sell = Item::orderBy("order_count", 'desc')
             ->take(6)
             ->get();
@@ -51,7 +53,6 @@ class DashboardController extends Controller
         ->get();
         $data['top_sell'] = $top_sell;
         $data['most_rated_items'] = $most_rated_items;
-
         return view('vendor-views.dashboard', compact('data', 'earning', 'commission', 'params'));
     }
 

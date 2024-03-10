@@ -476,7 +476,7 @@
                             <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{ route('admin.store.pending-requests') }}" title="{{ translate('messages.pending_requests') }}">
                                 <span class="tio-calendar-note nav-icon"></span>
                                 <span class="text-truncate position-relative overflow-visible">
-                                    {{ translate('messages.new_stores') }}
+                                    {{ translate('messages.new_vendors') }}
                                     @php($new_str = \App\Models\Store::whereHas('vendor', function($query){
                                         return $query->where('status', null);
                                     })->module(Config::get('module.current_module_id'))->get())
@@ -488,17 +488,17 @@
                             </a>
                         </li>
                         <li class="navbar-vertical-aside-has-menu {{ Request::is('admin/store/add') ? 'active' : '' }}">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{ route('admin.store.add') }}" title="{{ translate('messages.add_store') }}">
+                            <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{ route('admin.store.add') }}" title="{{ translate('messages.add_vendor') }}">
                                 <span class="tio-add-circle nav-icon"></span>
                                 <span class="text-truncate">
-                                    {{ translate('messages.add_store') }}
+                                    {{ translate('messages.Add Vendor') }}
                                 </span>
                             </a>
                         </li>
                         <li class="navbar-vertical-aside-has-menu {{ Request::is('admin/store/list') ? 'active' : '' }}">
-                            <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{ route('admin.store.list') }}" title="{{ translate('messages.stores_list') }}">
+                            <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{ route('admin.store.list') }}" title="{{ translate('messages.vendors_list') }}">
                                 <span class="tio-layout nav-icon"></span>
-                                <span class="text-truncate">{{ translate('messages.stores') }}
+                                <span class="text-truncate">{{ translate('messages.vendors') }}
                                     {{ translate('list') }}</span>
                             </a>
                         </li>
@@ -506,13 +506,13 @@
                         <li class="navbar-item {{ Request::is('admin/store/recommended-store') ? 'active' : '' }}">
                             <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{ route('admin.store.recommended_store') }}" title="{{ translate('messages.pending_requests') }}">
                                 <span class="tio-hot  nav-icon"></span>
-                                <span class="text-truncate text-capitalize">{{ translate('Recommended_Store') }}</span>
+                                <span class="text-truncate text-capitalize">{{ translate('Recommended_Vendor') }}</span>
                             </a>
                         </li>
         
         
         
-                        <li class="navbar-vertical-aside-has-menu {{ Request::is('admin/store/bulk-import') ? 'active' : '' }}">
+                        {{-- <li class="navbar-vertical-aside-has-menu {{ Request::is('admin/store/bulk-import') ? 'active' : '' }}">
                             <a class="nav-link " href="{{ route('admin.store.bulk-import') }}" title="{{ translate('messages.bulk_import') }}">
                                 <span class="tio-publish nav-icon"></span>
                                 <span class="text-truncate text-capitalize">{{ translate('messages.bulk_import') }}</span>
@@ -523,7 +523,7 @@
                                 <span class="tio-download-to nav-icon"></span>
                                 <span class="text-truncate text-capitalize">{{ translate('messages.bulk_export') }}</span>
                             </a>
-                        </li>
+                        </li> --}}
                     @endif
                     @if (\App\CentralLogics\Helpers::module_permission_check('timeslot'))
                     <li class="nav-item">

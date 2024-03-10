@@ -25,8 +25,10 @@ use App\CentralLogics\StoreLogic;
 use Illuminate\Support\Facades\DB;
 use App\Mail\OrderVerificationMail;
 use App\Models\NotificationMessage;
+use App\Models\Vendor;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use MatanYadaev\EloquentSpatial\Objects\Point;
@@ -1786,6 +1788,17 @@ class Helpers
         return 0;
     }
 
+    public static function get_vendor_module_id()
+    {
+        if (auth('vendor')->check()) {
+            $vendor = Store::with('module')->where('vendor_id',auth('vendor')->id())->first();
+            return $vendor->module->module_type;
+        } else if (auth('vendor_employee')->check()) {
+            return auth('vendor_employee')->user()->vendor_id;
+        }
+        return 0;
+    }
+
     public static function get_vendor_data()
     {
         if (auth('vendor')->check()) {
@@ -1873,6 +1886,7 @@ class Helpers
 
     public static function employee_module_permission_check($mod_name)
     {
+        // Log::info($mod_name);
         if (auth('vendor')->check()) {
             if ($mod_name == 'reviews') {
                 return auth('vendor')->user()->stores[0]->reviews_section;
@@ -1881,6 +1895,7 @@ class Helpers
             } else if ($mod_name == 'pos') {
                 return auth('vendor')->user()->stores[0]->pos_system;
             } else if ($mod_name == 'addon') {
+                // Log::info(config('module.' . auth('vendor')->user()->stores[0]->module->module_type));
                 return config('module.' . auth('vendor')->user()->stores[0]->module->module_type)['add_on'];
             }
             return true;

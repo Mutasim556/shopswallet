@@ -39,7 +39,8 @@ class ItemController extends Controller
         $categories = Category::where(['position' => 0])->module(Helpers::get_store_data()->module_id)->get();
         $conditions = CommonCondition::all();
         $module_data = config('module.'. Helpers::get_store_data()->module->module_type);
-        return view('vendor-views.product.index', compact('categories','module_data','conditions'));
+        // dd($module_data);
+        return view('vendor-views.product.index', compact('categories','module_data','conditions')); 
     }
 
     public function store(Request $request)

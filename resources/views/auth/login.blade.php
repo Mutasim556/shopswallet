@@ -53,7 +53,7 @@
             <!-- Card -->
             <div class="auth-wrapper-form">
                 <!-- Form -->
-                <form class="" action="{{route('login_post')}}" method="post" id="form-id">
+                <form class="" action="{{route('login_post')}}" method="post" id="form-id"> 
                     @csrf
                     <input type="hidden" name="role" value="{{  $role ?? null }}">
                     <div class="auth-header">

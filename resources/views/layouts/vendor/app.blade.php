@@ -520,7 +520,7 @@ fetch('https://iid.googleapis.com/iid/v1/' + token + '/rel/topics/' + topic, {
         }
         });
 
-        @if(\App\CentralLogics\Helpers::employee_module_permission_check('order') && $order_notification_type == 'manual')
+        @if(\App\CentralLogics\Helpers::employee_module_permission_check('order') && $order_notification_type == 'manual') 
         setInterval(function () {
             $.get({
                 url: '{{route('vendor.get-store-data')}}',
