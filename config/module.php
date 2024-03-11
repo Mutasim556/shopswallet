@@ -106,10 +106,11 @@ return [
     ],
     'services'=>[
         'category_title'=>true,
+        'order_place_to_schedule_interval'=>true,
         'description'=>'',
         'add_on'=>false,
-        'stock'=>true,
-        'stock'=>true,
+        'stock'=>false,
+        'maximum_cart_quantity'=>false,
         'veg_non_veg'=>false,
         'unit'=>true,
         'order_attachment'=>false,

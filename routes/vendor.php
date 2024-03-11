@@ -105,7 +105,8 @@ Route::group(['namespace' => 'Vendor', 'as' => 'vendor.'], function () {
             Route::post('search', 'ItemController@search')->name('search');
             Route::get('view/{id}', 'ItemController@view')->name('view');
             Route::get('remove-image', 'ItemController@remove_image')->name('remove-image');
-            Route::get('get-categories', 'ItemController@get_categories')->name('get-categories');
+            Route::get('get-categories', 'ItemController@get_categories')->name('get-categories'); 
+            Route::get('get-items', 'ItemController@get_items')->name('get-items'); 
 
 
             
