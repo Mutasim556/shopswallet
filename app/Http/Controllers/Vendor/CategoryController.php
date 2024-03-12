@@ -31,11 +31,13 @@ class CategoryController extends Controller
     }
 
     public function get_all(Request $request){
-        $data = Category::where('name', 'like', '%'.$request->q.'%')->module(Helpers::get_store_data()->module_id)->limit(8)->get([DB::raw('id, CONCAT(name, " (", if(position = 0, "'.translate('messages.main').'", "'.translate('messages.sub').'"),")") as text')]);
-        if(isset($request->all))
-        {
-            $data[]=(object)['id'=>'all', 'text'=>translate('messages.all')];
-        }
+        
+            $data = Category::where('name', 'like', '%'.$request->q.'%')->module(Helpers::get_store_data()->module_id)->limit(8)->get([DB::raw('id, CONCAT(name, " (", if(position = 0, "'.translate('messages.main').'", "'.translate('messages.sub').'"),")") as text')]);
+            if(isset($request->all))
+            {
+                $data[]=(object)['id'=>'all', 'text'=>translate('messages.all')];
+            }
+       
         return response()->json($data);
     }
 

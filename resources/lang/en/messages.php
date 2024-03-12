@@ -3751,4 +3751,9 @@
   'customers_reviews' => 'Customers reviews',
   'select_please' => 'Select please',
   'child_category_required' => 'Child category required',
+  'service_default_details_required' => 'Service default details required',
+  'The_service_will_be_published_once_it_receives_approval_from_the_admin.' => 'The service will be published once it receives approval from the admin.',
+  'Want to delete this service ?' => 'Want to delete this service  ',
+  'service_updae' => 'Service updae',
+  'service_update' => 'Service update',
 );

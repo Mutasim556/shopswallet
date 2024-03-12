@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\DB;
 use App\CentralLogics\ProductLogic;
 use App\Models\PharmacyItemDetails;
 use App\Http\Controllers\Controller;
+use App\Models\Service;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\File;
 use Rap2hpoutre\FastExcel\FastExcel;
@@ -52,7 +53,7 @@ class ItemController extends Controller
                     ]
                 ]);
             }
-            return $request->all();
+         
             $validator = Validator::make($request->all(), [
                 'category_id' => 'required',
                 'sub_category_id' => 'required',
@@ -63,18 +64,99 @@ class ItemController extends Controller
                 'timeslot_list' => 'required',
                 'timeslot_list.*' => 'required',
                 'timeslot_list.*' => 'required',
-                'image' => 'required_unless:product_gellary,1',
+                // 'image' => 'required_unless:product_gellary,1',
                 'price' => 'required|numeric|between:.01,999999999999.99',
-                // 'description.*' => 'max:1000',
+                'service_details.0' => 'required|max:1000',
                 // 'description.0' => 'required',
                 'discount' => 'required|numeric|min:0',
             ], [
                 // 'name.0.required' => translate('messages.item_default_name_required'),
-                // 'description.0.required' => translate('messages.item_default_description_required'),
+                'service_details.0.required' => translate('messages.service_default_details_required'),
                 'category_id.required' => translate('messages.category_required'),
                 'sub_sub_category_id.required' => translate('messages.child_category_required'),
                 // 'description.*.max' => translate('messages.description_length_warning'),
             ]);
+
+            if ($request['discount_type'] == 'percent') {
+                $dis = ($request['price'] / 100) * $request['discount'];
+            } else {
+                $dis = $request['discount'];
+            }
+
+            if ($request['price'] <= $dis) {
+                $validator->getMessageBag()->add('unit_price', translate('messages.discount_can_not_be_more_than_or_equal'));
+            }
+
+            if ($request['price'] <= $dis || $validator->fails()) {
+                return response()->json(['errors' => Helpers::error_processor($validator)]);
+            }
+
+            $service = new Service();
+            $service->service_details = $request->service_details[array_search('default', $request->lang)];
+
+            $category = [];
+            if ($request->category_id != null) {
+                array_push($category, [
+                    'id' => $request->category_id,
+                    'position' => 1,
+                ]);
+            }
+            if ($request->sub_category_id != null) {
+                array_push($category, [
+                    'id' => $request->sub_category_id,
+                    'position' => 2,
+                ]);
+            }
+            if ($request->sub_sub_category_id != null) {
+                array_push($category, [
+                    'id' => $request->sub_sub_category_id,
+                    'position' => 3,
+                ]);
+            }
+
+
+            $service->category_id = $request->sub_sub_category_id ? $request->sub_sub_category_id : ($request->sub_category_id ? $request->sub_category_id : $request->category_id);
+
+
+            $service->category_ids = json_encode($category);
+            $service->item_id =$request->item_id;
+            $timeslot_list = [];
+            foreach($request->timeslot_list as $val){
+                array_push($timeslot_list,date('h:i a',strtotime($val)));
+            }
+
+            // service variation
+            // dd($timeslot_list);
+            $service->timeslot_list = implode(',',$timeslot_list);
+
+            $service->price = $request->price;
+            $service->discount = $request->discount_type == 'amount' ? $request->discount : $request->discount;
+            $service->discount_type = $request->discount_type;
+            $service->vendor_id = Helpers::get_loggedin_user()->id;
+            $service->module_id = Helpers::get_store_data()->module_id;
+            $service->unit_id = $request->unit_id;
+            $service->available_for = implode(',',$request->service_available_for);
+
+            $service->old_staff = $request->staff=='old_staff'?$request->old_staff:null;
+            $service->new_staff = $request->staff=='new_staff'?$request->new_staff:null;
+            $service->status = 0;
+            $service->is_approved = 0;
+            $service->save();
+
+          
+            Helpers::add_or_update_translations(request: $request, key_data: 'service_details', name_field: 'service_details', model_name: 'Service', data_id: $service->id, data_value: $service->service_details);
+
+
+            // $product_approval_datas = \App\Models\BusinessSetting::where('key', 'product_approval_datas')->first()?->value ?? '';
+            // $product_approval_datas = json_decode($product_approval_datas, true);
+            // if (Helpers::get_mail_status('product_approval') && data_get($product_approval_datas, 'Add_new_product', null) == 1) {
+            //     $this->store_temp_data($service, $request, $tag_ids);
+            //     $service->is_approved = 0;
+            //     $service->save();
+            //     return response()->json(['product_approval' => translate('messages.The_product_will_be_published_once_it_receives_approval_from_the_admin.')], 200);
+            // }
+            return response()->json(['product_approval' => translate('messages.The_service_will_be_published_once_it_receives_approval_from_the_admin.')], 200);
+
         } else {
             if (!Helpers::get_store_data()->item_section) {
                 return response()->json([
@@ -350,40 +432,75 @@ class ItemController extends Controller
 
     public function edit(Request $request, $id)
     {
-        if (!Helpers::get_store_data()->item_section) {
-            Toastr::warning(translate('messages.permission_denied'));
-            return back();
-        }
-        $temp_product = false;
-        if ($request->temp_product) {
-            $product = TempProduct::withoutGlobalScope('translate')->findOrFail($id);
-            $temp_product = true;
-        } else {
-            $product = Item::withoutGlobalScope('translate');
-            if (isset($request->product_gellary) && $request->product_gellary == 1) {
-
-                $product->withoutGlobalScope(StoreScope::class)->where('is_approved', 1);
+        if(Helpers::get_vendor_module_id() == 'services'){
+            $product = Service::withoutGlobalScope('translate')->findOrFail($id);
+            $item = DB::table('items')->where('id',$product->item_id)->first();
+            $product->name=$item->name;
+            if (!Helpers::get_store_data()->item_section) {
+                Toastr::warning(translate('messages.permission_denied'));
+                return back();
             }
-            $product = $product->findOrFail($id);
+            $temp_product = false;
+            $product_category = json_decode($product->category_ids);
+            $categories = Category::where(['parent_id' => 0])->module(Helpers::get_store_data()->module_id)->get();
+            $module_data = config('module.' . Helpers::get_store_data()->module->module_type);
+            $conditions = CommonCondition::all();
+            foreach($product_category as $key=>$value){
+                $cat = Category::where('id',$value->id)->first();
+                $product_category[$key]->category_name = $cat->name;
+            }
+            return view('vendor-views.product.edit', compact('product', 'product_category', 'categories', 'module_data', 'temp_product', 'conditions'));
+        }else{
+            if (!Helpers::get_store_data()->item_section) {
+                Toastr::warning(translate('messages.permission_denied'));
+                return back();
+            }
+            $temp_product = false;
+            if ($request->temp_product) {
+                $product = TempProduct::withoutGlobalScope('translate')->findOrFail($id);
+                $temp_product = true;
+            } else {
+                $product = Item::withoutGlobalScope('translate');
+                if (isset($request->product_gellary) && $request->product_gellary == 1) {
+    
+                    $product->withoutGlobalScope(StoreScope::class)->where('is_approved', 1);
+                }
+                $product = $product->findOrFail($id);
+            }
+            $product_category = json_decode($product->category_ids);
+            $categories = Category::where(['parent_id' => 0])->module(Helpers::get_store_data()->module_id)->get();
+            $module_data = config('module.' . Helpers::get_store_data()->module->module_type);
+            $conditions = CommonCondition::all();
+            return view('vendor-views.product.edit', compact('product', 'product_category', 'categories', 'module_data', 'temp_product', 'conditions'));
         }
-        $product_category = json_decode($product->category_ids);
-        $categories = Category::where(['parent_id' => 0])->module(Helpers::get_store_data()->module_id)->get();
-        $module_data = config('module.' . Helpers::get_store_data()->module->module_type);
-        $conditions = CommonCondition::all();
-        return view('vendor-views.product.edit', compact('product', 'product_category', 'categories', 'module_data', 'temp_product', 'conditions'));
+        
     }
 
     public function status(Request $request)
     {
-        if (!Helpers::get_store_data()->item_section) {
-            Toastr::warning(translate('messages.permission_denied'));
+        if(Helpers::get_vendor_module_id() == 'services'){
+            if (!Helpers::get_store_data()->item_section) {
+                Toastr::warning(translate('messages.permission_denied'));
+                return back();
+            }
+            $product = Service::find($request->id);
+            $product->status = $request->status;
+            $product->save();
+            Toastr::success('Service status updated!');
             return back();
-        }
-        $product = Item::find($request->id);
-        $product->status = $request->status;
-        $product->save();
-        Toastr::success('Item status updated!');
+        }else{
+            if (!Helpers::get_store_data()->item_section) {
+                Toastr::warning(translate('messages.permission_denied'));
+                return back();
+            }
+            $product = Item::find($request->id);
+            $product->status = $request->status;
+            $product->save();
+            Toastr::success('Item status updated!');
         return back();
+        }
+        
+        
     }
 
     public function recommended(Request $request)
@@ -635,24 +752,32 @@ class ItemController extends Controller
             Toastr::warning(translate('messages.permission_denied'));
             return back();
         }
-
-        if ($request?->temp_product) {
-            $product = TempProduct::find($request->id);
-        } else {
-            $product = Item::find($request->id);
-            $product?->temp_product?->translations()?->delete();
-            $product?->temp_product()?->delete();
-        }
-
-        if ($product->image) {
-            if (Storage::disk('public')->exists('product/' . $product['image'])) {
-                Storage::disk('public')->delete('product/' . $product['image']);
+        if(Helpers::get_vendor_module_id() == 'services'){
+            $product = Service::find($request->id);
+            $product->translations()->delete();
+            $product->delete();
+            Toastr::success('Service removed!');
+            return back();
+        }else{
+            if ($request?->temp_product) {
+                $product = TempProduct::find($request->id);
+            } else {
+                $product = Item::find($request->id);
+                $product?->temp_product?->translations()?->delete();
+                $product?->temp_product()?->delete();
             }
+    
+            if ($product->image) {
+                if (Storage::disk('public')->exists('product/' . $product['image'])) {
+                    Storage::disk('public')->delete('product/' . $product['image']);
+                }
+            }
+            $product->translations()->delete();
+            $product->delete();
+            Toastr::success('Item removed!');
+            return back();
         }
-        $product->translations()->delete();
-        $product->delete();
-        Toastr::success('Item removed!');
-        return back();
+        
     }
 
     public function variant_combination(Request $request)
@@ -725,9 +850,26 @@ class ItemController extends Controller
     {
         $category_id = $request->query('category_id', 'all');
         $type = $request->query('type', 'all');
+        // dd($type);
         $sub_category_id = $request->query('sub_category_id', 'all');
-
-        $items = Item::when(is_numeric($category_id), function ($query) use ($category_id) {
+        if(Helpers::get_vendor_module_id() == 'services'){
+            $items = Service::when(is_numeric($category_id), function ($query) use ($category_id) {
+                return $query->whereHas('category', function ($q) use ($category_id) {
+                    return $q->whereId($category_id)->orWhere('parent_id', $category_id);
+                });
+            })
+            ->when(is_numeric($sub_category_id), function ($query) use ($sub_category_id) {
+                return $query->where('category_id', $sub_category_id);
+            })
+            ->where('is_approved', 0)
+            ->latest()->paginate(config('default_pagination'));
+            foreach($items as $key=>$value){
+                $item = DB::table('items')->where('id',$value->item_id)->select('id','image','name')->first();
+                $items[$key]->image = $item->image; 
+                $items[$key]->name = $item->name; 
+            }
+        }else{
+            $items = Item::when(is_numeric($category_id), function ($query) use ($category_id) {
                 return $query->whereHas('category', function ($q) use ($category_id) {
                     return $q->whereId($category_id)->orWhere('parent_id', $category_id);
                 });
@@ -737,8 +879,10 @@ class ItemController extends Controller
             })
             ->where('is_approved', 1)
             ->type($type)->latest()->paginate(config('default_pagination'));
+        }
+        
         $sub_categories = $category_id != 'all' ? Category::where('parent_id', $category_id)->get(['id', 'name']) : [];
-
+        // dd($items);
         $category = $category_id != 'all' ? Category::findOrFail($category_id) : null;
         return view('vendor-views.product.list', compact('items', 'category', 'type', 'sub_categories'));
     }

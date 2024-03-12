@@ -13,7 +13,14 @@
         <div class="page-header">
             <div class="btn--container align-items-center mb-0">
                 <div class="mr-auto">
-                    <h1 class="page-header-title"><i class="tio-filter-list"></i> {{translate('messages.item_list')}}<span class="badge badge-soft-dark ml-2" id="itemCount">{{$items->total()}}</span></h1>
+                    <h1 class="page-header-title"><i class="tio-filter-list"></i> 
+                        @if (\App\CentralLogics\Helpers::get_vendor_module_id() == 'services')
+                        {{translate('messages.service_list')}}
+                        @else    
+                        {{translate('messages.item_list')}}
+                        @endif
+                        
+                    <span class="badge badge-soft-dark ml-2" id="itemCount">{{$items->total()}}</span></h1>
                 </div>
 
 
@@ -33,7 +40,7 @@
                     <div class="col-sm-6 col-md-4">
                         <div class="select-item">
                             <select name="category_id" id="category" data-placeholder="{{ translate('messages.select_category') }}"
-                                class="js-data-example-ajax form-control" id="category_id"
+                                class="js-data-example-ajax form-control" 
                                 onchange="set_filter('{{url()->full()}}',this.value,'category_id')">
                                 @if($category)
                                 <option value="{{$category->id}}" selected>{{$category->name}}</option>
@@ -43,6 +50,7 @@
                             </select>
                         </div>
                     </div>
+                    @if (!\App\CentralLogics\Helpers::get_vendor_module_id() == 'services')
                     <div class="col-sm-6 col-md-4">
                         <div class="select-item">
                             <select name="sub_category_id" class="form-control js-select2-custom" data-placeholder="{{ translate('messages.select_sub_category') }}" id="sub-categories" onchange="set_filter('{{url()->full()}}',this.value,'sub_category_id')">
@@ -56,6 +64,7 @@
                             </select>
                         </div>
                     </div>
+                    @endif
 
 
                     @if (($store_data->module->module_type == 'food') && $toggle_veg_non_veg)
@@ -217,7 +226,9 @@
                             <th class="border-0 w-20p">{{translate('messages.name')}}</th>
                             <th class="border-0 w-20p">{{translate('messages.category')}}</th>
                             <th class="border-0">{{translate('messages.price')}}</th>
+                            @if (!\App\CentralLogics\Helpers::get_vendor_module_id() == 'services')
                             <th class="border-0 text-center">{{translate('messages.Recommended')}}</th>
+                            @endif
                             <th class="border-0 text-center">{{translate('messages.status')}}</th>
                             <th class="border-0 text-center">{{translate('messages.action')}}</th>
                         </tr>
@@ -244,6 +255,7 @@
                                     {{\App\CentralLogics\Helpers::format_currency($item['price'])}}
                                 </div>
                             </td>
+                            @if (!\App\CentralLogics\Helpers::get_vendor_module_id() == 'services')
                             <td>
                                 <div class="d-flex">
                                     <div class="mx-auto">
@@ -256,6 +268,8 @@
                                     </div>
                                 </div>
                             </td>
+                            @endif
+                            @if (\App\CentralLogics\Helpers::get_vendor_module_id() == 'services')
                             <td>
                                 <label class="toggle-switch toggle-switch-sm" for="stocksCheckbox{{$item->id}}">
                                     <input type="checkbox" onclick="location.href='{{route('vendor.item.status',[$item['id'],$item->status?0:1])}}'"class="toggle-switch-input" id="stocksCheckbox{{$item->id}}" {{$item->status?'checked':''}}>
@@ -264,14 +278,30 @@
                                     </span>
                                 </label>
                             </td>
+                            @else
+                            <td>
+                                <label class="toggle-switch toggle-switch-sm" for="stocksCheckbox{{$item->id}}">
+                                    <input type="checkbox" onclick="location.href='{{route('vendor.item.status',[$item['id'],$item->status?0:1])}}'"class="toggle-switch-input" id="stocksCheckbox{{$item->id}}" {{$item->status?'checked':''}}>
+                                    <span class="toggle-switch-label mx-auto">
+                                        <span class="toggle-switch-indicator"></span>
+                                    </span>
+                                </label>
+                            </td>
+                            @endif
                             <td>
                                 <div class="btn--container justify-content-center">
                                     <a class="btn btn-sm btn--primary btn-outline-primary action-btn"
                                         href="{{route('vendor.item.edit',[$item['id']])}}" title="{{translate('messages.edit_item')}}"><i class="tio-edit"></i>
                                     </a>
+                                    @if (\App\CentralLogics\Helpers::get_vendor_module_id() == 'services')
+                                    <a class="btn btn-sm btn--danger btn-outline-danger action-btn" href="javascript:"
+                                        onclick="form_alert('food-{{$item['id']}}','{{ translate('Want to delete this service ?') }}')" title="{{translate('messages.delete_item')}}"><i class="tio-delete-outlined"></i>
+                                    </a>
+                                    @else
                                     <a class="btn btn-sm btn--danger btn-outline-danger action-btn" href="javascript:"
                                         onclick="form_alert('food-{{$item['id']}}','{{ translate('Want to delete this item ?') }}')" title="{{translate('messages.delete_item')}}"><i class="tio-delete-outlined"></i>
                                     </a>
+                                    @endif
                                 </div>
                                 <form action="{{route('vendor.item.delete',[$item['id']])}}"
                                         method="post" id="food-{{$item['id']}}">

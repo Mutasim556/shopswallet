@@ -50,54 +50,113 @@
                             </div>
                             <div class="card-body">
                                 <div class="row g-2">
-                                    <div class="col-sm-6 col-lg-4">
-                                        <div class="form-group mb-0">
-                                            <label class="input-label"
-                                                for="exampleFormControlSelect1">{{ translate('messages.category') }}<span
-                                                    class="input-label-secondary">*</span></label>
-                                            <select name="category_id" id="category_id"
-                                                class="form-control js-select2-custom"
-                                                onchange="getRequest('{{ url('/') }}/store-panel/item/get-categories?parent_id='+this.value,'sub-categories')">
-                                                <option value="">---{{ translate('messages.select') }}---</option>
-                                                @foreach ($categories as $category)
-                                                    <option value="{{ $category['id'] }}">{{ $category['name'] }}
-                                                    </option>
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-lg-6">
+                                                <div class="form-group mb-0">
+                                                    <label class="input-label"
+                                                        for="exampleFormControlSelect1">{{ translate('messages.category') }}<span
+                                                            class="input-label-secondary">*</span></label>
+                                                    <select name="category_id" id="category_id"
+                                                        class="form-control js-select2-custom"
+                                                        onchange="getRequest('{{ url('/') }}/store-panel/item/get-categories?parent_id='+this.value,'sub-categories')">
+                                                        <option value="">---{{ translate('messages.select') }}---
+                                                        </option>
+                                                        @foreach ($categories as $category)
+                                                            <option value="{{ $category['id'] }}">{{ $category['name'] }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 col-lg-6">
+                                                <div class="form-group mb-0">
+                                                    <label class="input-label"
+                                                        for="exampleFormControlSelect1">{{ translate('messages.sub_category') }}<span
+                                                            class="input-label-secondary"></span></label>
+                                                    <select name="sub_category_id" id="sub-categories"
+                                                        class="form-control js-select2-custom"
+                                                        onchange="getRequest('{{ url('/') }}/store-panel/item/get-categories?parent_id='+this.value,'sub-sub-categories')">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6 col-lg-6 my-2">
+                                                <div class="form-group mb-0">
+                                                    <label class="input-label"
+                                                        for="exampleFormControlSelect1">{{ translate('messages.child_category') }}<span
+                                                            class="input-label-secondary"></span></label>
+                                                    <select name="sub_sub_category_id" id="sub-sub-categories"
+                                                        class="form-control js-select2-custom"
+                                                        onchange="getItems('{{ url('/') }}/store-panel/item/get-items?parent_id='+this.value,'item_id')">
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-12 col-lg-12">
+                                                <div class="form-group mb-0">
+                                                    <label class="input-label"
+                                                        for="exampleFormControlSelect1">{{ translate('messages.services') }}<span
+                                                            class="input-label-secondary"></span></label>
+                                                    <select name="item_id" id="item_id"
+                                                        class="form-control js-select2-custom">
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        @if ($language)
+                                            <ul class="nav nav-tabs mb-4">
+                                                <li class="nav-item">
+                                                    <a class="nav-link lang_link active" href="#"
+                                                        id="default-link">{{ translate('messages.default') }}</a>
+                                                </li>
+                                                @foreach (json_decode($language) as $lang)
+                                                    <li class="nav-item">
+                                                        <a class="nav-link lang_link" href="#"
+                                                            id="{{ $lang }}-link">{{ \App\CentralLogics\Helpers::get_language_name($lang) . '(' . strtoupper($lang) . ')' }}</a>
+                                                    </li>
                                                 @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-lg-4">
-                                        <div class="form-group mb-0">
-                                            <label class="input-label"
-                                                for="exampleFormControlSelect1">{{ translate('messages.sub_category') }}<span
-                                                    class="input-label-secondary"></span></label>
-                                            <select name="sub_category_id" id="sub-categories"
-                                                class="form-control js-select2-custom"
-                                                onchange="getRequest('{{ url('/') }}/store-panel/item/get-categories?parent_id='+this.value,'sub-sub-categories')">
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 col-lg-4">
-                                        <div class="form-group mb-0">
-                                            <label class="input-label"
-                                                for="exampleFormControlSelect1">{{ translate('messages.child_category') }}<span
-                                                    class="input-label-secondary"></span></label>
-                                            <select name="sub_sub_category_id" id="sub-sub-categories"
-                                                class="form-control js-select2-custom"
-                                                onchange="getItems('{{ url('/') }}/store-panel/item/get-items?parent_id='+this.value,'item_id')">
-                                            </select>
+                                            </ul>
+                                        @endif
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                @if ($language)
+                                                    <div class="form-group lang_form" id="default-form">
+                                                        <label class="input-label"
+                                                            for="exampleFormControlInput1">{{ translate('messages.service_details') }}
+                                                            ({{ translate('messages.default') }})</label>
+                                                        <textarea id="summernote" name="service_details[]" class="form-control summernote"
+                                                            oninvalid="document.getElementById('en-link').click()"></textarea>
+                                                    </div>
+                                                    <input type="hidden" name="lang[]" value="default">
+
+                                                    @foreach (json_decode($language) as $lang)
+                                                        <div class="form-group d-none lang_form"
+                                                            id="{{ $lang }}-form">
+                                                            <label class="input-label"
+                                                                for="exampleFormControlInput1">{{ translate('messages.service_details') }}
+                                                                ({{ strtoupper($lang) }})
+                                                            </label>
+                                                            <textarea id="summernote" name="service_details[]" class="form-control summernote"
+                                                                oninvalid="document.getElementById('en-link').click()"></textarea>
+                                                        </div>
+                                                        <input type="hidden" name="lang[]" value="{{ $lang }}">
+                                                    @endforeach
+                                                @else
+                                                    <div class="form-group lang_form" id="default-form">
+                                                        <label class="input-label"
+                                                            for="exampleFormControlInput1">{{ translate('messages.service_details') }}</label>
+                                                        <textarea id="summernote" name="service_details[]" class="form-control summernote"
+                                                            oninvalid="document.getElementById('en-link').click()"></textarea>
+                                                    </div>
+                                                    <input type="hidden" name="lang[]" value="default">
+                                                @endif
+                                                
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-12 col-lg-12">
-                                        <div class="form-group mb-0">
-                                            <label class="input-label"
-                                                for="exampleFormControlSelect1">{{ translate('messages.services') }}<span
-                                                    class="input-label-secondary"></span></label>
-                                            <select name="item_id" id="item_id" class="form-control js-select2-custom">
-                                            </select>
-                                        </div>
-                                    </div>
 
 
                                     @if ($module_data['unit'])
@@ -122,7 +181,7 @@
                                                 for="exampleFormControlInput1">{{ translate('messages.price') }}</label>
                                             <input type="number" min="0" max="100000" step="0.01"
                                                 value="1" name="price" class="form-control"
-                                                placeholder="{{ translate('messages.Ex:') }} 100" >
+                                                placeholder="{{ translate('messages.Ex:') }} 100">
                                         </div>
                                     </div>
                                     <div class="col-sm-6 col-lg-3">
@@ -150,11 +209,11 @@
                                     <div class="col-md-8 mt-3">
                                         <label class="input-label"
                                             for="{{ translate('message.timeslot_list') }}">{{ translate('messages.service_available_for') }}</label>
-                                        <input type="checkbox" name="day_available" checked>
+                                        <input type="checkbox" name="service_available_for[]" value="daily" checked>
                                         &nbsp;{{ translate('messages.daily') }} &nbsp;&nbsp;<span class="mr-2"></span>
-                                        <input type="checkbox" name="month_available">
+                                        <input type="checkbox" name="service_available_for[]" value="monthly">
                                         &nbsp;{{ translate('messages.monthly') }}&nbsp;&nbsp;<span class="mr-2"></span>
-                                        <input type="checkbox" name="year_available">
+                                        <input type="checkbox" name="service_available_for[]" value="yearly">
                                         &nbsp;{{ translate('messages.yearly') }} &nbsp;&nbsp;
                                     </div>
                                 </div>
@@ -200,21 +259,13 @@
                                     <div class="col-md-6 mt-3 d-none" id="old_staff_div">
                                         <label class="input-label"
                                             for="{{ translate('message.timeslot_list') }}">{{ translate('messages.old_staff') }}</label>
-                                        <select name="old_staff" id="old_staff" class="form-control js-select2-custom"
-                                            >
+                                        <select name="old_staff" id="old_staff" class="form-control js-select2-custom">
                                             {{-- <option value="">Select Please</option> --}}
                                             @foreach (DB::table('vendor_employees')->where('vendor_id', auth('vendor')->id())->select('id', 'f_name', 'l_name')->get() as $staff)
                                                 <option value="{{ $staff->id }}">
                                                     {{ $staff->f_name . ' ' . $staff->fl_name }}</option>
                                             @endforeach
                                         </select>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <div class="col-md-12 mt-3">
-                                        <label class="input-label"
-                                            for="{{ translate('message.timeslot_list') }}">{{ translate('messages.service_details') }}*</label>
-                                        <textarea name="service_details" id="summernote" class="form-control" cols="50" rows="20"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -712,31 +763,32 @@
 @endsection
 
 @push('script')
-    
 @endpush
 
 @push('script_2')
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#summernote').summernote({
-                tabsize: 2,
-                height: 200,
-                toolbar: [
-                    ['style', ['style']],
-                    ['font', ['bold', 'underline','italic', 'clear']],
-                    ['fontname', ['fontname']],
-                    ['color', ['color']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['table', ['table']],
-                    // ['insert', ['link']],
-                    ['view', ['fullscreen', 'codeview', 'help']]
-                ]
+            $('.summernote').each(function(e) {
+                $(this).summernote({
+                    tabsize: 2,
+                    height: 200,
+                    toolbar: [
+                        ['style', ['style']],
+                        ['font', ['bold', 'underline', 'italic', 'clear']],
+                        ['fontname', ['fontname']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['table', ['table']],
+                        // ['insert', ['link']],
+                        ['view', ['fullscreen', 'codeview', 'help']]
+                    ],
+                    placeholder: '{{ translate("messages.service_details") }}'
+                });
             });
         });
     </script>
     <script>
-        
         var count = 0;
         var mod_type = "{{ $module_type }}";
         $(document).ready(function() {
