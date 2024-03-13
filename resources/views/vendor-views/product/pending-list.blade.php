@@ -15,7 +15,7 @@
                 <div class="mr-auto">
                     <h1 class="page-header-title"><i class="tio-filter-list"></i> 
                         @if (\App\CentralLogics\Helpers::get_vendor_module_id() == 'services')
-                        {{translate('messages.service_list')}}
+                        {{translate('messages.pending_service_list')}}
                         @else    
                         {{translate('messages.item_list')}}
                         @endif

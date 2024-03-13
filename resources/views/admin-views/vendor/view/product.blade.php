@@ -19,77 +19,152 @@
 
             <div class="col-12 mb-3">
                 <div class="row g-2">
-                    @php($item = \App\Models\Item::withoutGlobalScope(\App\Scopes\StoreScope::class)->where(['store_id'=>$store->id])->count())
-                    <div class="col-sm-6 col-lg-3">
-                        <a class="order--card h-100" href="{{route('admin.store.view', ['store'=>$store->id, 'tab'=> 'item'])}}">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
-                                    <img src="{{asset('/public/assets/admin/img/store_items/fi_9752284.png')}}" alt="dashboard" class="oder--card-icon">
-                                    <span>{{translate('All_Items')}}</span>
-                                </h6>
-                                <span class="card-title text-success">
-                                    {{$item}}
-                                </span>
-                            </div>
-                        </a>
-                    </div>
+                    @if(Config::get('module.current_module_type') == 'services')
+                        @php($item = \App\Models\Service::withoutGlobalScope(\App\Scopes\StoreScope::class)->where(['store_id'=>$store->id])->count())
+                        <div class="col-sm-6 col-lg-3">
+                            <a class="order--card h-100" href="{{route('admin.store.view', ['store'=>$store->id, 'tab'=> 'item'])}}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
+                                        <img src="{{asset('/public/assets/admin/img/store_items/fi_9752284.png')}}" alt="dashboard" class="oder--card-icon">
+                                        <span>{{translate('All_Items')}}</span>
+                                    </h6>
+                                    <span class="card-title text-success">
+                                        {{$item}} 
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
 
-                    @php($item = \App\Models\Item::withoutGlobalScope(\App\Scopes\StoreScope::class)->where(['store_id'=>$store->id, 'status'=>1])->count())
-                    <div class="col-sm-6 col-lg-3">
-                        <a class="order--card h-100" href="{{route('admin.store.view', ['store'=>$store->id, 'tab'=> 'item' ,'sub_tab' => 'active-items'])}}">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
-                                    <img src="{{asset('/public/assets/admin/img/store_items/fi_10608883.png')}}" alt="dashboard" class="oder--card-icon">
-                                    <span>{{translate('messages.Active_Items')}}</span>
-                                </h6>
-                                <span class="card-title text-success">
-                                    {{$item}}
-                                </span>
-                            </div>
-                        </a>
-                    </div>
-                    @php($item = \App\Models\Item::withoutGlobalScope(\App\Scopes\StoreScope::class)->where(['store_id'=>$store->id, 'status'=>0])->count())
-                    <div class="col-sm-6 col-lg-3">
-                        <a class="order--card h-100" href="{{route('admin.store.view', ['store'=>$store->id, 'tab'=> 'item' ,'sub_tab' => 'inactive-items'])}}">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
-                                    <img src="{{asset('/public/assets/admin/img/store_items/fi_10186054.png')}}" alt="dashboard" class="oder--card-icon">
-                                    <span>{{translate('messages.Inactive_Items')}}</span>
-                                </h6>
-                                <span class="card-title text-success">
-                                    {{$item}}
-                                </span>
-                            </div>
-                        </a>
-                    </div>
-                    @php($item = \App\Models\TempProduct::withoutGlobalScope(\App\Scopes\StoreScope::class)->where(['store_id'=>$store->id, 'is_rejected'=>0])->count())
-                    <div class="col-sm-6 col-lg-3">
-                        <a class="order--card h-100" href="{{route('admin.store.view', ['store'=>$store->id, 'tab'=> 'item' ,'sub_tab' => 'pending-items'])}}">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
-                                    <img src="{{asset('/public/assets/admin/img/store_items/fi_5106700.png')}}" alt="dashboard" class="oder--card-icon">
-                                    <span>{{translate('messages.Pending_for_Approval')}}</span>
-                                </h6>
-                                <span class="card-title text-success">
-                                    {{$item}}
-                                </span>
-                            </div>
-                        </a>
-                    </div>
-                    @php($item = \App\Models\TempProduct::withoutGlobalScope(\App\Scopes\StoreScope::class)->where(['store_id'=>$store->id, 'is_rejected'=>1])->count())
-                    <div class="col-sm-6 col-lg-3">
-                        <a class="order--card h-100" href="{{route('admin.store.view', ['store'=>$store->id, 'tab'=> 'item' ,'sub_tab' => 'rejected-items'])}}">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
-                                    <img src="{{asset('/public/assets/admin/img/store_items/image 89.png')}}" alt="dashboard" class="oder--card-icon">
-                                    <span>{{translate('messages.Rejected_Items')}}</span>
-                                </h6>
-                                <span class="card-title text-success">
-                                    {{$item}}
-                                </span>
-                            </div>
-                        </a>
-                    </div>
+                        @php($item = \App\Models\Service::withoutGlobalScope(\App\Scopes\StoreScope::class)->where(['store_id'=>$store->id, 'status'=>1])->count())
+                        <div class="col-sm-6 col-lg-3">
+                            <a class="order--card h-100" href="{{route('admin.store.view', ['store'=>$store->id, 'tab'=> 'item' ,'sub_tab' => 'active-items'])}}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
+                                        <img src="{{asset('/public/assets/admin/img/store_items/fi_10608883.png')}}" alt="dashboard" class="oder--card-icon">
+                                        <span>{{translate('messages.Active_Items')}}</span>
+                                    </h6>
+                                    <span class="card-title text-success">
+                                        {{$item}}
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                        @php($item = \App\Models\Service::withoutGlobalScope(\App\Scopes\StoreScope::class)->where(['store_id'=>$store->id, 'status'=>0])->count())
+                        <div class="col-sm-6 col-lg-3">
+                            <a class="order--card h-100" href="{{route('admin.store.view', ['store'=>$store->id, 'tab'=> 'item' ,'sub_tab' => 'inactive-items'])}}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
+                                        <img src="{{asset('/public/assets/admin/img/store_items/fi_10186054.png')}}" alt="dashboard" class="oder--card-icon">
+                                        <span>{{translate('messages.Inactive_Items')}}</span>
+                                    </h6>
+                                    <span class="card-title text-success">
+                                        {{$item}}
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                        @php($item = \App\Models\Service::withoutGlobalScope(\App\Scopes\StoreScope::class)->where(['store_id'=>$store->id, 'is_approved'=>0])->count())
+                        <div class="col-sm-6 col-lg-3">
+                            <a class="order--card h-100" href="{{route('admin.store.view', ['store'=>$store->id, 'tab'=> 'item' ,'sub_tab' => 'pending-items'])}}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
+                                        <img src="{{asset('/public/assets/admin/img/store_items/fi_5106700.png')}}" alt="dashboard" class="oder--card-icon">
+                                        <span>{{translate('messages.Pending_for_Approval')}}</span>
+                                    </h6>
+                                    <span class="card-title text-success">
+                                        {{$item}}
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                        @php($item = \App\Models\Service::withoutGlobalScope(\App\Scopes\StoreScope::class)->where(['store_id'=>$store->id, 'is_approved'=>2])->count())
+                        <div class="col-sm-6 col-lg-3">
+                            <a class="order--card h-100" href="{{route('admin.store.view', ['store'=>$store->id, 'tab'=> 'item' ,'sub_tab' => 'rejected-items'])}}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
+                                        <img src="{{asset('/public/assets/admin/img/store_items/image 89.png')}}" alt="dashboard" class="oder--card-icon">
+                                        <span>{{translate('messages.Rejected_Items')}}</span>
+                                    </h6>
+                                    <span class="card-title text-success">
+                                        {{$item}}
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                    @else
+                    @php($item = \App\Models\Item::withoutGlobalScope(\App\Scopes\StoreScope::class)->where(['store_id'=>$store->id])->count())
+                        <div class="col-sm-6 col-lg-3">
+                            <a class="order--card h-100" href="{{route('admin.store.view', ['store'=>$store->id, 'tab'=> 'item'])}}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
+                                        <img src="{{asset('/public/assets/admin/img/store_items/fi_9752284.png')}}" alt="dashboard" class="oder--card-icon">
+                                        <span>{{translate('All_Items')}}</span>
+                                    </h6>
+                                    <span class="card-title text-success">
+                                        {{$item}} 
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+
+                        @php($item = \App\Models\Item::withoutGlobalScope(\App\Scopes\StoreScope::class)->where(['store_id'=>$store->id, 'status'=>1])->count())
+                        <div class="col-sm-6 col-lg-3">
+                            <a class="order--card h-100" href="{{route('admin.store.view', ['store'=>$store->id, 'tab'=> 'item' ,'sub_tab' => 'active-items'])}}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
+                                        <img src="{{asset('/public/assets/admin/img/store_items/fi_10608883.png')}}" alt="dashboard" class="oder--card-icon">
+                                        <span>{{translate('messages.Active_Items')}}</span>
+                                    </h6>
+                                    <span class="card-title text-success">
+                                        {{$item}}
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                        @php($item = \App\Models\Item::withoutGlobalScope(\App\Scopes\StoreScope::class)->where(['store_id'=>$store->id, 'status'=>0])->count())
+                        <div class="col-sm-6 col-lg-3">
+                            <a class="order--card h-100" href="{{route('admin.store.view', ['store'=>$store->id, 'tab'=> 'item' ,'sub_tab' => 'inactive-items'])}}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
+                                        <img src="{{asset('/public/assets/admin/img/store_items/fi_10186054.png')}}" alt="dashboard" class="oder--card-icon">
+                                        <span>{{translate('messages.Inactive_Items')}}</span>
+                                    </h6>
+                                    <span class="card-title text-success">
+                                        {{$item}}
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                        @php($item = \App\Models\TempProduct::withoutGlobalScope(\App\Scopes\StoreScope::class)->where(['store_id'=>$store->id, 'is_rejected'=>0])->count())
+                        <div class="col-sm-6 col-lg-3">
+                            <a class="order--card h-100" href="{{route('admin.store.view', ['store'=>$store->id, 'tab'=> 'item' ,'sub_tab' => 'pending-items'])}}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
+                                        <img src="{{asset('/public/assets/admin/img/store_items/fi_5106700.png')}}" alt="dashboard" class="oder--card-icon">
+                                        <span>{{translate('messages.Pending_for_Approval')}}</span>
+                                    </h6>
+                                    <span class="card-title text-success">
+                                        {{$item}}
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                        @php($item = \App\Models\TempProduct::withoutGlobalScope(\App\Scopes\StoreScope::class)->where(['store_id'=>$store->id, 'is_rejected'=>1])->count())
+                        <div class="col-sm-6 col-lg-3">
+                            <a class="order--card h-100" href="{{route('admin.store.view', ['store'=>$store->id, 'tab'=> 'item' ,'sub_tab' => 'rejected-items'])}}">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h6 class="card-subtitle d-flex justify-content-between m-0 align-items-center">
+                                        <img src="{{asset('/public/assets/admin/img/store_items/image 89.png')}}" alt="dashboard" class="oder--card-icon">
+                                        <span>{{translate('messages.Rejected_Items')}}</span>
+                                    </h6>
+                                    <span class="card-title text-success">
+                                        {{$item}}
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                    @endif
+                    
                 </div>
             </div>
 
@@ -202,17 +277,18 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="">
-                                        @if ($food->is_rejected == 1)
-                                        <span class="badge badge-soft-danger  text-capitalize">
-                                            {{ translate('messages.rejected') }}
-                                        </span>
-                                        @else
-                                        <span class="badge badge-soft-info  text-capitalize">
-                                            {{ translate('messages.pending') }}
-                                        </span>
-                                        @endif
-                                        </div>
+                                        
+                                            <div class="">
+                                            @if ($food->is_rejected == 1)
+                                            <span class="badge badge-soft-danger  text-capitalize">
+                                                {{ translate('messages.rejected') }}
+                                            </span>
+                                            @else
+                                            <span class="badge badge-soft-info  text-capitalize">
+                                                {{ translate('messages.pending') }}
+                                            </span>
+                                            @endif
+                                            </div>
                                     </td>
                                     <td>
                                         <div class="btn--container justify-content-center">
@@ -220,27 +296,53 @@
                                             data-original-title="{{ translate('messages.View') }}" href="{{route('admin.item.requested_item_view',['id'=> $food['id']])}}">
                                                 <i class="tio-invisible"></i>
                                             </a>
-                                            <a class="btn action-btn btn--primary btn-outline-primary" data-toggle="tooltip" data-placement="top"
-                                            data-original-title="{{ translate('messages.approve') }}"
-                                            onclick="request_alert('{{route('admin.item.approved',[ 'id'=> $food['id']])}}','{{translate('messages.you_want_to_approve_this_product')}}')"
-                                                href="javascript:"><i class="tio-done font-weight-bold"></i> </a>
-                                            @if($food->is_rejected == 0)
-                                                <a class="btn action-btn btn--danger btn-outline-danger " data-toggle="tooltip" data-placement="top"
-                                                data-original-title="{{ translate('messages.deny') }}"
-                                                onclick="cancelled_status('{{ route('admin.item.deny', ['id'=> $food['id']]) }}','{{ translate('you_want_to_deny_this_product') }}')"
-                                                href="javascript:"><i class="tio-clear font-weight-bold"></i></a>
+                                            @if (Config::get('module.current_module_type') == 'services')
+                                                <a class="btn action-btn btn--primary btn-outline-primary" href="{{route('admin.item.approved',[ 'id'=> $food->id])}}" data-toggle="tooltip" data-placement="top"
+                                                data-original-title="{{ translate('messages.approve') }}"
+                                                onclick="return confirm('{{translate('messages.you_want_to_approve_this_service')}}')"
+                                                    href="javascript:"><i class="tio-done font-weight-bold"></i> </a>  
+
+                                                @if($food->is_approved == 0)
+                                                    <a class="btn action-btn btn--danger btn-outline-danger " data-toggle="tooltip" data-placement="top"
+                                                    data-original-title="{{ translate('messages.deny') }}" href="{{ route('admin.item.deny', ['id'=> $food['id']]) }}"
+                                                    onclick="return confirm('{{translate('messages.you_want_to_deny_this_service')}}')"
+                                                    href="javascript:"><i class="tio-clear font-weight-bold"></i></a>
+                                                @endif
+                                                <a class="btn action-btn btn--primary btn-outline-primary"
+                                                    href="{{route('admin.item.edit',[$food['id'], 'temp_product' => true])}}" title="{{translate('messages.edit_item')}}"><i class="tio-edit"></i>
+                                                </a>
+                                                <a class="btn action-btn btn--danger btn-outline-danger" href="javascript:"
+                                                    onclick="form_alert('food-{{$food['id']}}','{{translate('messages.Want_to_delete_this_service')}}')" title="{{translate('messages.delete_item')}}"><i class="tio-delete-outlined"></i>
+                                                </a>
+                                                <form action="{{route('admin.item.delete',[$food['id']])}}"
+                                                        method="post" id="food-{{$food['id']}}">
+                                                    @csrf @method('delete')
+                                                    <input type="hidden" value="1" name="temp_product" >
+                                                </form>
+                                            @else
+                                                <a class="btn action-btn btn--primary btn-outline-primary" data-toggle="tooltip" data-placement="top"
+                                                data-original-title="{{ translate('messages.approve') }}"
+                                                onclick="request_alert('{{route('admin.item.approved',[ 'id'=> $food['id']])}}','{{translate('messages.you_want_to_approve_this_product')}}')"
+                                                    href="javascript:"><i class="tio-done font-weight-bold"></i> </a>
+                                                @if($food->is_rejected == 0)
+                                                    <a class="btn action-btn btn--danger btn-outline-danger " data-toggle="tooltip" data-placement="top"
+                                                    data-original-title="{{ translate('messages.deny') }}"
+                                                    onclick="cancelled_status('{{ route('admin.item.deny', ['id'=> $food['id']]) }}','{{ translate('you_want_to_deny_this_product') }}')"
+                                                    href="javascript:"><i class="tio-clear font-weight-bold"></i></a>
+                                                @endif
+                                                <a class="btn action-btn btn--primary btn-outline-primary"
+                                                    href="{{route('admin.item.edit',[$food['id'], 'temp_product' => true])}}" title="{{translate('messages.edit_item')}}"><i class="tio-edit"></i>
+                                                </a>
+                                                <a class="btn action-btn btn--danger btn-outline-danger" href="javascript:"
+                                                    onclick="form_alert('food-{{$food['id']}}','{{translate('messages.Want_to_delete_this_item')}}')" title="{{translate('messages.delete_item')}}"><i class="tio-delete-outlined"></i>
+                                                </a>
+                                                <form action="{{route('admin.item.delete',[$food['id']])}}"
+                                                        method="post" id="food-{{$food['id']}}">
+                                                    @csrf @method('delete')
+                                                    <input type="hidden" value="1" name="temp_product" >
+                                                </form>
                                             @endif
-                                            <a class="btn action-btn btn--primary btn-outline-primary"
-                                                href="{{route('admin.item.edit',[$food['id'], 'temp_product' => true])}}" title="{{translate('messages.edit_item')}}"><i class="tio-edit"></i>
-                                            </a>
-                                            <a class="btn action-btn btn--danger btn-outline-danger" href="javascript:"
-                                                onclick="form_alert('food-{{$food['id']}}','{{translate('messages.Want_to_delete_this_item')}}')" title="{{translate('messages.delete_item')}}"><i class="tio-delete-outlined"></i>
-                                            </a>
-                                            <form action="{{route('admin.item.delete',[$food['id']])}}"
-                                                    method="post" id="food-{{$food['id']}}">
-                                                @csrf @method('delete')
-                                                <input type="hidden" value="1" name="temp_product" >
-                                            </form>
+                                            
                                         </div>
                                     </td>
                                 </tr>
@@ -265,7 +367,7 @@
                                     <td>{{\App\CentralLogics\Helpers::format_currency($food['price'])}}</td>
                                     <td>
                                         <label class="toggle-switch toggle-switch-sm" for="stocksCheckbox{{$food->id}}">
-                                            <input type="checkbox" onclick="location.href='{{route('admin.item.status',[$food['id'],$food->status?0:1])}}'"class="toggle-switch-input" id="stocksCheckbox{{$food->id}}" {{$food->status?'checked':''}}>
+                                            <input type="checkbox" onclick="location.href='{{route('admin.item.status',[$food['id'],$food->status?0:1])}}'"class="toggle-switch-input" id="stocksCheckbox{{$food->id}}" {{$food->status?'checked':''}}> 
                                             <span class="toggle-switch-label">
                                                 <span class="toggle-switch-indicator"></span>
                                             </span>

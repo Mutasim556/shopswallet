@@ -100,6 +100,7 @@ Route::group(['namespace' => 'Vendor', 'as' => 'vendor.'], function () {
             Route::get('edit/{id}', 'ItemController@edit')->name('edit');
             Route::post('update/{id}', 'ItemController@update')->name('update');
             Route::get('list', 'ItemController@list')->name('list');
+            Route::get('pending-list', 'ItemController@pending_list')->name('pending_list');
             Route::delete('delete/{id}', 'ItemController@delete')->name('delete');
             Route::get('status/{id}/{status}', 'ItemController@status')->name('status');
             Route::post('search', 'ItemController@search')->name('search');

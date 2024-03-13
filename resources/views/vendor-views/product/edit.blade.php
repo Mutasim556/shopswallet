@@ -43,16 +43,15 @@
         @endif
         <!-- End Page Header -->
         @if (\App\CentralLogics\Helpers::get_vendor_module_id() == 'services')
-            <form action="javascript:" method="post" id="item_form" enctype="multipart/form-data">
+            <form action="javascript:" method="post" id="product_form" enctype="multipart/form-data">
                 @csrf
                 @php($language = \App\Models\BusinessSetting::where('key', 'language')->first())
                 @php($language = $language->value ?? null)
                 @php($default_lang = str_replace('_', '-', app()->getLocale()))
                 <div class="row g-2">
-
-
-
-
+                    <input type="hidden" class="route_url"
+                    value="{{ $route ?? route('vendor.item.update',[$product['id']]) }}">
+                    <input type="hidden" value="{{ $product['id'] ?? null }}" name="service_id">
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
@@ -72,9 +71,10 @@
                                                     <label class="input-label"
                                                         for="exampleFormControlSelect1">{{ translate('messages.category') }}<span
                                                             class="input-label-secondary">*</span></label>
-                                                    <select name="category_id" id="category_id"
-                                                        class="form-control js-select2-custom"
-                                                        onchange="getRequest('{{ url('/') }}/store-panel/item/get-categories?parent_id='+this.value,'sub-categories')" disabled>
+                                                    <input type="hidden" name="category_id" value="{{ $product_category[0]->id }}">
+                                                    <select id="category_id"
+                                                        class="form-control  js-select2-custom"  disabled
+                                                        onchange="getRequest('{{ url('/') }}/store-panel/item/get-categories?parent_id='+this.value,'sub-categories')" >
                                                         <option value="">---{{ translate('messages.select') }}---
                                                         </option>
                                                         @foreach ($categories as $category)
@@ -91,9 +91,10 @@
                                                     <label class="input-label"
                                                         for="exampleFormControlSelect1">{{ translate('messages.sub_category') }}<span
                                                             class="input-label-secondary"></span></label>
-                                                    <select name="sub_category_id" id="sub-categories"
-                                                        class="form-control js-select2-custom"
-                                                        onchange="getRequest('{{ url('/') }}/store-panel/item/get-categories?parent_id='+this.value,'sub-sub-categories')" disabled>
+                                                    <input type="hidden" name="sub_category_id" value="{{ $product_category[1]->id }}">
+                                                    <select name="" id="sub-categories"
+                                                        class="form-control js-select2-custom" disabled
+                                                        onchange="getRequest('{{ url('/') }}/store-panel/item/get-categories?parent_id='+this.value,'sub-sub-categories')" >
                                                         <option value="{{ $product_category[1]->id }}" selected>
                                                             {{ $product_category[1]->category_name }}
                                                     </select>
@@ -104,9 +105,10 @@
                                                     <label class="input-label"
                                                         for="exampleFormControlSelect1">{{ translate('messages.child_category') }}<span
                                                             class="input-label-secondary"></span></label>
-                                                    <select name="sub_sub_category_id" id="sub-sub-categories"
-                                                        class="form-control js-select2-custom"
-                                                        onchange="getItems('{{ url('/') }}/store-panel/item/get-items?parent_id='+this.value,'item_id')" disabled>
+                                                    <input type="hidden" name="sub_sub_category_id" value="{{ $product_category[2]->id }}">
+                                                    <select name="" id="sub-sub-categories"
+                                                        class="form-control js-select2-custom" disabled
+                                                        onchange="getItems('{{ url('/') }}/store-panel/item/get-items?parent_id='+this.value,'item_id')" >
                                                         <option value="{{ $product_category[2]->id }}" selected>
                                                             {{ $product_category[2]->category_name }}
                                                     </select>
@@ -118,9 +120,10 @@
                                                     <label class="input-label"
                                                         for="exampleFormControlSelect1">{{ translate('messages.services') }}<span
                                                             class="input-label-secondary"></span></label>
-                                                    <select name="item_id" id="item_id"
+                                                    <input type="hidden" name="item_id" value="{{ $product->item_id }}">
+                                                    <select name="" id="item_id"
                                                         class="form-control js-select2-custom" disabled>
-                                                        <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                                        <option value="{{ $product->item_id }}">{{ $product->name }}</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -141,7 +144,7 @@
                                                 @endforeach
                                             </ul>
                                         @endif
-                                        <div class="row">
+                                        <div class="row"> 
                                             <div class="col-md-12">
                                                 @if ($language)
                                                     <div class="form-group lang_form" id="default-form">
@@ -149,11 +152,21 @@
                                                             for="exampleFormControlInput1">{{ translate('messages.service_details') }}
                                                             ({{ translate('messages.default') }})</label>
                                                         <textarea id="summernote" name="service_details[]" class="form-control summernote"
-                                                            oninvalid="document.getElementById('en-link').click()"></textarea>
+                                                            oninvalid="document.getElementById('en-link').click()">{{ $product?->getRawOriginal('service_details') }}</textarea>
                                                     </div>
                                                     <input type="hidden" name="lang[]" value="default">
 
                                                     @foreach (json_decode($language) as $lang)
+                                                        <?php
+                                                            if (count($product['translations'])) {
+                                                                $translate = [];
+                                                                foreach ($product['translations'] as $t) {
+                                                                    if ($t->locale == $lang && $t->key == 'service_details') {
+                                                                        $translate[$lang]['service_details'] = $t->value;
+                                                                    }
+                                                                }
+                                                            }
+                                                        ?>
                                                         <div class="form-group d-none lang_form"
                                                             id="{{ $lang }}-form">
                                                             <label class="input-label"
@@ -161,7 +174,7 @@
                                                                 ({{ strtoupper($lang) }})
                                                             </label>
                                                             <textarea id="summernote" name="service_details[]" class="form-control summernote"
-                                                                oninvalid="document.getElementById('en-link').click()"></textarea>
+                                                                oninvalid="document.getElementById('en-link').click()">{{ $translate[$lang]['service_details'] ?? '' }}</textarea>
                                                         </div>
                                                         <input type="hidden" name="lang[]"
                                                             value="{{ $lang }}">
@@ -191,7 +204,7 @@
                                                     class="form-control js-select2-custom">
                                                     <option value="">{{ translate('select_please') }}</option>
                                                     @foreach (\App\Models\Unit::all() as $unit)
-                                                        <option value="{{ $unit->id }}">{{ $unit->unit }}</option>
+                                                        <option value="{{ $unit->id }}" {{ $product->unit_id==$unit->id?'selected':'' }}>{{ $unit->unit }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -203,7 +216,7 @@
                                             <label class="input-label"
                                                 for="exampleFormControlInput1">{{ translate('messages.price') }}</label>
                                             <input type="number" min="0" max="100000" step="0.01"
-                                                value="1" name="price" class="form-control"
+                                                value="{{ $product->price }}" name="price" class="form-control"
                                                 placeholder="{{ translate('messages.Ex:') }} 100">
                                         </div>
                                     </div>
@@ -213,8 +226,8 @@
                                                 for="exampleFormControlInput1">{{ translate('messages.discount_type') }}</label>
                                             <select name="discount_type" id="discount_type"
                                                 class="form-control js-select2-custom">
-                                                <option value="percent">{{ translate('messages.percent') }}</option>
-                                                <option value="amount">{{ translate('messages.amount') }}</option>
+                                                <option value="percent" {{ $product->discount_type=='percent'?'selected':'' }}>{{ translate('messages.percent') }}</option>
+                                                <option value="amount" {{ $product->discount_type=='amount'?'selected':'' }}>{{ translate('messages.amount') }}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -222,21 +235,22 @@
                                         <div class="form-group mb-0">
                                             <label class="input-label"
                                                 for="exampleFormControlInput1">{{ translate('messages.discount') }}</label>
-                                            <input type="number" min="0" max="100000" value="0"
+                                            <input type="number" min="0" max="100000" value="{{ $product->discount }}"
                                                 name="discount" class="form-control"
                                                 placeholder="{{ translate('messages.Ex:') }} 100">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="row">
+                                    @php($available_for = explode(',',$product->available_for))
                                     <div class="col-md-8 mt-3">
                                         <label class="input-label"
                                             for="{{ translate('message.timeslot_list') }}">{{ translate('messages.service_available_for') }}</label>
-                                        <input type="checkbox" name="service_available_for[]" value="daily" checked>
+                                        <input type="checkbox" name="service_available_for[]" value="daily" {{ in_array('daily',$available_for)?'checked':'' }}>
                                         &nbsp;{{ translate('messages.daily') }} &nbsp;&nbsp;<span class="mr-2"></span>
-                                        <input type="checkbox" name="service_available_for[]" value="monthly">
+                                        <input type="checkbox" name="service_available_for[]" value="monthly" {{ in_array('monthly',$available_for)?'checked':'' }}>
                                         &nbsp;{{ translate('messages.monthly') }}&nbsp;&nbsp;<span class="mr-2"></span>
-                                        <input type="checkbox" name="service_available_for[]" value="yearly">
+                                        <input type="checkbox" name="service_available_for[]" value="yearly" {{ in_array('yearly',$available_for)?'checked':'' }}>
                                         &nbsp;{{ translate('messages.yearly') }} &nbsp;&nbsp;
                                     </div>
                                 </div>
@@ -249,26 +263,45 @@
                                     </div>
                                 </div>
                                 <div id="append_timeslot" class="row">
+                                    @php($time_slot_list = explode(',',$product->timeslot_list))
                                     <div class="col-md-3 mt-3">
                                         <input type="time" class="form-control" name="timeslot_list[]"
-                                            value="{{ isset($timeslot) ? date('H:i', strtotime($time_slot_list[0])) : '08:00' }}">
+                                            value="{{ isset($product) ? date('H:i', strtotime($time_slot_list[0])) : '08:00' }}">
                                         <span class="text-danger">
                                             @error('timeslot_list')
                                                 {{ $message }}
                                             @enderror
                                         </span>
                                     </div>
+                                    @foreach ($time_slot_list as $key=>$value)
+                                    @if($key==0)
+                                    <?php
+                                        continue;
+                                    ?>
+                                    @endif
+
+                                    <div class="col-md-3 mt-3" id="new_append">
+                                        <div class="row">
+                                            <div class="col-md-9">
+                                                <input type="time" class="form-control" name="timeslot_list[]" value="{{ date('H:i',strtotime($value)) }}">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button type="button" id="del_timeslot" class="btn btn-danger" style="padding-bottom:10px; padding-top:10px;"><i class="tio-delete-outlined"></i></button>
+                                            </div>    
+                                        </div>
+                                    </div>
+                                    @endforeach
                                 </div>
                                 <div class="row">
                                     <div class="col-md-4 mt-3">
                                         <label class="input-label"
                                             for="{{ translate('message.timeslot_list') }}">{{ translate('messages.assign_staff') }}</label>
                                         <input type="radio" name="staff" value="new_staff"
-                                            onchange="changeStaffDiv($(this).val(),'old_staff')" checked>
+                                            onchange="changeStaffDiv($(this).val(),'old_staff')" {{ $product->new_staff?'checked':'' }}>
                                         &nbsp;{{ translate('messages.new_staff') }} &nbsp;&nbsp;<span
                                             class="mr-2"></span>
                                         <input type="radio" name="staff" value="old_staff"
-                                            onchange="changeStaffDiv($(this).val(),'new_staff')">
+                                            onchange="changeStaffDiv($(this).val(),'new_staff')" {{ $product->old_staff?'checked':'' }}>
                                         &nbsp;{{ translate('messages.old_staff') }}&nbsp;&nbsp;<span
                                             class="mr-2"></span>
                                     </div>
@@ -276,7 +309,7 @@
                                     <div class="col-md-6 mt-3" id="new_staff_div">
                                         <label class="input-label"
                                             for="{{ translate('message.timeslot_list') }}">{{ translate('messages.new_staff') }}</label>
-                                        <input type="text" class="form-control" name="new_staff">
+                                        <input type="text" class="form-control" name="new_staff" value="{{ $product->new_staff? $product->new_staff:'' }}">
                                     </div>
 
                                     <div class="col-md-6 mt-3 d-none" id="old_staff_div">
@@ -301,7 +334,7 @@
                         <div class="btn--container justify-content-end">
                             <button type="reset" id="reset_btn"
                                 class="btn btn--reset">{{ translate('messages.reset') }}</button>
-                            <button type="submit" class="btn btn--primary">{{ translate('messages.submit') }}</button>
+                            <button type="submit" class="btn btn--primary">{{ translate('messages.update') }}</button>
                         </div>
                     </div>
                 </div>
@@ -1249,14 +1282,20 @@
                         location.href = '{{ route('vendor.item.pending_item_list') }}';
                     }, 2000);
                 }
+               
                 if (data.success) {
                     toastr.success(data.success, {
                         CloseButton: true,
                         ProgressBar: true
                     });
                     setTimeout(function() {
-                        location.href = '{{ route('vendor.item.list') }}';
+                        if (data.is_approved==0) {
+                            location.href = '{{ route('vendor.item.pending_list') }}';
+                        }else{
+                            location.href = '{{ route('vendor.item.list') }}';
+                        }
                     }, 2000);
+                    
                 }
             }
         });
@@ -1321,5 +1360,30 @@
             }
         });
     });
+</script>
+<script>
+    $('#plus_timeslot').on('click', function() {
+        $('#append_timeslot').append(`
+        <div class="col-md-3 mt-3" id="new_append">
+            <div class="row">
+                <div class="col-md-9">
+                    <input type="time" class="form-control" name="timeslot_list[]">
+                </div>
+                <div class="col-md-3">
+                    <button type="button" id="del_timeslot" class="btn btn-danger" style="padding-bottom:10px; padding-top:10px;"><i class="tio-delete-outlined"></i></button>
+                </div>    
+            </div>
+        </div>
+    `);
+    });
+
+    $(document).on('click', '#del_timeslot', function() {
+        $(this).closest('#new_append').remove();
+    });
+
+    function changeStaffDiv(x, y) {
+        $('#' + x + "_div").removeClass('d-none');
+        $('#' + y + "_div").addClass('d-none');
+    }
 </script>
 @endpush

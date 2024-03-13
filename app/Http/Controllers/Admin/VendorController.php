@@ -45,7 +45,7 @@ use App\Exports\StoreOrderTransactionExport;
 use MatanYadaev\EloquentSpatial\Objects\Point;
 use App\Exports\StoreWithdrawTransactionExport;
 use App\Exports\StoreWiseWithdrawTransactionExport;
-
+use App\Models\Service;
 
 class VendorController extends Controller
 {
@@ -357,6 +357,8 @@ class VendorController extends Controller
 
     public function view($store_id, $tab=null, $sub_tab='cash')
     {
+
+        
         $key = explode(' ', request()->search);
 
         $store = Store::find($store_id);
@@ -389,29 +391,61 @@ class VendorController extends Controller
             ->Notpos()->paginate(10);
             return view('admin-views.vendor.view.order', compact('store','orders'));
         }
-        else if($tab == 'item')
+        else if($tab == 'item') 
         {
             if($sub_tab == 'pending-items' || $sub_tab == 'rejected-items' ){
-
-                $foods = TempProduct::withoutGlobalScope(\App\Scopes\StoreScope::class)->where('store_id', $store->id)
-                ->when(isset($key) , function($q) use($key){
-                    $q->where(function ($q) use ($key) {
-                        foreach ($key as $value) {
-                            $q->where('name', 'like', "%{$value}%");
-                        }
-                    });
-                })
-                ->when($sub_tab == 'pending-items' , function($q){
-                    $q->where('is_rejected' , 0);
-                })
-                ->when($sub_tab == 'rejected-items' , function($q){
-                    $q->where('is_rejected' , 1);
-                })
-                ->latest()->paginate(25);
+                if(Config::get('module.current_module_type') == 'services'){
+                    $foods = Service::withoutGlobalScope(\App\Scopes\StoreScope::class)->where('store_id', $store->id)
+                    
+                    ->when($sub_tab == 'pending-items' , function($q){
+                        $q->where('is_approved' , 0);
+                    })
+                    ->when($sub_tab == 'rejected-items' , function($q){
+                        $q->where('is_approved' , 2);
+                    })
+                    ->latest()->paginate(25);
+                    foreach($foods as $key=>$food){
+                        $item = DB::table('items')->where('id',$food->item_id)->select('name','image')->first();
+                        $foods[$key]->name = $item->name;
+                        $foods[$key]->image = $item->image;
+                    }
+                }else{
+                    $foods = TempProduct::withoutGlobalScope(\App\Scopes\StoreScope::class)->where('store_id', $store->id)
+                    ->when(isset($key) , function($q) use($key){
+                        $q->where(function ($q) use ($key) {
+                            foreach ($key as $value) {
+                                $q->where('name', 'like', "%{$value}%");
+                            }
+                        });
+                    })
+                    ->when($sub_tab == 'pending-items' , function($q){
+                        $q->where('is_rejected' , 0);
+                    })
+                    ->when($sub_tab == 'rejected-items' , function($q){
+                        $q->where('is_rejected' , 1);
+                    })
+                    ->latest()->paginate(25);
+                }
+                
             }
             else{
-
-                $foods = Item::withoutGlobalScope(\App\Scopes\StoreScope::class)->where('store_id', $store->id)
+                if(Config::get('module.current_module_type') == 'services'){
+                    $foods = Service::withoutGlobalScope(\App\Scopes\StoreScope::class)->where('store_id', $store->id)
+                    
+                    ->when($sub_tab == 'active-items' , function($q){
+                        $q->where('status' , 1);
+                    })
+                    ->when($sub_tab == 'inactive-items' , function($q){
+                        $q->where('status' , 0);
+                    })
+                    ->latest()->paginate(25);
+                    foreach($foods as $key=>$food){
+                        $item = DB::table('items')->where('id',$food->item_id)->select('name','image')->first();
+                        $foods[$key]->name = $item->name;
+                        $foods[$key]->image = $item->image;
+                    }
+                }else{
+                    $foods = Item::withoutGlobalScope(\App\Scopes\StoreScope::class)->where('store_id', $store->id)
                     ->when(isset($key) , function($q) use($key){
                         $q->where(function ($q) use ($key) {
                             foreach ($key as $value) {
@@ -426,6 +460,8 @@ class VendorController extends Controller
                         $q->where('status' , 0);
                     })
                     ->latest()->paginate(25);
+                }
+               
             }
 
             return view('admin-views.vendor.view.product', compact('store','foods','sub_tab'));
@@ -760,6 +796,7 @@ class VendorController extends Controller
 
     public function status(Store $store, Request $request)
     {
+      
         $store->status = $request->status;
         $store->save();
         $vendor = $store->vendor;

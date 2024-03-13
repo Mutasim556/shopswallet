@@ -95,6 +95,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('edit/{id}', 'ItemController@edit')->name('edit');
             Route::post('update/{id}', 'ItemController@update')->name('update');
             Route::get('list', 'ItemController@list')->name('list');
+            // Route::get('request-list', 'ItemController@request_list')->name('request_list');
             Route::delete('delete/{id}', 'ItemController@delete')->name('delete');
             Route::get('status/{id}/{status}', 'ItemController@status')->name('status');
             Route::get('review-status/{id}/{status}', 'ItemController@reviews_status')->name('reviews.status');

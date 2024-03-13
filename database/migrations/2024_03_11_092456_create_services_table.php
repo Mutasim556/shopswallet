@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('item_id')->references('id')->on('items');
             $table->foreignId('module_id')->references('id')->on('modules');
             $table->foreignId('vendor_id')->references('id')->on('vendors');
+            $table->foreignId('store_id')->references('id')->on('stores');
             $table->foreignId('category_id')->nullable()->references('id')->on('categories');
             $table->string('category_ids');
             $table->text('service_details');

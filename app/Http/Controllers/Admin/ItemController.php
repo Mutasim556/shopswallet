@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\DB;
 use App\CentralLogics\ProductLogic;
 use App\Models\PharmacyItemDetails;
 use App\Http\Controllers\Controller;
+use App\Models\Service;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
@@ -276,6 +277,8 @@ class ItemController extends Controller
         return view('admin-views.product.view', compact('product', 'reviews'));
     }
 
+
+
     public function edit(Request $request,$id)
     {
         $temp_product= false;
@@ -307,11 +310,20 @@ class ItemController extends Controller
 
     public function status(Request $request)
     {
-        $product = Item::withoutGlobalScope(StoreScope::class)->findOrFail($request->id);
-        $product->status = $request->status;
-        $product->save();
-        Toastr::success(translate('messages.item_status_updated'));
-        return back();
+        if(Config::get('module.current_module_type') == 'services'){
+            $product = Service::withoutGlobalScope(StoreScope::class)->findOrFail($request->id);
+            $product->status = $request->status;
+            $product->save();
+            Toastr::success(translate('messages.service_status_updated'));
+            return back();
+        }else{
+            $product = Item::withoutGlobalScope(StoreScope::class)->findOrFail($request->id);
+            $product->status = $request->status;
+            $product->save();
+            Toastr::success(translate('messages.item_status_updated'));
+            return back();
+        }
+       
     }
 
     public function update(Request $request, $id)
@@ -542,25 +554,32 @@ class ItemController extends Controller
 
     public function delete(Request $request)
     {
-
-        if($request?->temp_product){
-            $product = TempProduct::find($request->id);
-        }
-        else{
-            $product = Item::withoutGlobalScope(StoreScope::class)->withoutGlobalScope('translate')->find($request->id);
-            $product?->temp_product?->translations()?->delete();
-            $product?->temp_product()?->delete();
-        }
-
-        if ($product->image) {
-            if (Storage::disk('public')->exists('product/' . $product['image'])) {
-                Storage::disk('public')->delete('product/' . $product['image']);
+        if(Config::get('module.current_module_type') == 'services'){
+            $product = Service::find($request->id);
+            $product->delete();
+            Toastr::success(translate('messages.service_deleted_successfully'));
+            return back();
+        }else{
+            if($request?->temp_product){
+                $product = TempProduct::find($request->id);
             }
+            else{
+                $product = Item::withoutGlobalScope(StoreScope::class)->withoutGlobalScope('translate')->find($request->id);
+                $product?->temp_product?->translations()?->delete();
+                $product?->temp_product()?->delete();
+            }
+    
+            if ($product->image) {
+                if (Storage::disk('public')->exists('product/' . $product['image'])) {
+                    Storage::disk('public')->delete('product/' . $product['image']);
+                }
+            }
+            $product?->translations()->delete();
+            $product->delete();
+            Toastr::success(translate('messages.product_deleted_successfully'));
+            return back();
         }
-        $product?->translations()->delete();
-        $product->delete();
-        Toastr::success(translate('messages.product_deleted_successfully'));
-        return back();
+        
     }
 
     public function variant_combination(Request $request)
@@ -798,6 +817,8 @@ class ItemController extends Controller
             
         return view('admin-views.product.list', compact('items', 'store', 'category', 'type','sub_categories', 'condition'));
     }
+
+    
 
     public function remove_image(Request $request)
     {
@@ -1564,95 +1585,139 @@ class ItemController extends Controller
 
     public function deny(Request $request)
     {
-        $data = TempProduct::findOrfail($request->id);
-        $data->is_rejected = 1;
-        $data->note = $request->note;
-        $data->save();
-        Toastr::success(translate('messages.Product_denied'));
+        if(Config::get('module.current_module_type') == 'services'){
+            $data = Service::findOrfail($request->id);
+            $data->is_approved = 2;
+            // $data->note = $request->note;
+            $data->save();
+            Toastr::success(translate('messages.Product_denied'));
 
-        try
-        {
-            $mail_status = Helpers::get_mail_status('product_deny_mail_status_store');
-            if(config('mail.status') && $mail_status == '1') {
-                Mail::to($data?->store?->vendor?->email)->send(new \App\Mail\VendorProductMail($data?->store?->name,'denied'));
+            try
+            {
+                $mail_status = Helpers::get_mail_status('product_deny_mail_status_store');
+                if(config('mail.status') && $mail_status == '1') {
+                    Mail::to($data?->store?->vendor?->email)->send(new \App\Mail\VendorProductMail($data?->store?->name,'denied'));
+                }
             }
+            catch(\Exception $e)
+            {
+                info($e->getMessage());
+            }
+            return back();
+        }else{
+            $data = TempProduct::findOrfail($request->id);
+            $data->is_rejected = 1;
+            $data->note = $request->note;
+            $data->save();
+            Toastr::success(translate('messages.Product_denied'));
+
+            try
+            {
+                $mail_status = Helpers::get_mail_status('product_deny_mail_status_store');
+                if(config('mail.status') && $mail_status == '1') {
+                    Mail::to($data?->store?->vendor?->email)->send(new \App\Mail\VendorProductMail($data?->store?->name,'denied'));
+                }
+            }
+            catch(\Exception $e)
+            {
+                info($e->getMessage());
+            }
+            return to_route('admin.item.approval_list');
         }
-        catch(\Exception $e)
-        {
-            info($e->getMessage());
-        }
-        return to_route('admin.item.approval_list');
+        
     }
     public function approved(Request $request)
     {
-        $data = TempProduct::findOrfail($request->id);
-        $item= Item::withoutGlobalScope('translate')->with('translations')->findOrfail($data->item_id);
+        if(Config::get('module.current_module_type') == 'services'){
+            $data = Service::findOrfail($request->id);
+            $data->is_approved = 1;
+            $data->save();
 
-        $item->name = $data->name;
-        $item->description =  $data->description;
-        $item->image = $data->image;
-        $item->images = $data->images;
-
-        $item->store_id = $data->store_id;
-        $item->module_id = $data->module_id;
-        $item->unit_id = $data->unit_id;
-
-        $item->category_id = $data->category_id;
-        $item->category_ids = $data->category_ids;
-
-        $item->choice_options = $data->choice_options;
-        $item->food_variations = $data->food_variations;
-        $item->variations = $data->variations;
-        $item->add_ons = $data->add_ons;
-        $item->attributes = $data->attributes;
-
-        $item->price = $data->price;
-        $item->discount = $data->discount;
-        $item->discount_type = $data->discount_type;
-
-        $item->available_time_starts = $data->available_time_starts;
-        $item->available_time_ends = $data->available_time_ends;
-        $item->maximum_cart_quantity = $data->maximum_cart_quantity;
-        $item->veg = $data->veg;
-
-        $item->organic = $data->organic;
-        $item->stock =  $data->stock;
-        $item->is_approved = 1;
-
-        $item->save();
-        $item->tags()->sync(json_decode($data->tag_ids));
-
-        $item?->pharmacy_item_details()?->delete();
-
-        if($item->module->module_type == 'pharmacy'){
-            DB::table('pharmacy_item_details')->where('temp_product_id' , $data->id)->update([
-                'item_id' => $item->id,
-                'temp_product_id' => null
-                ]);
-        }
-
-        $item?->translations()?->delete();
-        Translation::where('translationable_type' , 'App\Models\TempProduct')->where('translationable_id' , $data->id)->update([
-            'translationable_type' => 'App\Models\Item',
-            'translationable_id' => $item->id
-            ]);
-
-        $data->delete();
-
-        try
-        {
-            $mail_status = Helpers::get_mail_status('product_approve_mail_status_store');
-            if(config('mail.status') && $mail_status == '1') {
-                Mail::to($data?->store?->vendor?->email)->send(new \App\Mail\VendorProductMail($data?->store?->name,'approved'));
+            try
+            {
+                $mail_status = Helpers::get_mail_status('product_approve_mail_status_store');
+                if(config('mail.status') && $mail_status == '1') {
+                    Mail::to($data?->store?->vendor?->email)->send(new \App\Mail\VendorProductMail($data?->store?->name,'approved'));
+                }
             }
-        }
-        catch(\Exception $e)
-        {
-            info($e->getMessage());
-        }
+            catch(\Exception $e)
+            {
+                info($e->getMessage());
+            }
 
-        Toastr::success(translate('messages.Product_approved'));
-        return to_route('admin.item.approval_list');
+            Toastr::success(translate('messages.service_approved'));
+            return back();
+        }else{
+            $data = TempProduct::findOrfail($request->id);
+            $item= Item::withoutGlobalScope('translate')->with('translations')->findOrfail($data->item_id);
+
+            $item->name = $data->name;
+            $item->description =  $data->description;
+            $item->image = $data->image;
+            $item->images = $data->images;
+
+            $item->store_id = $data->store_id;
+            $item->module_id = $data->module_id;
+            $item->unit_id = $data->unit_id;
+
+            $item->category_id = $data->category_id;
+            $item->category_ids = $data->category_ids;
+
+            $item->choice_options = $data->choice_options;
+            $item->food_variations = $data->food_variations;
+            $item->variations = $data->variations;
+            $item->add_ons = $data->add_ons;
+            $item->attributes = $data->attributes;
+
+            $item->price = $data->price;
+            $item->discount = $data->discount;
+            $item->discount_type = $data->discount_type;
+
+            $item->available_time_starts = $data->available_time_starts;
+            $item->available_time_ends = $data->available_time_ends;
+            $item->maximum_cart_quantity = $data->maximum_cart_quantity;
+            $item->veg = $data->veg;
+
+            $item->organic = $data->organic;
+            $item->stock =  $data->stock;
+            $item->is_approved = 1;
+
+            $item->save();
+            $item->tags()->sync(json_decode($data->tag_ids));
+
+            $item?->pharmacy_item_details()?->delete();
+
+            if($item->module->module_type == 'pharmacy'){
+                DB::table('pharmacy_item_details')->where('temp_product_id' , $data->id)->update([
+                    'item_id' => $item->id,
+                    'temp_product_id' => null
+                    ]);
+            }
+
+            $item?->translations()?->delete();
+            Translation::where('translationable_type' , 'App\Models\TempProduct')->where('translationable_id' , $data->id)->update([
+                'translationable_type' => 'App\Models\Item',
+                'translationable_id' => $item->id
+                ]);
+
+            $data->delete();
+
+            try
+            {
+                $mail_status = Helpers::get_mail_status('product_approve_mail_status_store');
+                if(config('mail.status') && $mail_status == '1') {
+                    Mail::to($data?->store?->vendor?->email)->send(new \App\Mail\VendorProductMail($data?->store?->name,'approved'));
+                }
+            }
+            catch(\Exception $e)
+            {
+                info($e->getMessage());
+            }
+
+            Toastr::success(translate('messages.Product_approved'));
+            return to_route('admin.item.approval_list');
+        }
+        
     }
 
     public function product_gallery(Request $request){
