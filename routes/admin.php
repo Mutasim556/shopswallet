@@ -92,7 +92,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('add-new', 'ItemController@index')->name('add-new');
             Route::post('variant-combination', 'ItemController@variant_combination')->name('variant-combination');
             Route::post('store', 'ItemController@store')->name('store');
-            Route::get('edit/{id}', 'ItemController@edit')->name('edit');
+            Route::get('edit/{id}/{type?}', 'ItemController@edit')->name('edit');
             Route::post('update/{id}', 'ItemController@update')->name('update');
             Route::get('list', 'ItemController@list')->name('list');
             // Route::get('request-list', 'ItemController@request_list')->name('request_list');

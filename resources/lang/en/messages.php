@@ -3768,4 +3768,5 @@
   'you_want_to_approve_this_service' => 'You want to approve this service',
   'you_want_to_deny_this_service' => 'You want to deny this service',
   'Want_to_delete_this_service' => 'Want to delete this service',
+  'service_updated_successfully' => 'Service updated successfully',
 );

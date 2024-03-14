@@ -279,33 +279,64 @@ class ItemController extends Controller
 
 
 
-    public function edit(Request $request,$id)
+    public function edit(Request $request,$id,$type=null)
     {
-        $temp_product= false;
-        if($request->temp_product){
-            $product = TempProduct::withoutGlobalScope(StoreScope::class)->withoutGlobalScope('translate')->with('store', 'category', 'module')->findOrFail($id);
-            $temp_product= true;
+        // dd($type);
+        if(Config::get('module.current_module_type') == 'services' && $type=='service'){
+            $product = Service::withoutGlobalScope(StoreScope::class)->withoutGlobalScope('translate')->with('store', 'category', 'module')->findOrFail($id);
+            if (!$product) {
+                Toastr::error(translate('messages.item_not_found'));
+                return back();
+            }else{
+                $product_categoies = json_decode($product->category_ids);
+                $category = [];
+                $sub_category = [];
+                $temp_product = [];
+                foreach($product_categoies as $key=>$product_category){
+                    $get_category = DB::table('categories')->where('id',$product_category->id)->first();
+                    
+                    if($product_category->position==1){
+                        $product->product_category_id = $get_category->id;
+                        $product->product_category_name = $get_category->name;
+                    }elseif($product_category->position==2){
+                        $product->product_sub_category_id = $get_category->id;
+                        $product->product_sub_category_name = $get_category->name;
+                    }else{
+                        $product->product_sub_sub_category_id = $get_category->id;
+                        $product->product_sub_sub_category_name = $get_category->name;
+                    }
+                }
+
+                $item = DB::table('items')->where('id',$product->item_id)->first();
+                $product->name = $item->name;
+
+                
+            }
+
+            return view('admin-views.product.edit_service', compact('product', 'sub_category', 'category','temp_product'));
         }else{
-            $product = Item::withoutGlobalScope(StoreScope::class)->withoutGlobalScope('translate')->with('store', 'category', 'module')->findOrFail($id);
+            $temp_product= false;
+            if($request->temp_product){
+                $product = TempProduct::withoutGlobalScope(StoreScope::class)->withoutGlobalScope('translate')->with('store', 'category', 'module')->findOrFail($id);
+                $temp_product= true;
+            }else{
+                $product = Item::withoutGlobalScope(StoreScope::class)->withoutGlobalScope('translate')->with('store', 'category', 'module')->findOrFail($id);
+            }
+            if (!$product) {
+                Toastr::error(translate('messages.item_not_found'));
+                return back();
+            }
+            $temp = $product->category;
+            if ($temp?->position) {
+                $sub_category = $temp;
+                $sub_sub_category =
+                $category = $temp->parent;
+            } else {
+                $category = $temp;
+                $sub_category = null;
+            }
+            return view('admin-views.product.edit', compact('product', 'sub_category', 'category','temp_product'));
         }
-        if (!$product) {
-            Toastr::error(translate('messages.item_not_found'));
-            return back();
-        }
-        $temp = $product->category;
-        if ($temp?->position) {
-            $sub_category = $temp;
-            $sub_sub_category =
-            $category = $temp->parent;
-        } else {
-            $category = $temp;
-            $sub_category = null;
-        }
-
-        // dd($product->category,$category->parent()->first(),$sub_category);
-
-
-        return view('admin-views.product.edit', compact('product', 'sub_category', 'category','temp_product'));
     }
 
     public function status(Request $request)
@@ -328,228 +359,335 @@ class ItemController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'array',
-            'name.0' => 'required',
-            'name.*' => 'max:191',
-            'category_id' => 'required',
-            'price' => 'required|numeric|between:.01,999999999999.99',
-            'store_id' => 'required',
-            'description' => 'array',
-            'description.*' => 'max:1000',
-            'discount' => 'required|numeric|min:0',
-            'name.0' => 'required',
-            'description.0' => 'required',
-        ], [
-            'description.*.max' => translate('messages.description_length_warning'),
-            'category_id.required' => translate('messages.category_required'),
-            'name.0.required' => translate('default_name_is_required'),
-            'description.0.required' => translate('default_description_is_required'),
-        ]);
+        if(Config::get('module.current_module_type') == 'services'){
+            $validator = Validator::make($request->all(), [
+                'category_id' => 'required',
+                'sub_category_id' => 'required',
+                'sub_sub_category_id' => 'required',
+                'item_id' => 'required',
+                'discount_type' => 'required',
+                // 'discount' => 'required',
+                'timeslot_list' => 'required',
+                'timeslot_list.*' => 'required',
+                'timeslot_list.*' => 'required',
+                // 'image' => 'required_unless:product_gellary,1',
+                'price' => 'required|numeric|between:.01,999999999999.99',
+                'service_details.0' => 'required|max:1000',
+                // 'description.0' => 'required',
+                'discount' => 'required|numeric|min:0',
+            ], [
+                // 'name.0.required' => translate('messages.item_default_name_required'),
+                'service_details.0.required' => translate('messages.service_default_details_required'),
+                'category_id.required' => translate('messages.category_required'),
+                'sub_sub_category_id.required' => translate('messages.child_category_required'),
+                // 'description.*.max' => translate('messages.description_length_warning'),
+            ]);
 
-        if ($request['discount_type'] == 'percent') {
-            $dis = ($request['price'] / 100) * $request['discount'];
-        } else {
-            $dis = $request['discount'];
-        }
-
-        if ($request['price'] <= $dis) {
-            $validator->getMessageBag()->add('unit_price', translate('messages.discount_can_not_be_more_than_or_equal'));
-        }
-
-        if ($request['price'] <= $dis || $validator->fails()) {
-            return response()->json(['errors' => Helpers::error_processor($validator)]);
-        }
-
-        $item = Item::withoutGlobalScope(StoreScope::class)->find($id);
-        $tag_ids = [];
-        if ($request->tags != null) {
-            $tags = explode(",", $request->tags);
-        }
-        if (isset($tags)) {
-            foreach ($tags as $key => $value) {
-                $tag = Tag::firstOrNew(
-                    ['tag' => $value]
-                );
-                $tag->save();
-                array_push($tag_ids, $tag->id);
+            if ($request['discount_type'] == 'percent') {
+                $dis = ($request['price'] / 100) * $request['discount'];
+            } else {
+                $dis = $request['discount'];
             }
-        }
 
-        $item->name = $request->name[array_search('default', $request->lang)];
+            if ($request['price'] <= $dis) {
+                $validator->getMessageBag()->add('unit_price', translate('messages.discount_can_not_be_more_than_or_equal'));
+            }
 
-        $category = [];
-        if ($request->category_id != null) {
-            array_push($category, [
-                'id' => $request->category_id,
-                'position' => 1,
+            if ($request['price'] <= $dis || $validator->fails()) {
+                return response()->json(['errors' => Helpers::error_processor($validator)]);
+            }
+
+            $service = Service::findOrFail($request->service_id);
+            $service->service_details = $request->service_details[array_search('default', $request->lang)];
+
+            $category = [];
+            if ($request->category_id != null) {
+                array_push($category, [
+                    'id' => $request->category_id,
+                    'position' => 1,
+                ]);
+            }
+            if ($request->sub_category_id != null) {
+                array_push($category, [
+                    'id' => $request->sub_category_id,
+                    'position' => 2,
+                ]);
+            }
+            if ($request->sub_sub_category_id != null) {
+                array_push($category, [
+                    'id' => $request->sub_sub_category_id,
+                    'position' => 3,
+                ]);
+            }
+
+
+            $service->category_id = $request->sub_sub_category_id ? $request->sub_sub_category_id : ($request->sub_category_id ? $request->sub_category_id : $request->category_id);
+
+
+            $service->category_ids = json_encode($category);
+            $service->item_id =$request->item_id;
+            $timeslot_list = [];
+            foreach($request->timeslot_list as $val){
+                array_push($timeslot_list,date('h:i a',strtotime($val)));
+            }
+
+            // service variation
+            // dd($timeslot_list);
+            $service->timeslot_list = implode(',',$timeslot_list);
+
+            $service->price = $request->price;
+            $service->discount = $request->discount_type == 'amount' ? $request->discount : $request->discount;
+            $service->discount_type = $request->discount_type;
+            $service->unit_id = $request->unit_id;
+            $service->available_for = implode(',',$request->service_available_for);
+
+            $service->old_staff = $request->staff=='old_staff'?$request->old_staff:null;
+            $service->new_staff = $request->staff=='new_staff'?$request->new_staff:null;
+         
+            $service->save();
+
+          
+            Helpers::add_or_update_translations(request: $request, key_data: 'service_details', name_field: 'service_details', model_name: 'Service', data_id: $service->id, data_value: $service->service_details);
+
+
+            // $product_approval_datas = \App\Models\BusinessSetting::where('key', 'product_approval_datas')->first()?->value ?? '';
+            // $product_approval_datas = json_decode($product_approval_datas, true);
+            // if (Helpers::get_mail_status('product_approval') && data_get($product_approval_datas, 'Add_new_product', null) == 1) {
+            //     $this->store_temp_data($service, $request, $tag_ids);
+            //     $service->is_approved = 0;
+            //     $service->save();
+            //     return response()->json(['product_approval' => translate('messages.The_product_will_be_published_once_it_receives_approval_from_the_admin.')], 200);
+            // }
+            return response()->json([
+                'success' => translate('messages.service_updated_successfully'),
+                'is_approved'=> 1,
+            ], 200);
+
+        }else{
+            $validator = Validator::make($request->all(), [
+                'name' => 'array',
+                'name.0' => 'required',
+                'name.*' => 'max:191',
+                'category_id' => 'required',
+                'price' => 'required|numeric|between:.01,999999999999.99',
+                'store_id' => 'required',
+                'description' => 'array',
+                'description.*' => 'max:1000',
+                'discount' => 'required|numeric|min:0',
+                'name.0' => 'required',
+                'description.0' => 'required',
+            ], [
+                'description.*.max' => translate('messages.description_length_warning'),
+                'category_id.required' => translate('messages.category_required'),
+                'name.0.required' => translate('default_name_is_required'),
+                'description.0.required' => translate('default_description_is_required'),
             ]);
-        }
-        if ($request->sub_category_id != null) {
-            array_push($category, [
-                'id' => $request->sub_category_id,
-                'position' => 2,
-            ]);
-        }
-        if ($request->sub_sub_category_id != null) {
-            array_push($category, [
-                'id' => $request->sub_sub_category_id,
-                'position' => 3,
-            ]);
-        }
-
-        // $item->category_id = $request->sub_category_id ? $request->sub_category_id : $request->category_id;
-
-        $item->category_id = $request->sub_sub_category_id ? $request->sub_sub_category_id : ($request->sub_category_id ? $request->sub_category_id : $request->category_id);
-
-        $item->category_ids = json_encode($category);
-        $item->description =  $request->description[array_search('default', $request->lang)];
-
-        $choice_options = [];
-        if ($request->has('choice')) {
-            foreach ($request->choice_no as $key => $no) {
-                $str = 'choice_options_' . $no;
-                if ($request[$str][0] == null) {
-                    $validator->getMessageBag()->add('name', translate('messages.attribute_choice_option_value_can_not_be_null'));
-                    return response()->json(['errors' => Helpers::error_processor($validator)]);
+    
+            if ($request['discount_type'] == 'percent') {
+                $dis = ($request['price'] / 100) * $request['discount'];
+            } else {
+                $dis = $request['discount'];
+            }
+    
+            if ($request['price'] <= $dis) {
+                $validator->getMessageBag()->add('unit_price', translate('messages.discount_can_not_be_more_than_or_equal'));
+            }
+    
+            if ($request['price'] <= $dis || $validator->fails()) {
+                return response()->json(['errors' => Helpers::error_processor($validator)]);
+            }
+    
+            $item = Item::withoutGlobalScope(StoreScope::class)->find($id);
+            $tag_ids = [];
+            if ($request->tags != null) {
+                $tags = explode(",", $request->tags);
+            }
+            if (isset($tags)) {
+                foreach ($tags as $key => $value) {
+                    $tag = Tag::firstOrNew(
+                        ['tag' => $value]
+                    );
+                    $tag->save();
+                    array_push($tag_ids, $tag->id);
                 }
-                $temp['name'] = 'choice_' . $no;
-                $temp['title'] = $request->choice[$key];
-                $temp['options'] = explode(',', implode('|', preg_replace('/\s+/', ' ', $request[$str])));
-                array_push($choice_options, $temp);
             }
-        }
-        $item->choice_options = $request->has('attribute_id') ? json_encode($choice_options) : json_encode([]);
-        $variations = [];
-        $options = [];
-        if ($request->has('choice_no')) {
-            foreach ($request->choice_no as $key => $no) {
-                $name = 'choice_options_' . $no;
-                $my_str = implode('|', $request[$name]);
-                array_push($options, explode(',', $my_str));
+    
+            $item->name = $request->name[array_search('default', $request->lang)];
+    
+            $category = [];
+            if ($request->category_id != null) {
+                array_push($category, [
+                    'id' => $request->category_id,
+                    'position' => 1,
+                ]);
             }
-        }
-        //Generates the combinations of customer choice options
-        $combinations = Helpers::combinations($options);
-        if (count($combinations[0]) > 0) {
-            foreach ($combinations as $key => $combination) {
-                $str = '';
-                foreach ($combination as $k => $temp) {
-                    if ($k > 0) {
-                        $str .= '-' . str_replace(' ', '', $temp);
-                    } else {
-                        $str .= str_replace(' ', '', $temp);
+            if ($request->sub_category_id != null) {
+                array_push($category, [
+                    'id' => $request->sub_category_id,
+                    'position' => 2,
+                ]);
+            }
+            if ($request->sub_sub_category_id != null) {
+                array_push($category, [
+                    'id' => $request->sub_sub_category_id,
+                    'position' => 3,
+                ]);
+            }
+    
+            // $item->category_id = $request->sub_category_id ? $request->sub_category_id : $request->category_id;
+    
+            $item->category_id = $request->sub_sub_category_id ? $request->sub_sub_category_id : ($request->sub_category_id ? $request->sub_category_id : $request->category_id);
+    
+            $item->category_ids = json_encode($category);
+            $item->description =  $request->description[array_search('default', $request->lang)];
+    
+            $choice_options = [];
+            if ($request->has('choice')) {
+                foreach ($request->choice_no as $key => $no) {
+                    $str = 'choice_options_' . $no;
+                    if ($request[$str][0] == null) {
+                        $validator->getMessageBag()->add('name', translate('messages.attribute_choice_option_value_can_not_be_null'));
+                        return response()->json(['errors' => Helpers::error_processor($validator)]);
+                    }
+                    $temp['name'] = 'choice_' . $no;
+                    $temp['title'] = $request->choice[$key];
+                    $temp['options'] = explode(',', implode('|', preg_replace('/\s+/', ' ', $request[$str])));
+                    array_push($choice_options, $temp);
+                }
+            }
+            $item->choice_options = $request->has('attribute_id') ? json_encode($choice_options) : json_encode([]);
+            $variations = [];
+            $options = [];
+            if ($request->has('choice_no')) {
+                foreach ($request->choice_no as $key => $no) {
+                    $name = 'choice_options_' . $no;
+                    $my_str = implode('|', $request[$name]);
+                    array_push($options, explode(',', $my_str));
+                }
+            }
+            //Generates the combinations of customer choice options
+            $combinations = Helpers::combinations($options);
+            if (count($combinations[0]) > 0) {
+                foreach ($combinations as $key => $combination) {
+                    $str = '';
+                    foreach ($combination as $k => $temp) {
+                        if ($k > 0) {
+                            $str .= '-' . str_replace(' ', '', $temp);
+                        } else {
+                            $str .= str_replace(' ', '', $temp);
+                        }
+                    }
+                    $temp = [];
+                    $temp['type'] = $str;
+                    $temp['price'] = abs($request['price_' . str_replace('.', '_', $str)]);
+                    $temp['stock'] = abs($request['stock_' . str_replace('.', '_', $str)]);
+                    array_push($variations, $temp);
+                }
+            }
+            //combinations end
+            $images = $item['images'];
+            if ($request->has('item_images')) {
+                foreach ($request->item_images as $img) {
+                    $image = Helpers::upload('product/', 'png', $img);
+                    array_push($images, $image);
+                }
+            }
+    
+            $food_variations = [];
+            if (isset($request->options)) {
+                foreach (array_values($request->options) as $key => $option) {
+                    $temp_variation['name'] = $option['name'];
+                    $temp_variation['type'] = $option['type'];
+                    $temp_variation['min'] = $option['min'] ?? 0;
+                    $temp_variation['max'] = $option['max'] ?? 0;
+                    if ($option['min'] > 0 &&  $option['min'] > $option['max']) {
+                        $validator->getMessageBag()->add('name', translate('messages.minimum_value_can_not_be_greater_then_maximum_value'));
+                        return response()->json(['errors' => Helpers::error_processor($validator)]);
+                    }
+                    if (!isset($option['values'])) {
+                        $validator->getMessageBag()->add('name', translate('messages.please_add_options_for') . $option['name']);
+                        return response()->json(['errors' => Helpers::error_processor($validator)]);
+                    }
+                    if ($option['max'] > count($option['values'])) {
+                        $validator->getMessageBag()->add('name', translate('messages.please_add_more_options_or_change_the_max_value_for') . $option['name']);
+                        return response()->json(['errors' => Helpers::error_processor($validator)]);
+                    }
+                    $temp_variation['required'] = $option['required'] ?? 'off';
+                    $temp_value = [];
+                    foreach (array_values($option['values']) as $value) {
+                        if (isset($value['label'])) {
+                            $temp_option['label'] = $value['label'];
+                        }
+                        $temp_option['optionPrice'] = $value['optionPrice'];
+                        array_push($temp_value, $temp_option);
+                    }
+                    $temp_variation['values'] = $temp_value;
+                    array_push($food_variations, $temp_variation);
+                }
+            }
+            $slug = Str::slug($request->name[array_search('default', $request->lang)]);
+            $item->slug = $item->slug ? $item->slug : "{$slug}{$item->id}";
+            $item->food_variations = json_encode($food_variations);
+            $item->variations = $request->has('attribute_id') ? json_encode($variations) : json_encode([]);
+            $item->price = $request->price;
+            $item->image = $request->has('image') ? Helpers::update('product/', $item->image, 'png', $request->file('image')) : $item->image;
+            $item->available_time_starts = $request->available_time_starts ?? '00:00:00';
+            $item->available_time_ends = $request->available_time_ends ?? '23:59:59';
+    
+            $item->discount = $request->discount_type == 'amount' ? $request->discount : $request->discount;
+            $item->discount_type = $request->discount_type;
+            $item->unit_id = $request->unit;
+            $item->attributes = $request->has('attribute_id') ? json_encode($request->attribute_id) : json_encode([]);
+            $item->add_ons = $request->has('addon_ids') ? json_encode($request->addon_ids) : json_encode([]);
+            $item->store_id = $request->store_id;
+            $item->maximum_cart_quantity = $request->maximum_cart_quantity;
+            // $item->module_id= $request->module_id;
+            $item->stock = $request->current_stock ?? 0;
+            $item->organic = $request->organic ?? 0;
+            $item->veg = $request->veg;
+            $item->images = $images;
+            if (Helpers::get_mail_status('product_approval') && $request?->temp_product) {
+                $item->temp_product?->translations()->delete();
+                $item?->pharmacy_item_details()?->delete();
+                if($item->module->module_type == 'pharmacy'){
+                    DB::table('pharmacy_item_details')->where('temp_product_id' , $item->temp_product?->id)->update([
+                        'item_id' => $item->id,
+                        'temp_product_id' => null
+                        ]);
+                }
+                $item->temp_product?->delete();
+                $item->is_approved = 1;
+                try
+                {
+                    $mail_status = Helpers::get_mail_status('product_approve_mail_status_store');
+                    if(config('mail.status') && $mail_status == '1') {
+                        Mail::to($item?->store?->vendor?->email)->send(new \App\Mail\VendorProductMail($item?->store?->name,'approved'));
                     }
                 }
-                $temp = [];
-                $temp['type'] = $str;
-                $temp['price'] = abs($request['price_' . str_replace('.', '_', $str)]);
-                $temp['stock'] = abs($request['stock_' . str_replace('.', '_', $str)]);
-                array_push($variations, $temp);
+                catch(\Exception $e)
+                {
+                    info($e->getMessage());
+                }
+    
             }
-        }
-        //combinations end
-        $images = $item['images'];
-        if ($request->has('item_images')) {
-            foreach ($request->item_images as $img) {
-                $image = Helpers::upload('product/', 'png', $img);
-                array_push($images, $image);
-            }
-        }
-
-        $food_variations = [];
-        if (isset($request->options)) {
-            foreach (array_values($request->options) as $key => $option) {
-                $temp_variation['name'] = $option['name'];
-                $temp_variation['type'] = $option['type'];
-                $temp_variation['min'] = $option['min'] ?? 0;
-                $temp_variation['max'] = $option['max'] ?? 0;
-                if ($option['min'] > 0 &&  $option['min'] > $option['max']) {
-                    $validator->getMessageBag()->add('name', translate('messages.minimum_value_can_not_be_greater_then_maximum_value'));
-                    return response()->json(['errors' => Helpers::error_processor($validator)]);
-                }
-                if (!isset($option['values'])) {
-                    $validator->getMessageBag()->add('name', translate('messages.please_add_options_for') . $option['name']);
-                    return response()->json(['errors' => Helpers::error_processor($validator)]);
-                }
-                if ($option['max'] > count($option['values'])) {
-                    $validator->getMessageBag()->add('name', translate('messages.please_add_more_options_or_change_the_max_value_for') . $option['name']);
-                    return response()->json(['errors' => Helpers::error_processor($validator)]);
-                }
-                $temp_variation['required'] = $option['required'] ?? 'off';
-                $temp_value = [];
-                foreach (array_values($option['values']) as $value) {
-                    if (isset($value['label'])) {
-                        $temp_option['label'] = $value['label'];
-                    }
-                    $temp_option['optionPrice'] = $value['optionPrice'];
-                    array_push($temp_value, $temp_option);
-                }
-                $temp_variation['values'] = $temp_value;
-                array_push($food_variations, $temp_variation);
-            }
-        }
-        $slug = Str::slug($request->name[array_search('default', $request->lang)]);
-        $item->slug = $item->slug ? $item->slug : "{$slug}{$item->id}";
-        $item->food_variations = json_encode($food_variations);
-        $item->variations = $request->has('attribute_id') ? json_encode($variations) : json_encode([]);
-        $item->price = $request->price;
-        $item->image = $request->has('image') ? Helpers::update('product/', $item->image, 'png', $request->file('image')) : $item->image;
-        $item->available_time_starts = $request->available_time_starts ?? '00:00:00';
-        $item->available_time_ends = $request->available_time_ends ?? '23:59:59';
-
-        $item->discount = $request->discount_type == 'amount' ? $request->discount : $request->discount;
-        $item->discount_type = $request->discount_type;
-        $item->unit_id = $request->unit;
-        $item->attributes = $request->has('attribute_id') ? json_encode($request->attribute_id) : json_encode([]);
-        $item->add_ons = $request->has('addon_ids') ? json_encode($request->addon_ids) : json_encode([]);
-        $item->store_id = $request->store_id;
-        $item->maximum_cart_quantity = $request->maximum_cart_quantity;
-        // $item->module_id= $request->module_id;
-        $item->stock = $request->current_stock ?? 0;
-        $item->organic = $request->organic ?? 0;
-        $item->veg = $request->veg;
-        $item->images = $images;
-        if (Helpers::get_mail_status('product_approval') && $request?->temp_product) {
-            $item->temp_product?->translations()->delete();
-            $item?->pharmacy_item_details()?->delete();
+            $item->save();
+            $item->tags()->sync($tag_ids);
             if($item->module->module_type == 'pharmacy'){
-                DB::table('pharmacy_item_details')->where('temp_product_id' , $item->temp_product?->id)->update([
-                    'item_id' => $item->id,
-                    'temp_product_id' => null
-                    ]);
+                DB::table('pharmacy_item_details')
+                    ->updateOrInsert(
+                        ['item_id' => $item->id],
+                        [
+                            'common_condition_id' => $request->condition_id,
+                            'is_basic' => $request->basic ?? 0,
+                        ]
+                    );
             }
-            $item->temp_product?->delete();
-            $item->is_approved = 1;
-            try
-            {
-                $mail_status = Helpers::get_mail_status('product_approve_mail_status_store');
-                if(config('mail.status') && $mail_status == '1') {
-                    Mail::to($item?->store?->vendor?->email)->send(new \App\Mail\VendorProductMail($item?->store?->name,'approved'));
-                }
-            }
-            catch(\Exception $e)
-            {
-                info($e->getMessage());
-            }
-
+            Helpers::add_or_update_translations(request: $request, key_data: 'name', name_field: 'name', model_name: 'Item', data_id: $item->id, data_value: $item->name);
+            Helpers::add_or_update_translations(request: $request, key_data: 'description', name_field: 'description', model_name: 'Item', data_id: $item->id, data_value: $item->description);
+    
+            return response()->json(['success' => translate('messages.product_updated_successfully')], 200);
         }
-        $item->save();
-        $item->tags()->sync($tag_ids);
-        if($item->module->module_type == 'pharmacy'){
-            DB::table('pharmacy_item_details')
-                ->updateOrInsert(
-                    ['item_id' => $item->id],
-                    [
-                        'common_condition_id' => $request->condition_id,
-                        'is_basic' => $request->basic ?? 0,
-                    ]
-                );
-        }
-        Helpers::add_or_update_translations(request: $request, key_data: 'name', name_field: 'name', model_name: 'Item', data_id: $item->id, data_value: $item->name);
-        Helpers::add_or_update_translations(request: $request, key_data: 'description', name_field: 'description', model_name: 'Item', data_id: $item->id, data_value: $item->description);
-
-        return response()->json(['success' => translate('messages.product_updated_successfully')], 200);
+        
     }
 
     public function delete(Request $request)

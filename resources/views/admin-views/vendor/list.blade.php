@@ -305,7 +305,7 @@
                                     onclick="form_alert('vendor-{{$store['id']}}','{{translate('You want to remove this store')}}')" title="{{translate('messages.delete_store')}}"><i class="tio-delete-outlined"></i>
                                     </a>
                                     <form action="{{route('admin.store.delete',[$store['id']])}}" method="post" id="vendor-{{$store['id']}}">
-                                        @csrf @method('delete')
+                                        @csrf @method('delete') 
                                     </form>
                                 </div>
                             </td>

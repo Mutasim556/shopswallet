@@ -25,5 +25,14 @@ class Service extends Model
     {
         return $this->belongsTo(Item::class, 'item_id');
     }
+
+    public function module()
+    {
+        return $this->belongsTo(Module::class,'module_id');
+    }
+    public function store()
+    {
+        return $this->belongsTo(Store::class);
+    }
     
 }

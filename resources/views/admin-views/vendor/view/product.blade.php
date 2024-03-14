@@ -309,7 +309,7 @@
                                                     href="javascript:"><i class="tio-clear font-weight-bold"></i></a>
                                                 @endif
                                                 <a class="btn action-btn btn--primary btn-outline-primary"
-                                                    href="{{route('admin.item.edit',[$food['id'], 'temp_product' => true])}}" title="{{translate('messages.edit_item')}}"><i class="tio-edit"></i>
+                                                    href="{{route('admin.item.edit',[$food['id'],'service'])}}" title="{{translate('messages.edit_item')}}"><i class="tio-edit"></i>
                                                 </a>
                                                 <a class="btn action-btn btn--danger btn-outline-danger" href="javascript:"
                                                     onclick="form_alert('food-{{$food['id']}}','{{translate('messages.Want_to_delete_this_service')}}')" title="{{translate('messages.delete_item')}}"><i class="tio-delete-outlined"></i>
@@ -376,7 +376,7 @@
                                     <td>
                                         <div class="btn--container justify-content-center">
                                             <a class="btn action-btn btn--primary btn-outline-primary"
-                                                href="{{route('admin.item.edit',[$food['id']])}}" title="{{translate('messages.edit_item')}}"><i class="tio-edit"></i>
+                                                href="{{route('admin.item.edit',[$food['id'],'service'])}}" title="{{translate('messages.edit_item')}}"><i class="tio-edit"></i>
                                             </a>
                                             <a class="btn action-btn btn--danger btn-outline-danger" href="javascript:"
                                                 onclick="form_alert('food-{{$food['id']}}','{{ translate('messages.Want to delete this item ?') }}')" title="{{translate('messages.delete_item')}}"><i class="tio-delete-outlined"></i>
