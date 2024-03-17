@@ -174,7 +174,7 @@ class LoginController extends Controller
             $admin->is_logged_in = 1;
             $admin->save();
             $modules = Module::Active()->get();
-            if(isset($modules)&&($modules->count()>0)){
+            if(isset($modules)&&($modules->count()>0)){ 
 
                 return redirect()->route('admin.dashboard');
             }

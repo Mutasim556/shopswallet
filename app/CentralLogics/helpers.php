@@ -1794,7 +1794,8 @@ class Helpers
             $vendor = Store::with('module')->where('vendor_id',auth('vendor')->id())->first();
             return $vendor->module->module_type;
         } else if (auth('vendor_employee')->check()) {
-            return auth('vendor_employee')->user()->vendor_id;
+            $vendor = Store::with('module')->where('vendor_id', auth('vendor_employee')->user()->vendor_id)->first();
+            return $vendor->module->module_type;
         }
         return 0;
     }

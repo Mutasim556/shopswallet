@@ -45,7 +45,7 @@ class ItemController extends Controller
 
     public function store(Request $request)
     {
-        if (Helpers::get_vendor_module_id() == 'services') { 
+        if (Helpers::get_vendor_module_id() == 'services') {
             if (!Helpers::get_store_data()->item_section) {
                 return response()->json([
                     'errors' => [
@@ -143,7 +143,7 @@ class ItemController extends Controller
             $service->is_approved = 0;
             $service->save();
 
-          
+
             Helpers::add_or_update_translations(request: $request, key_data: 'service_details', name_field: 'service_details', model_name: 'Service', data_id: $service->id, data_value: $service->service_details);
 
 
@@ -462,7 +462,7 @@ class ItemController extends Controller
             } else {
                 $product = Item::withoutGlobalScope('translate');
                 if (isset($request->product_gellary) && $request->product_gellary == 1) {
-    
+
                     $product->withoutGlobalScope(StoreScope::class)->where('is_approved', 1);
                 }
                 $product = $product->findOrFail($id);
@@ -473,7 +473,7 @@ class ItemController extends Controller
             $conditions = CommonCondition::all();
             return view('vendor-views.product.edit', compact('product', 'product_category', 'categories', 'module_data', 'temp_product', 'conditions'));
         }
-        
+
     }
 
     public function status(Request $request)
@@ -499,8 +499,8 @@ class ItemController extends Controller
             Toastr::success('Item status updated!');
         return back();
         }
-        
-        
+
+
     }
 
     public function recommended(Request $request)
@@ -611,10 +611,10 @@ class ItemController extends Controller
 
             $service->old_staff = $request->staff=='old_staff'?$request->old_staff:null;
             $service->new_staff = $request->staff=='new_staff'?$request->new_staff:null;
-         
+
             $service->save();
 
-          
+
             Helpers::add_or_update_translations(request: $request, key_data: 'service_details', name_field: 'service_details', model_name: 'Service', data_id: $service->id, data_value: $service->service_details);
 
 
@@ -647,21 +647,21 @@ class ItemController extends Controller
                 'category_id.required' => translate('messages.category_required'),
                 'description.*.max' => translate('messages.description_length_warning'),
             ]);
-    
+
             if ($request['discount_type'] == 'percent') {
                 $dis = ($request['price'] / 100) * $request['discount'];
             } else {
                 $dis = $request['discount'];
             }
-    
+
             if ($request['price'] <= $dis) {
                 $validator->getMessageBag()->add('unit_price', translate('messages.discount_can_not_be_more_than_or_equal'));
             }
-    
+
             if ($request['price'] <= $dis || $validator->fails()) {
                 return response()->json(['errors' => Helpers::error_processor($validator)]);
             }
-    
+
             $tag_ids = [];
             if ($request->tags != null) {
                 $tags = explode(",", $request->tags);
@@ -675,10 +675,10 @@ class ItemController extends Controller
                     array_push($tag_ids, $tag->id);
                 }
             }
-    
+
             $p = Item::find($id);
             $p->name = $request->name[array_search('default', $request->lang)];
-    
+
             $category = [];
             if ($request->category_id != null) {
                 array_push($category, [
@@ -698,16 +698,16 @@ class ItemController extends Controller
                     'position' => 3,
                 ]);
             }
-    
+
             // $p->category_id = $request->sub_category_id?$request->sub_category_id:$request->category_id;
-    
-    
+
+
             $p->category_id = $request->sub_sub_category_id ? $request->sub_sub_category_id : ($request->sub_category_id ? $request->sub_category_id : $request->category_id);
-    
-    
+
+
             $p->category_ids = json_encode($category);
             $p->description = $request->description[array_search('default', $request->lang)];
-    
+
             $choice_options = [];
             if ($request->has('choice')) {
                 foreach ($request->choice_no as $key => $no) {
@@ -752,8 +752,8 @@ class ItemController extends Controller
                 }
             }
             //combinations end
-    
-    
+
+
             $food_variations = [];
             if (isset($request->options)) {
                 foreach (array_values($request->options) as $key => $option) {
@@ -786,14 +786,14 @@ class ItemController extends Controller
                     array_push($food_variations, $temp_variation);
                 }
             }
-    
+
             $variation_changed = false;
             if ((($p->food_variations != null && $food_variations != '[]') && strcmp($p->food_variations, json_encode($food_variations)) !== 0) || (
                 ($p->variations != null && $variations != '[]') && strcmp($p->variations, json_encode($variations)) !== 0)) {
                 $variation_changed = true;
             }
-    
-    
+
+
             $old_price = $p->price;
             $slug = Str::slug($request->name[array_search('default', $request->lang)]);
             $p->slug = $p->slug ? $p->slug : "{$slug}-{$p->id}";
@@ -810,15 +810,15 @@ class ItemController extends Controller
             $p->add_ons = $request->has('addon_ids') ? json_encode($request->addon_ids) : json_encode([]);
             $p->stock = $request->current_stock ?? 0;
             $p->organic = $request->organic ?? 0;
-    
-    
-    
-    
+
+
+
+
             $product_approval_datas = \App\Models\BusinessSetting::where('key', 'product_approval_datas')->first()?->value ?? '';
             $product_approval_datas = json_decode($product_approval_datas, true);
-    
+
             if (Helpers::get_mail_status('product_approval') && ((data_get($product_approval_datas, 'Update_anything_in_product_details', null) == 1) || (data_get($product_approval_datas, 'Update_product_price', null) == 1 && $old_price !=  $request->price) || (data_get($product_approval_datas, 'Update_product_variation', null) == 1 &&  $variation_changed))) {
-    
+
                 $this->store_temp_data($p, $request, $tag_ids, true);
                 return response()->json(['product_approval' => translate('your_product_added_for_approval')], 200);
             } else {
@@ -832,7 +832,7 @@ class ItemController extends Controller
                 }
                 $p->images = $images;
             }
-    
+
             if ($p->module->module_type == 'pharmacy') {
                 DB::table('pharmacy_item_details')
                     ->updateOrInsert(
@@ -843,16 +843,16 @@ class ItemController extends Controller
                         ]
                     );
             }
-    
+
             $p->save();
             $p->tags()->sync($tag_ids);
-    
+
             Helpers::add_or_update_translations(request: $request, key_data: 'name', name_field: 'name', model_name: 'Item', data_id: $p->id, data_value: $p->name);
             Helpers::add_or_update_translations(request: $request, key_data: 'description', name_field: 'description', model_name: 'Item', data_id: $p->id, data_value: $p->description);
-    
+
             return response()->json(['success' => translate('messages.product_updated_successfully')], 200);
         }
-        
+
     }
 
     public function delete(Request $request)
@@ -875,7 +875,7 @@ class ItemController extends Controller
                 $product?->temp_product?->translations()?->delete();
                 $product?->temp_product()?->delete();
             }
-    
+
             if ($product->image) {
                 if (Storage::disk('public')->exists('product/' . $product['image'])) {
                     Storage::disk('public')->delete('product/' . $product['image']);
@@ -886,7 +886,7 @@ class ItemController extends Controller
             Toastr::success('Item removed!');
             return back();
         }
-        
+
     }
 
     public function variant_combination(Request $request)
@@ -974,8 +974,8 @@ class ItemController extends Controller
             ->latest()->paginate(config('default_pagination'));
             foreach($items as $key=>$value){
                 $item = DB::table('items')->where('id',$value->item_id)->select('id','image','name')->first();
-                $items[$key]->image = $item->image; 
-                $items[$key]->name = $item->name; 
+                $items[$key]->image = $item->image;
+                $items[$key]->name = $item->name;
             }
         }else{
             $items = Item::when(is_numeric($category_id), function ($query) use ($category_id) {
@@ -989,7 +989,7 @@ class ItemController extends Controller
             ->where('is_approved', 1)
             ->type($type)->latest()->paginate(config('default_pagination'));
         }
-        
+
         $sub_categories = $category_id != 'all' ? Category::where('parent_id', $category_id)->get(['id', 'name']) : [];
         // dd($items);
         $category = $category_id != 'all' ? Category::findOrFail($category_id) : null;
@@ -1014,8 +1014,8 @@ class ItemController extends Controller
             ->latest()->paginate(config('default_pagination'));
             foreach($items as $key=>$value){
                 $item = DB::table('items')->where('id',$value->item_id)->select('id','image','name')->first();
-                $items[$key]->image = $item->image; 
-                $items[$key]->name = $item->name; 
+                $items[$key]->image = $item?$item->image:null;
+                $items[$key]->name = $item?$item->name:null;
             }
         }else{
             $items = Item::when(is_numeric($category_id), function ($query) use ($category_id) {
@@ -1029,7 +1029,7 @@ class ItemController extends Controller
             ->where('is_approved', 1)
             ->type($type)->latest()->paginate(config('default_pagination'));
         }
-        
+
         $sub_categories = $category_id != 'all' ? Category::where('parent_id', $category_id)->get(['id', 'name']) : [];
         // dd($items);
         $category = $category_id != 'all' ? Category::findOrFail($category_id) : null;
