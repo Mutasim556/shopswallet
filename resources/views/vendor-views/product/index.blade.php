@@ -152,7 +152,7 @@
                                                     </div>
                                                     <input type="hidden" name="lang[]" value="default">
                                                 @endif
-                                                
+
                                             </div>
                                         </div>
                                     </div>
@@ -263,7 +263,7 @@
                                             {{-- <option value="">Select Please</option> --}}
                                             @foreach (DB::table('vendor_employees')->where('vendor_id', auth('vendor')->id())->select('id', 'f_name', 'l_name')->get() as $staff)
                                                 <option value="{{ $staff->id }}">
-                                                    {{ $staff->f_name . ' ' . $staff->fl_name }}</option>
+                                                    {{ $staff->f_name . ' ' . $staff->f_name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -1230,7 +1230,7 @@
                     </div>
                     <div class="col-md-3">
                         <button type="button" id="del_timeslot" class="btn btn-danger" style="padding-bottom:10px; padding-top:10px;"><i class="tio-delete-outlined"></i></button>
-                    </div>    
+                    </div>
                 </div>
             </div>
         `);
