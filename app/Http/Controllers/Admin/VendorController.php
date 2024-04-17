@@ -125,6 +125,8 @@ class VendorController extends Controller
         $store->longitude = $request->longitude;
         $store->vendor_id = $vendor->id;
         $store->zone_id = $request->zone_id;
+        $store->type_one = $request->store_type_1?$request->store_type_1:'Local';
+        $store->type_two = $request->store_type_2?$request->store_type_2:'Retailer';
         $store->tax = $request->tax;
         $store->delivery_time = $request->minimum_delivery_time .'-'. $request->maximum_delivery_time.' '.$request->delivery_time_type;
         $store->module_id = Config::get('module.current_module_id');
@@ -268,6 +270,8 @@ class VendorController extends Controller
         $store->longitude = $request->longitude;
         $store->zone_id = $request->zone_id;
         $store->tax = $request->tax;
+        $store->type_one = $request->store_type_1?$request->store_type_1:'Local';
+        $store->type_two = $request->store_type_2?$request->store_type_2:'Retailer';
         $store->delivery_time = $request->minimum_delivery_time .'-'. $request->maximum_delivery_time.' '.$request->delivery_time_type;
         $store->save();
         $default_lang = str_replace('_', '-', app()->getLocale());

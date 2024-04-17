@@ -205,6 +205,32 @@
                         </div>
                         <div class="card-body">
                             <div class="row g-3 my-0">
+                                @if (Config::get('module.current_module_type')=='grocery')
+                                <div class="col-sm-6 col-lg-6">
+                                    <div class="form-group mb-0">
+                                        <label class="input-label" for="store_type_1">{{
+                                            translate('messages.store_type_1') }}<span class="input-label-secondary"></label>
+                                        <select name="store_type_1" class="js-data-example-ajax form-control"
+                                            data-placeholder="{{ translate('messages.select_store_type') }}"
+                                            id="store_type_1">
+                                            <option value="Local" {{$store->type_one=='Local'?'selected':''}}>{{ translate('messages.local') }}</option>
+                                            <option value="International" {{$store->type_one=='International'?'selected':''}}>{{ translate('messages.international') }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-lg-6">
+                                    <div class="form-group mb-0">
+                                        <label class="input-label" for="store_type_2">{{
+                                            translate('messages.store_type_2') }}<span class="input-label-secondary"></label>
+                                        <select name="store_type_2" class="js-data-example-ajax form-control"
+                                            data-placeholder="{{ translate('messages.select_store_type') }}"
+                                            id="store_type_2">
+                                            <option value="Retailer" {{$store->type_two=='Retailer'?'selected':''}}>{{ translate('messages.retailer') }}</option>
+                                            <option value="Wholeseller" {{$store->type_two=='Wholeseller'?'selected':''}}>{{ translate('messages.wholeseller') }}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                @endif
                                 <div class="col-md-6">
                                     <div class="form-group mb-0">
                                         <label class="input-label" for="tax">{{translate('messages.vat/tax')}} (%)</label>
@@ -775,5 +801,7 @@
         $("#time_view").val(min+' to '+max+' '+type);
 
     }
+    $('#store_type_1').select2();
+    $('#store_type_2').select2();
 </script>
 @endpush

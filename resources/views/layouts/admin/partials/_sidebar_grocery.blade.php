@@ -394,6 +394,17 @@
                     </a>
                 </li>
                 @endif
+
+                @if (\App\CentralLogics\Helpers::module_permission_check('brands'))
+                <li class="navbar-vertical-aside-has-menu {{ Request::is('admin/brand*') ? 'active' : '' }}">
+                    <a class="js-navbar-vertical-aside-menu-link nav-link" href="{{ route('admin.brand.add-new') }}" title="{{ translate('messages.Brands') }}">
+                        <i class="tio-apps nav-icon"></i>
+                        <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                            {{ translate('messages.brands') }}
+                        </span>
+                    </a>
+                </li>
+                @endif
                 <!-- End Attributes -->
 
                 <!-- Unit -->

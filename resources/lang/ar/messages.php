@@ -3571,4 +3571,13 @@
   '‘Include_Tax_Amount ’' => '"تضمين مبلغ الضريبة"',
   'category_title' => 'Category title',
   'new_category_title' => 'New category title',
+  'Brands' => 'Brands',
+  'add_new_brand' => 'Add new brand',
+  'ex_:_new_brand' => 'Ex : new brand',
+  'sub_sub_category' => 'Sub sub category',
+  'select_sub_sub_category' => 'Select sub sub category',
+  'brand_list' => 'Brand list',
+  'ex_:_brand_name' => 'Ex : brand name',
+  'Want to delete this brand ?' => 'Want to delete this brand  ',
+  'brands' => 'Brands',
 );

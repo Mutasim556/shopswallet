@@ -228,7 +228,20 @@
                                                 alt="{{ translate('messages.category_required_warning') }}"></span></label>
                                     <select name="sub_sub_category_id" class="js-data-example-ajax form-control"
                                         data-placeholder="{{ translate('messages.select_sub_sub_category') }}"
-                                        id="sub_sub_categories">
+                                        id="sub_sub_categories" onchange="SubsubcategoryChange(this.value)">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="form-group mb-0">
+                                    <label class="input-label" for="brand">{{
+                                        translate('messages.brand') }}<span class="input-label-secondary"
+                                            title="{{ translate('messages.brand') }}"><img
+                                                src="{{ asset('/public/assets/admin/img/info-circle.svg') }}"
+                                                alt="{{ translate('messages.category_required_warning') }}"></span></label>
+                                    <select name="brand" class="js-data-example-ajax form-control"
+                                        data-placeholder="{{ translate('messages.select_brand') }}"
+                                        id="brand">
                                     </select>
                                 </div>
                             </div>
@@ -681,7 +694,7 @@
                                         <button type="button" class="btn btn--primary btn-outline-primary" onclick="add_new_row_button(` +
                     count + `)" >{{ translate('Add_New_Option') }}</button>
                                     </div>
-                                </div>
+                                </div> 
                             </div>
                         </div>
                     </div>`;
@@ -813,6 +826,7 @@
     var module_id = {{Config::get('module.current_module_id')}};
         var parent_category_id = 0;
         var selected_sub_category_id = 0;
+        var brand_category_id = 0;
         var module_data = null;
         var stock = true;
 
@@ -881,13 +895,19 @@
         modulChange({{Config::get('module.current_module_id')}});
         function categoryChange(id) {
             parent_category_id = id;            
+            brand_category_id = id;            
             console.log(parent_category_id);
             
         }
         function SubcategoryChange(id) {
-            selected_sub_category_id = id;            
+            selected_sub_category_id = id;    
+            brand_category_id = id;        
             console.log(selected_sub_category_id);
             
+        }
+
+        function SubsubcategoryChange(id) {
+            brand_category_id = id;    
         }
 
         $(document).on('ready', function() {
@@ -1063,6 +1083,31 @@
                     module_id:{{Config::get('module.current_module_id')}},
                     parent_id: selected_sub_category_id,
                     sub_sub_category: true
+                };
+          },
+            processResults: function(data) {
+                console.log(data)
+                return {
+                    results: data                    
+                };
+            },
+            __port: function(params, success, failure) {
+                var $request = $.ajax(params);
+                $request.then(success);
+                $request.fail(failure);
+                return $request;
+            }
+        }
+    });
+
+     // Initialize Select2 for brand dropdown
+    $('#brand').select2({
+        ajax: {
+            url: '{{ url('/') }}/admin/item/get-brands',
+            data: function(params) {
+                return {
+                    module_id:{{Config::get('module.current_module_id')}},
+                    category_id: brand_category_id,
                 };
           },
             processResults: function(data) {

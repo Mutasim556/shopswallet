@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
 
-class Attribute extends Model
+class Brand extends Model
 {
     use HasFactory;
 
     public function translations()
     {
         return $this->morphMany(Translation::class, 'translationable');
-    } 
+    }
 
     public function getNameAttribute($value){
         if (count($this->translations) > 0) {
@@ -34,5 +34,9 @@ class Attribute extends Model
                 return $query->where('locale', app()->getLocale());
             }]);
         });
+    }
+
+    public function category(){
+        return $this->belongsTo(Category::class);
     }
 }

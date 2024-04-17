@@ -214,7 +214,9 @@
                         @else
                         <th class="border-0">{{translate('messages.store_information')}}</th>
                         @endif
-                        
+                        @if (Config::get('module.current_module_type')=='grocery')
+                        <th>{{ translate('messages.store_type') }}</th>
+                        @endif
                         <th class="border-0">{{translate('messages.module')}}</th>
                         <th class="border-0">{{translate('messages.owner_information')}}</th>
                         <th class="border-0">{{translate('messages.zone')}}</th>
@@ -243,6 +245,11 @@
                                     </a>
                                 </div>
                             </td>
+                            @if (Config::get('module.current_module_type')=='grocery')
+                            <td>
+                                <span class="badge badge-warning">{{ $store->type_one.' , '.$store->type_two }}</span>
+                            </td>
+                            @endif
                             <td>
                                 <span class="d-block font-size-sm text-body">
                                     {{Str::limit($store->module->module_name,20,'...')}}

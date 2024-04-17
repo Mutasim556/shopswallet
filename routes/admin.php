@@ -117,6 +117,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
 
             //ajax request
             Route::get('get-categories', 'ItemController@get_categories')->name('get-categories');
+            Route::get('get-brands', 'ItemController@get_brands')->name('get-brands');
             Route::get('get-items', 'ItemController@get_items')->name('getitems');
             Route::get('get-items-flashsale', 'ItemController@get_items_flashsale')->name('getitems-flashsale');
             Route::post('food-variation-generate', 'ItemController@food_variation_generator')->name('food-variation-generate');
@@ -214,6 +215,21 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::post('bulk-export', 'AttributeController@bulk_export_data')->name('bulk-export');
         });
 
+        Route::group(['prefix' => 'brand', 'as' => 'brand.', 'middleware' => ['module:brand']], function () {
+            Route::get('add-new', 'BrandController@index')->name('add-new');
+            Route::post('store', 'BrandController@store')->name('store');
+            Route::get('edit/{id}', 'BrandController@edit')->name('edit');
+            Route::post('update/{id}', 'BrandController@update')->name('update');
+            Route::delete('delete/{id}', 'BrandController@delete')->name('delete');
+            Route::get('export-brands', 'BrandController@export_brands')->name('export-brands');
+
+            //Import and export
+            Route::get('bulk-import', 'BrandController@bulk_import_index')->name('bulk-import');
+            Route::post('bulk-import', 'BrandController@bulk_import_data');
+            Route::get('bulk-export', 'BrandController@bulk_export_index')->name('bulk-export-index');
+            Route::post('bulk-export', 'BrandController@bulk_export_data')->name('bulk-export');
+        });
+
         Route::group(['prefix' => 'flash-sale', 'as' => 'flash-sale.'], function () {
             Route::get('add-new', 'FlashSaleController@index')->name('add-new');
             Route::post('store', 'FlashSaleController@store')->name('store');
@@ -257,7 +273,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
                 Route::post('update/{store}', 'VendorController@update')->name('update');
                 Route::post('discount/{store}', 'VendorController@discountSetup')->name('discount');
                 Route::post('update-settings/{store}', 'VendorController@updateStoreSettings')->name('update-settings');
-                Route::post('update-meta-data/{store}', 'VendorController@updateStoreMetaData')->name('update-meta-data');
+                Route::post('update-meta-data/{store}', 'VendorController@updateStoreMetaData')->name('update-meta-data'); 
                 Route::delete('delete/{store}', 'VendorController@destroy')->name('delete');
                 Route::delete('clear-discount/{store}', 'VendorController@cleardiscount')->name('clear-discount');
                 // Route::get('view/{store}', 'VendorController@view')->name('view_tab');

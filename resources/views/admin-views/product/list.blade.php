@@ -372,11 +372,15 @@
                     <tr>
                         <th class="border-0">{{translate('sl')}}</th>
                         <th class="border-0">{{translate('messages.name')}}</th>
+                        @if(Config::get('module.current_module_type')=='grocery')
+                        <th>{{ translate('messages.brand') }}</th>
+                        @endif
                         <th class="border-0">{{translate('messages.category')}}</th>
                         @if (Config::get('module.current_module_type')!='services' && Config::get('module.current_module_type')!='booking')     
                         <th class="border-0">{{translate('messages.store')}}</th>
                         <th class="border-0 text-center">{{translate('messages.price')}}</th>
                         @endif
+                        
                         
                         <th class="border-0 text-center">{{translate('messages.status')}}</th>
                         <th class="border-0 text-center">{{translate('messages.action')}}</th>
@@ -407,6 +411,18 @@
                                 @endif
                                
                             </td>
+                            @if(Config::get('module.current_module_type')=='grocery')
+                            <td>
+                                <?php 
+                                    if($item->brand_id){
+                                        $brand = \App\Models\Brand::where('id',$item->brand_id)->first();
+                                        echo $brand->name;
+                                    }else {
+                                ?>
+                                    <span class="text-danger">{{ translate('messages.no_brand') }}</span>
+                                <?php }?>
+                            </td>
+                            @endif
                             <td>
                             {{Str::limit($item->category?$item->category->name:translate('messages.category_deleted'),20,'...')}}
                             </td>

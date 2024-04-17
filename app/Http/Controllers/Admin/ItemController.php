@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\DB;
 use App\CentralLogics\ProductLogic;
 use App\Models\PharmacyItemDetails;
 use App\Http\Controllers\Controller;
+use App\Models\Brand;
 use App\Models\Service;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\File;
@@ -248,6 +249,7 @@ class ItemController extends Controller
         $item->maximum_cart_quantity = $request->maximum_cart_quantity;
         $item->veg = $request->veg;
         $item->module_id = Config::get('module.current_module_id');
+        $item->brand_id = $request->brand?$request->brand:null;
         $module_type = Config::get('module.current_module_type');
         if ($module_type == 'grocery') {
             $item->organic = $request->organic ?? 0;
@@ -839,6 +841,24 @@ class ItemController extends Controller
 
         return response()->json($cat);
     }
+    public function get_brands(Request $request)
+    { 
+        
+        $brands = Brand::where('module_id',$request->module_id);
+        if($request->category_id!=0){
+            $brands = $brands->where('category_id',$request->category_id);
+        }
+        $brands =  $brands
+            ->get()
+            ->map(function ($brand) {
+                return [
+                    'id' => $brand->id,
+                    'text' => $brand->name,
+                ];
+            });
+
+        return response()->json($brands);
+    }
 
     public function get_items(Request $request)
     {
@@ -944,6 +964,7 @@ class ItemController extends Controller
                     }
                 });
             })
+            
             ->where('is_approved',1)
             ->module(Config::get('module.current_module_id'))
             ->type($type)
