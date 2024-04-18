@@ -2,10 +2,10 @@
 
 namespace App\Traits;
 
-use Illuminate\Foundation\Application;
 use Illuminate\Contracts\Routing\UrlGenerator;
+use Illuminate\Foundation\Application;
 use InvalidArgumentException;
-use App\Models\PaymentRequest;
+use Modules\Gateways\Entities\PaymentRequest;
 
 trait Payment
 {

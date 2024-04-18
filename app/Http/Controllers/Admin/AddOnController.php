@@ -26,7 +26,7 @@ class AddOnController extends Controller
         ->when(is_numeric($store_id), function($query)use($store_id){
             return $query->where('store_id', $store_id);
         })->whereHas('store', function ($q) use ($request) {
-            return $q->where('module_id', Config::get('module.current_module_id'));
+            return $q->where('module_id', Config::get('module.current_module_id')); 
         })
         ->when(isset($key), function ($q1) use($key){
             $q1->where(function ($q) use ($key) {

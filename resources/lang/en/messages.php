@@ -3798,4 +3798,6 @@
   'wholeseller' => 'Wholeseller',
   'Update store info' => 'Update store info',
   'minimum_delivery_time_should_be_more_than_10_min' => 'Minimum delivery time should be more than 10 min',
+  'After purchasing the Payment & SMS Module from Codecanyon, you will find a file download option.' => 'After purchasing the Payment & SMS Module from Codecanyon  you will find a file download option.',
+  'Download the file. It will be downloaded as Zip format Filename.Zip.' => 'Download the file. It will be downloaded as Zip format Filename.Zip.',
 );

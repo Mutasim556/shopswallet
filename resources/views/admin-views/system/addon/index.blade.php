@@ -133,13 +133,13 @@
                             </div>
                         </div>
                         <div class="col-12">
-                            @if($condition_one && $condition_two)
+                            {{-- @if($condition_one && $condition_two) --}}
                                 <div class="d-flex justify-content-end mt-3">
                                     <button type="button"
                                         onclick="zip_upload()"
                                         class="btn btn--primary px-4" id="upload_theme">{{translate('upload')}}</button>
                                 </div>
-                            @endif
+                            {{-- @endif --}}
                         </div>
                     </div>
                 </form>
