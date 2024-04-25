@@ -73,6 +73,8 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api/v2/api.php'));
 
+            $this->customRouteRegister();
+            
         });
     }
 
@@ -87,4 +89,15 @@ class RouteServiceProvider extends ServiceProvider
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
         });
     }
+
+    protected function customRouteRegister(){
+        if(config('customModule')){
+            foreach(config('customModule') as $key=>$value){
+                return  Route::prefix($value['prefix'])
+                        ->middleware('web')
+                        ->group(base_path($value['route']));
+            }
+        }
+    }
+
 }

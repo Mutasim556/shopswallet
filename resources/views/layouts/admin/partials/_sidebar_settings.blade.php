@@ -284,6 +284,35 @@
                         </ul>
                     </li>
                 @endif
+                @if (config('customModule'))
+                    
+                        <li class="nav-item">
+                            <small
+                                class="nav-subtitle">{{translate('messages.custom_menus')}}</small>
+                            <small class="tio-more-horizontal nav-subtitle-replacer"></small>
+                        </li>
+                        @foreach (config('customModule') as $key=>$value)
+                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/'.$key.'/*')}}">
+                                <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:" >
+                                    <i class="tio-puzzle nav-icon"></i>
+                                    <span  class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate($key)}}</span>
+                                </a>
+                                <ul class="js-navbar-vertical-aside-submenu nav nav-sub" style="display: {{Request::is('admin/'.$key.'/*') || Request::is('admin/'.$key.'/*')?'block':'none'}}">
+                                    @foreach($value['routes'] as $rKey=>$routes)
+                                        {{-- @foreach($routes as $route) --}}
+                                            <li class="navbar-vertical-aside-has-menu {{(Request::url()==route($routes['route_name']))  ? 'active' :''}}">
+                                                <a class="js-navbar-vertical-aside-menu-link nav-link "
+                                                href="{{ route($routes['route_name']) }}" title="{{ translate($routes['menu_name']) }}">
+                                                    <span class="tio-circle nav-indicator-icon"></span>
+                                                    <span class="text-truncate">{{ translate($routes['menu_name']) }}</span>
+                                                </a>
+                                            </li>
+                                        {{-- @endforeach --}}
+                                    @endforeach
+                                </ul>
+                            </li>
+                        @endforeach
+                @endif
             <!--addon end-->
                 <!-- End web & adpp Settings -->
 
