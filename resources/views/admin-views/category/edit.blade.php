@@ -47,7 +47,7 @@
                             @endif
                         </div>
                         <div class="col-md-6">
-                            @if($language)
+                            @if($language) 
                                 <div class="form-group lang_form" id="default-form">
                                     <label class="input-label" for="exampleFormControlInput1">{{translate('messages.name')}} ({{ translate('messages.default') }})</label>
                                     <input type="text" name="name[]" class="form-control" placeholder="{{translate('messages.new_category')}}" maxlength="191" value="{{$category?->getRawOriginal('name')}}" oninvalid="document.getElementById('en-link').click()">

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\Modules\Sucpription;
+namespace App\Models\Modules\Subscription;
 
 use App\Models\Module;
 use App\Models\Translation;
@@ -20,5 +20,10 @@ class SubscriptionPackage extends Model
     public function module()
     {
         return $this->belongsTo(Module::class);
+    }
+
+    public function scopeModule($query, $module_id)
+    {
+        return $query->where('module_id', $module_id);
     }
 }

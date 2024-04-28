@@ -1,8 +1,10 @@
 @extends('layouts.admin.app')
 
-@section('title', translate('messages.Add new category'))
+@section('title', translate('messages.Packages'))
 
 @push('css_or_js')
+    <link href="{{ asset('public/assets/admin/css/tags-input.min.css') }}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
 @endpush
 
 @section('content')
@@ -14,7 +16,7 @@
                     <img src="{{ asset('public/assets/admin/img/category.png') }}" class="w--20" alt="">
                 </span>
                 <span>
-                    {{ translate('add_new_package') }}
+                    {{ isset($package)?translate('update_package'):translate('add_new_package') }}
                 </span>
             </h1>
         </div>
@@ -23,7 +25,7 @@
         <div class="card">
             <div class="card-body">
                 <form
-                    action="{{ isset($category) ? route('admin.category.update', [$category['id']]) : route('admin.category.store') }}"
+                    action="{{ isset($package) ? route('subscription.packages.update', [$package['id']]) : route('subscription.packages.store') }}"
                     method="post" enctype="multipart/form-data">
                     @csrf
                     @php($language = \App\Models\BusinessSetting::where('key', 'language')->first())
@@ -46,7 +48,9 @@
                     <div class="row">
                         <div class="col-md-12">
 
-
+                            @if (isset($package))
+                                @method('PUT')
+                            @endif
                             @if ($language)
                                 <div class="form-group lang_form" id="default-form">
                                     <label class="input-label"
@@ -54,13 +58,33 @@
                                         ({{ translate('messages.default') }})</label>
                                     <input type="text" name="name[]" class="form-control"
                                         placeholder="{{ translate('messages.new_package') }}" maxlength="191"
-                                        oninvalid="document.getElementById('en-link').click()">
+                                        oninvalid="document.getElementById('en-link').click()" value="{{isset($package)?$package->getRawOriginal('name'):''}}">
                                     {{-- {{ session()->get('current_module') }} --}}
                                     
-
+                                    <label class="input-label mt-2" for="exampleFormControlInput1">{{ translate('messages.package_details') }}
+                                        ({{ translate('messages.default') }})</label>
+                                    <textarea id="summernote" name="package_details[]" class="form-control summernote"
+                                        oninvalid="document.getElementById('en-link').click()">{{isset($package)?$package->getRawOriginal('details'):''}}</textarea>
                                 </div>
                                 <input type="hidden" name="lang[]" value="default">
                                 @foreach (json_decode($language) as $lang)
+
+                                <?php
+                                    if (isset($package)) {
+                                        if(count($package['translations'])){
+                                            $translate = [];
+                                            foreach($package['translations'] as $t)
+                                            {
+                                                if($t->locale == $lang && $t->key=="name"){
+                                                    $translate[$lang]['name'] = $t->value;
+                                                }
+                                                if($t->locale == $lang && $t->key=="package_details"){
+                                                    $translate[$lang]['package_details'] = $t->value;
+                                                }
+                                            }
+                                        }
+                                    }
+                                ?>
                                     <div class="form-group d-none lang_form" id="{{ $lang }}-form">
                                         <label class="input-label"
                                             for="exampleFormControlInput1">{{ translate('messages.name') }}
@@ -68,9 +92,13 @@
                                         </label>
                                         <input type="text" name="name[]" class="form-control"
                                             placeholder="{{ translate('messages.new_package') }}" maxlength="191"
-                                            oninvalid="document.getElementById('en-link').click()">
+                                            oninvalid="document.getElementById('en-link').click()" value="{{ isset($package)? $translate[$lang]['name']:'' }}">
 
-                                        
+                                        <label class="input-label mt-2" for="exampleFormControlInput1">{{ translate('messages.package_details') }}
+                                            ({{ strtoupper($lang) }})
+                                        </label>
+                                        <textarea id="summernote" name="package_details[]" class="form-control summernote"
+                                            oninvalid="document.getElementById('en-link').click()">{{ isset($package)? $translate[$lang]['package_details']:'' }}</textarea>
                                     </div>
                                     <input type="hidden" name="lang[]" value="{{ $lang }}">
                                 @endforeach
@@ -79,22 +107,45 @@
                                     <label class="input-label"
                                         for="exampleFormControlInput1">{{ translate('messages.name') }}</label>
                                     <input type="text" name="name" class="form-control"
-                                        placeholder="{{ translate('messages.new_package') }}" value="{{ old('name') }}"
+                                        placeholder="{{ translate('messages.new_package') }}" value="{{isset($package)?$package->getRawOriginal('name'):''}}"
                                         maxlength="191">
+                                </div>
+
+                                <div class="form-group lang_form" id="default-form">
+                                    <label class="input-label"
+                                        for="exampleFormControlInput1">{{ translate('messages.package_details') }}</label>
+                                    <textarea id="summernote" name="package_details[]" class="form-control summernote"
+                                        oninvalid="document.getElementById('en-link').click()">{{isset($package)?$package->getRawOriginal('details'):''}}</textarea>
                                 </div>
                                 <input type="hidden" name="lang[]" value="default">
                             @endif
-                            {{-- <div class="form-group mb-0 pt-md-4">
-                                <label class="input-label">{{translate('messages.module')}}</label>
-                                <select name="module_id" id="module_id" required class="form-control js-select2-custom"  data-placeholder="{{translate('messages.select_module')}}">
-                                        <option value="" selected disabled>{{translate('messages.select_module')}}</option>
-                                    @foreach (\App\Models\Module::notParcel()->get() as $module)
-                                        <option value="{{$module->id}}" >{{$module->module_name}}</option>
-                                    @endforeach
-                                </select>
-                                <small class="text-danger">{{translate('messages.module_change_warning')}}</small>
-                            </div> --}}
-                            <input name="position" value="0" class="initial-hidden">
+                            <div class="row">
+                                <div class="form-group col-md-4 col-lg-4 mb-0 pt-md-4">
+                                    <label class="input-label">{{translate('messages.module')}}</label>
+                                    <select name="module" id="module_id" required class="form-control js-select2-custom"  data-placeholder="{{translate('messages.select_module')}}">
+                                            <option value="" selected disabled>{{translate('messages.select_module')}}</option>
+                                        @foreach (\App\Models\Module::notParcel()->get() as $module)
+                                            <option value="{{$module->id}}" {{ isset($package)?($package->module->id==$module->id?'selected':''):'' }}>{{$module->module_name}}</option>
+                                        @endforeach
+                                    </select>
+                                    {{-- <small class="text-danger">{{translate('messages.module_change_warning')}}</small> --}}
+                                </div>
+                                <div class="form-group col-md-4 col-lg-4 mb-0 pt-md-4">
+                                    <label class="input-label">{{translate('messages.price')}}</label>
+                                    <input type="text" name="price" id="price" required class="form-control" placeholder="{{translate('messages.package_price')}}" value="{{  isset($package)?$package->price:'' }}">
+                                    {{-- <small class="text-danger">{{translate('messages.module_change_warning')}}</small> --}}
+                                </div>
+                                <div class="form-group col-md-4 col-lg-4 mb-0 pt-md-4">
+                                    <label class="input-label">{{translate('messages.currency')}}</label>
+                                    <select name="currency" id="currency" required class="form-control js-select2-custom"  data-placeholder="{{translate('messages.select_currency')}}">
+                                        <option value="" selected disabled>{{translate('messages.select_currency')}}</option>
+                                        <option value="BDT" {{  isset($package)?($package->currency=='BDT'?'selected':''):'' }}>BDT</option>
+                                        <option value="USD" {{  isset($package)?($package->currency=='USD'?'selected':''):'' }}>USD</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            {{-- <input name="position" value="0" class="initial-hidden"> --}}
                         </div>
                         
                     </div>
@@ -102,7 +153,7 @@
                         <button type="reset" id="reset_btn"
                             class="btn btn--reset">{{ translate('messages.reset') }}</button>
                         <button type="submit"
-                            class="btn btn--primary">{{ isset($category) ? translate('messages.update') : translate('messages.add') }}</button>
+                            class="btn btn--primary">{{ isset($package) ? translate('messages.update') : translate('messages.add') }}</button>
                     </div>
 
                 </form>
@@ -112,7 +163,7 @@
         <div class="card mt-3">
             <div class="card-header py-2 border-0">
                 <div class="search--button-wrapper">
-                    <h5 class="card-title">{{ translate('messages.category_list') }}<span
+                    <h5 class="card-title">{{ translate('messages.package_list') }}<span
                             class="badge badge-soft-dark ml-2" id="itemCount">{{ $packages->total() }}</span></h5>
                     {{-- <div class="min--240">
                         <select name="module_id" class="form-control js-select2-custom" onchange="set_filter('{{url()->full()}}',this.value,'module_id')" title="{{translate('messages.select_modules')}}">
@@ -189,90 +240,67 @@
                                 <th class="border-0">{{ translate('messages.id') }}</th>
                                 <th class="border-0 w--1">{{ translate('messages.name') }}</th>
                                 <th class="border-0 text-center">{{ translate('messages.module') }}</th>
+                                <th class="border-0 text-center">{{ translate('messages.details') }}</th>
                                 <th class="border-0 text-center">{{ translate('messages.status') }}</th>
-                                <th class="border-0 text-center">{{ translate('messages.featured') }}</th>
-                                <th class="border-0 text-center">{{ translate('messages.priority') }}</th>
                                 <th class="border-0 text-center">{{ translate('messages.action') }}</th>
                             </tr>
                         </thead>
 
-                        {{-- <tbody id="table-div">
-                            @foreach ($packages as $key => $category)
+                        <tbody id="table-div">
+                            @foreach ($packages as $key => $package)
                                 <tr>
                                     <td>{{ $key + $packages->firstItem() }}</td>
-                                    <td>{{ $category->id }}</td>
+                                    <td>{{ $package->id }}</td>
                                     <td>
                                         <span class="d-block font-size-sm text-body">
-                                            {{ Str::limit($category['name'], 20, '...') }}
+                                            {{ Str::limit($package['name'], 20, '...') }}
                                         </span>
                                     </td>
                                     <td>
                                         <span class="d-block font-size-sm text-body text-center">
-                                            {{ Str::limit($category->module->module_name, 15, '...') }}
+                                            {{ Str::limit($package->module->module_name, 15, '...') }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="d-block font-size-sm text-body text-center">
+                                            {!! $package->details !!}
                                         </span>
                                     </td>
                                     <td>
                                         <label class="toggle-switch toggle-switch-sm"
-                                            for="stocksCheckbox{{ $category->id }}">
+                                            for="stocksCheckbox{{ $package->id }}">
                                             <input type="checkbox"
-                                                onclick="location.href='{{ route('admin.category.status', [$category['id'], $category->status ? 0 : 1]) }}'"class="toggle-switch-input"
-                                                id="stocksCheckbox{{ $category->id }}"
-                                                {{ $category->status ? 'checked' : '' }}>
+                                                onclick="location.href='{{ route('subscription.packages.status', [$package->status==1 ? 0 : 1, $package['id']]) }}'"class="toggle-switch-input"
+                                                id="stocksCheckbox{{ $package->id }}"
+                                                {{ $package->status==1 ? 'checked' : '' }}>
                                             <span class="toggle-switch-label mx-auto">
                                                 <span class="toggle-switch-indicator"></span>
                                             </span>
                                         </label>
                                     </td>
-                                    <td>
-                                        <label class="toggle-switch toggle-switch-sm"
-                                            for="featuredCheckbox{{ $category->id }}">
-                                            <input type="checkbox"
-                                                onclick="location.href='{{ route('admin.category.featured', [$category['id'], $category->featured ? 0 : 1]) }}'"class="toggle-switch-input"
-                                                id="featuredCheckbox{{ $category->id }}"
-                                                {{ $category->featured ? 'checked' : '' }}>
-                                            <span class="toggle-switch-label mx-auto">
-                                                <span class="toggle-switch-indicator"></span>
-                                            </span>
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <form action="{{ route('admin.category.priority', $category->id) }}">
-                                            <select name="priority" id="priority"
-                                                class="form-control form--control-select mx-auto {{ $category->priority == 0 ? 'text-title' : '' }} {{ $category->priority == 1 ? 'text-info' : '' }} {{ $category->priority == 2 ? 'text-success' : '' }} "
-                                                onchange="this.form.submit()">
-                                                <option value="0" class="text--title"
-                                                    {{ $category->priority == 0 ? 'selected' : '' }}>
-                                                    {{ translate('messages.normal') }}</option>
-                                                <option value="1" class="text--title"
-                                                    {{ $category->priority == 1 ? 'selected' : '' }}>
-                                                    {{ translate('messages.medium') }}</option>
-                                                <option value="2" class="text--title"
-                                                    {{ $category->priority == 2 ? 'selected' : '' }}>
-                                                    {{ translate('messages.high') }}</option>
-                                            </select>
-                                        </form>
-                                    </td>
+                                    
+                                    
                                     <td>
                                         <div class="btn--container justify-content-center">
                                             <a class="btn action-btn btn--primary btn-outline-primary"
-                                                href="{{ route('admin.category.edit', [$category['id'],'Category']) }}"
-                                                title="{{ translate('messages.edit_category') }}"><i
+                                                href="{{ route('subscription.packages.index', [$package['id']]) }}"
+                                                title="{{ translate('messages.edit_package') }}"><i
                                                     class="tio-edit"></i>
                                             </a>
                                             <a class="btn action-btn btn--danger btn-outline-danger" href="javascript:"
-                                                onclick="form_alert('category-{{ $category['id'] }}','{{ translate('Want to delete this category') }}')"
+                                                onclick="form_alert('category-{{ $package['id'] }}','{{ translate('Want to delete this package ?') }}')"
                                                 title="{{ translate('messages.delete_category') }}"><i
                                                     class="tio-delete-outlined"></i>
                                             </a>
-                                            <form action="{{ route('admin.category.delete', [$category['id']]) }}"
-                                                method="post" id="category-{{ $category['id'] }}">
+                                            <form action="{{ route('subscription.packages.delete', [$package['id']]) }}"
+                                                method="post" id="category-{{ $package['id'] }}">
                                                 @csrf @method('delete')
                                             </form>
                                         </div>
                                     </td>
                                 </tr>
                             @endforeach
-                        </tbody> --}}
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -297,6 +325,28 @@
 @endsection
 
 @push('script_2')
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('.summernote').each(function(e) {
+                $(this).summernote({
+                    tabsize: 2,
+                    height: 200,
+                    toolbar: [
+                        ['style', ['style']],
+                        ['font', ['bold', 'underline', 'italic', 'clear']],
+                        ['fontname', ['fontname']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['table', ['table']],
+                        // ['insert', ['link']],
+                        ['view', ['fullscreen', 'codeview', 'help']]
+                    ],
+                    placeholder: '{{ translate("messages.package_details") }}'
+                });
+            });
+        });
+    </script>
     <script>
         $(document).on('ready', function() {
             // INITIALIZATION OF SELECT2
