@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\CustomModule\Subscription\SubscriptionCreateController;
+use App\Http\Controllers\CustomModule\Subscription\VendorSubscriptionController;
 use Illuminate\Support\Facades\Route;
 
-Route::name('subscription.')->group(function(){
+/** Admin Routes */
+Route::prefix('admin')->name('subscription.')->group(function(){
     // Route::resource('packages',SubscriptionCreateController::class)->except('index');
     Route::controller(SubscriptionCreateController::class)->prefix('packages')->name('packages.')->group(function(){
         Route::get('/index/{id?}','index')->name('index');
@@ -12,4 +14,12 @@ Route::name('subscription.')->group(function(){
         Route::delete('/delete/{id}','destroy')->name('delete');
         Route::get('/status/{status}/{id}','status')->name('status');
     });
+});
+
+/** Vendor Routes */
+
+Route::prefix('vendor')->name('subscription.vendor.')->group(function(){
+   Route::controller(VendorSubscriptionController::class)->prefix('packages')->name('packages.')->group(function(){
+        Route::get('/','index')->name('index');
+   }); 
 });

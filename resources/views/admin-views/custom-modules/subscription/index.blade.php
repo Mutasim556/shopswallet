@@ -120,7 +120,7 @@
                                 <input type="hidden" name="lang[]" value="default">
                             @endif
                             <div class="row">
-                                <div class="form-group col-md-4 col-lg-4 mb-0 pt-md-4">
+                                <div class="form-group col-md-3 col-lg-3 mb-0 pt-md-4">
                                     <label class="input-label">{{translate('messages.module')}}</label>
                                     <select name="module" id="module_id" required class="form-control js-select2-custom"  data-placeholder="{{translate('messages.select_module')}}">
                                             <option value="" selected disabled>{{translate('messages.select_module')}}</option>
@@ -130,18 +130,69 @@
                                     </select>
                                     {{-- <small class="text-danger">{{translate('messages.module_change_warning')}}</small> --}}
                                 </div>
-                                <div class="form-group col-md-4 col-lg-4 mb-0 pt-md-4">
+                                <div class="form-group col-md-3 col-lg-3 mb-0 pt-md-4">
                                     <label class="input-label">{{translate('messages.price')}}</label>
                                     <input type="text" name="price" id="price" required class="form-control" placeholder="{{translate('messages.package_price')}}" value="{{  isset($package)?$package->price:'' }}">
-                                    {{-- <small class="text-danger">{{translate('messages.module_change_warning')}}</small> --}}
                                 </div>
-                                <div class="form-group col-md-4 col-lg-4 mb-0 pt-md-4">
+                                <div class="form-group col-md-3 col-lg-3 mb-0 pt-md-4">
                                     <label class="input-label">{{translate('messages.currency')}}</label>
                                     <select name="currency" id="currency" required class="form-control js-select2-custom"  data-placeholder="{{translate('messages.select_currency')}}">
                                         <option value="" selected disabled>{{translate('messages.select_currency')}}</option>
                                         <option value="BDT" {{  isset($package)?($package->currency=='BDT'?'selected':''):'' }}>BDT</option>
                                         <option value="USD" {{  isset($package)?($package->currency=='USD'?'selected':''):'' }}>USD</option>
                                     </select>
+                                </div>
+                                <div class="form-group col-md-3 col-lg-3 mb-0 pt-md-4">
+                                    <label class="input-label">{{translate('messages.package_type')}}</label>
+                                    <select name="package_type" id="package_type" required class="form-control js-select2-custom"  data-placeholder="{{translate('messages.select_package_type')}}">
+                                        <option value="" selected disabled>{{translate('messages.select_package_type')}}</option>
+                                        <option value="1" {{  isset($package)?($package->package_type=='1'?'selected':''):'' }}>Top Sell</option>
+                                        <option value="2" {{  isset($package)?($package->package_type=='2'?'selected':''):'' }}>Recomended</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-3 col-lg-3 mb-0 pt-md-4">
+                                    <label class="input-label">{{translate('messages.purchase_type')}}</label>
+                                    <select name="purchase_type" id="purchase_type" required class="form-control js-select2-custom"  data-placeholder="{{translate('messages.select_purchase_type')}}">
+                                        <option value="" selected disabled>{{translate('messages.select_purchase_type')}}</option>
+                                        <option value="Free" {{  isset($package)?($package->purchase_type=='Free'?'selected':''):'' }}>Free</option>
+                                        <option value="Paid" {{  isset($package)?($package->purchase_type=='Paid'?'selected':''):'' }}>Paid</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-3 col-lg-3 mb-0 pt-md-4">
+                                    <label class="input-label">{{translate('messages.discount')}}</label>
+                                    <input type="text" name="discount" id="discount" class="form-control" placeholder="{{translate('messages.discount')}}" value="{{  isset($package)?$package->discount:'' }}">
+                                    {{-- <small class="text-danger">{{translate('messages.module_change_warning')}}</small> --}}
+                                </div>
+                                <div class="form-group col-md-3 col-lg-3 mb-0 pt-md-4">
+                                    <label class="input-label">{{translate('messages.discount_type')}}</label>
+                                    <select name="discount_type" id="discount_type" class="form-control js-select2-custom"  data-placeholder="{{translate('messages.discount_type')}}">
+                                        <option value="" selected disabled>{{translate('messages.select_discount_type')}}</option>
+                                        <option value="Flat" {{  isset($package)?($package->discount_type=='Flat'?'selected':''):'' }}>Flat</option>
+                                        <option value="Percent" {{  isset($package)?($package->discount_type=='Percent'?'selected':''):'' }}>Percent</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-3 col-lg-3 mb-0 pt-md-4">
+                                    <label class="input-label">{{translate('messages.validity')}}</label>
+                                    <input type="text" name="validity" id="validity" required class="form-control" placeholder="{{translate('messages.123')}}" value="{{  isset($package)?$package->validity:'' }}">
+                                </div>
+                                <div class="form-group col-md-3 col-lg-3 mb-0 pt-md-4">
+                                    <label class="input-label">{{translate('messages.purchase_limit')}}</label>
+                                    <input type="text" name="purchase_limit" id="purchase_limit" required class="form-control" placeholder="{{translate('messages.12')}}" value="{{  isset($package)?$package->purchase_limit:'' }}">
+                                </div>
+                                <div class="form-group col-md-3 col-lg-3 mb-0 pt-md-4">
+                                    <label class="input-label">{{translate('messages.purchase_limit_time')}}</label>
+                                    <input type="text" name="purchase_limit_time" id="purchase_limit_time" required class="form-control" placeholder="{{translate('messages.example-30')}}" value="{{  isset($package)?$package->purchase_limit_time:'' }}">
+                                    <small class="text-danger">{{translate('messages.type 0 for no limit and type -1 for only once ')}}</small>
+                                </div>
+                                <div class="form-group col-md-3 col-lg-3 mb-0 pt-md-4" >
+                                    <input type="checkbox" name="purchase_with_point" style="margin-top: 10%" id="purchase_with_point" {{  isset($package)?($package->purchase_with_point==1?'checked':''):'' }}> &nbsp; {{ translate('messages.Can purchase with point ?') }}
+                                </div>
+                                <div class="form-group col-md-3 col-lg-3 mb-0 pt-md-4" >
+                                    <input type="checkbox" name="gift_it" id="gift_it" style="margin-top: 10%" {{  isset($package)?($package->gift_it==1?'checked':''):'' }}> &nbsp; {{ translate('messages.Can gift it ?') }}
+                                </div>
+                                <div class="form-group col-md-3 col-lg-3 mb-0 pt-md-4">
+                                    <label class="input-label">{{translate('messages.maximum_order_limit')}}</label>
+                                    <input type="text" name="maximum_order_limit" id="maximum_order_limit" required class="form-control" placeholder="{{translate('messages.example-30')}}" value="{{  isset($package)?$package->maximum_order_limit:'' }}">
                                 </div>
                             </div>
                             
@@ -240,6 +291,10 @@
                                 <th class="border-0">{{ translate('messages.id') }}</th>
                                 <th class="border-0 w--1">{{ translate('messages.name') }}</th>
                                 <th class="border-0 text-center">{{ translate('messages.module') }}</th>
+                                <th class="border-0 text-center">{{ translate('messages.price') }}</th>
+                                <th class="border-0 text-center">{{ translate('messages.discount') }}</th>
+                                <th class="border-0 text-center">{{ translate('messages.purchase_type') }}</th>
+                                <th class="border-0 text-center">{{ translate('messages.validity') }}</th>
                                 <th class="border-0 text-center">{{ translate('messages.details') }}</th>
                                 <th class="border-0 text-center">{{ translate('messages.status') }}</th>
                                 <th class="border-0 text-center">{{ translate('messages.action') }}</th>
@@ -259,6 +314,26 @@
                                     <td>
                                         <span class="d-block font-size-sm text-body text-center">
                                             {{ Str::limit($package->module->module_name, 15, '...') }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="d-block font-size-sm text-body text-center">
+                                            {{ $package->price." ".$package->currency }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="d-block font-size-sm text-body text-center">
+                                            {{ $package->discount_type=='Percent'?$package->discount." %":$package->discount }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="d-block font-size-sm text-light badge badge-{{ $package->purchase_type=='Free'?'success':'danger' }} text-center">
+                                            {{ $package->purchase_type }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="d-block font-size-sm text-body text-center">
+                                            {{ $package->validity.' '.translate('messages.days') }}
                                         </span>
                                     </td>
                                     <td>
@@ -400,5 +475,6 @@
             $('#module_id').val(null).trigger('change');
             $('#viewer').attr('src', "{{ asset('public/assets/admin/img/900x400/img1.jpg') }}");
         })
+
     </script>
 @endpush

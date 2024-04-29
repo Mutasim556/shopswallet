@@ -690,6 +690,36 @@
                             </ul>
                         </li>
                     @endif
+
+                    @if (\App\CentralLogics\Helpers::employee_module_permission_check('subscription') && \App\CentralLogics\Helpers::get_vendor_module_id() == 'grocery')
+                        <li
+                            class="navbar-vertical-aside-has-menu {{ Request::is('subscription/vendor*') ? 'active' : '' }}">
+                            <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:"
+                                title="{{ translate('messages.Subscription') }}">
+                                <i class="tio-user nav-icon"></i>
+                                <span
+                                    class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{ translate('messages.Subscription') }}</span>
+                            </a>
+                            <ul class="js-navbar-vertical-aside-submenu nav nav-sub"
+                                style="display: {{ Request::is('subscription/vendor*') ? 'block' : 'none' }}">
+                                <li class="nav-item {{ Request::is('subscription/vendor/packages') ? 'active' : '' }}">
+                                    <a class="nav-link " href="{{ route('subscription.vendor.packages.index') }}"
+                                        title="{{ translate('messages.add_new_Employee') }}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{ translate('messages.Packages') }}</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item {{ Request::is('store-panel/employee/list') ? 'active' : '' }}">
+                                    <a class="nav-link " href="{{ route('vendor.employee.list') }}"
+                                        title="{{ translate('messages.Employee_list') }}">
+                                        <span class="tio-circle nav-indicator-icon"></span>
+                                        <span class="text-truncate">{{ translate('messages.purchase_history') }}</span>
+                                    </a>
+                                </li>
+
+                            </ul>
+                        </li>
+                    @endif
                     <!-- End Employee -->
 
                     <li class="nav-item py-5">

@@ -4,7 +4,7 @@
 return [
         'subscription'=>[
             'status'=>true,
-            'prefix'=>'admin/subscription',
+            'prefix'=>'subscription',
             'route'=>'routes/customModules/subscription.php',
             'routes'=>[
                 [

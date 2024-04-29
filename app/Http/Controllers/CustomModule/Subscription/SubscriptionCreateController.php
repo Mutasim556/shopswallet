@@ -14,6 +14,10 @@ class SubscriptionCreateController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function __construct()
+    {
+        // $this->middleware('subscription');
+    }
     public function index(Request $data)
     {
         $module_type = 'settings';
@@ -49,14 +53,29 @@ class SubscriptionCreateController extends Controller
             'price'=>'required',
             'currency'=>'required',
             'module'=>'required',
+            'package_type'=>'required',
+            'purchase_type'=>'required',
+            'discount_type'=>'required',
+            'validity'=>'required',
+            'purchase_limit'=>'required',
+            'purchase_limit_time'=>'required',
+            'maximum_order_limit'=>'required',
         ],[
             'name.required' => translate('messages.Name is required!'),
             'name.0.required' => translate('default_name_is_required'),
             'package_details.required' => translate('messages.Package details is required!'),
             'package_details.0.required' => translate('default_package_details_is_required'),
-            'price' => translate('price_is_required'),
-            'currency' => translate('currency_is_required'),
-            'module' => translate('module_is_required'),
+            'price.required' => translate('price_is_required'),
+            'currency.required' => translate('currency_is_required'),
+            'module.required' => translate('module_is_required'),
+            'package_type.required' => translate('package_type_is_required'),
+            'purchase_type.required' => translate('purchase_type_is_required'),
+            'discount_type.required' => translate('discount_type_is_required'),
+            'validity.required' => translate('validity_is_required'),
+            'purchase_limit.required' => translate('purchase_limit_is_required'),
+            'purchase_limit_time.required' => translate('purchase_limit_time_is_required'),
+            'maximum_order_limit.required' => translate('maximum_order_limit_is_required'),
+            
         ]);
 
         $package = new SubscriptionPackage();
@@ -65,6 +84,16 @@ class SubscriptionCreateController extends Controller
         $package->price = $request->price?$request->price:0;
         $package->currency = $request->currency;
         $package->module_id = $request->module;
+        $package->package_type = $request->package_type;
+        $package->purchase_type = $request->purchase_type;
+        $package->discount = $request->discount?$request->discount:0;
+        $package->discount_type = $request->discount_type?$request->discount_type:'Flat';
+        $package->validity = $request->validity;
+        $package->purchase_limit = $request->purchase_limit;
+        $package->purchase_limit_time = $request->purchase_limit_time;
+        $package->purchase_with_point = $request->purchase_with_point?1:0;
+        $package->gift_it = $request->gift_it?1:0;
+        $package->maximum_order_limit = $request->maximum_order_limit;
         $package->save();
 
         $default_lang = str_replace('_', '-', app()->getLocale());
@@ -146,6 +175,7 @@ class SubscriptionCreateController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // dd($request->all());
         $request->validate([
             'name'=>'required|max:150',
             'name.0'=>'required',
@@ -154,14 +184,29 @@ class SubscriptionCreateController extends Controller
             'price'=>'required',
             'currency'=>'required',
             'module'=>'required',
+            'package_type'=>'required',
+            'purchase_type'=>'required',
+            'discount_type'=>'required',
+            'validity'=>'required',
+            'purchase_limit'=>'required',
+            'purchase_limit_time'=>'required',
+            'maximum_order_limit'=>'required',
         ],[
             'name.required' => translate('messages.Name is required!'),
             'name.0.required' => translate('default_name_is_required'),
             'package_details.required' => translate('messages.Package details is required!'),
             'package_details.0.required' => translate('default_package_details_is_required'),
-            'price' => translate('price_is_required'),
-            'currency' => translate('currency_is_required'),
-            'module' => translate('module_is_required'),
+            'price.required' => translate('price_is_required'),
+            'currency.required' => translate('currency_is_required'),
+            'module.required' => translate('module_is_required'),
+            'package_type.required' => translate('package_type_is_required'),
+            'purchase_type.required' => translate('purchase_type_is_required'),
+            'discount_type.required' => translate('discount_type_is_required'),
+            'validity.required' => translate('validity_is_required'),
+            'purchase_limit.required' => translate('purchase_limit_is_required'),
+            'purchase_limit_time.required' => translate('purchase_limit_time_is_required'),
+            'maximum_order_limit.required' => translate('maximum_order_limit_is_required'),
+            
         ]);
 
         $package = SubscriptionPackage::findOrFail($id);
@@ -170,6 +215,16 @@ class SubscriptionCreateController extends Controller
         $package->price = $request->price?$request->price:0;
         $package->currency = $request->currency;
         $package->module_id = $request->module;
+        $package->package_type = $request->package_type;
+        $package->purchase_type = $request->purchase_type;
+        $package->discount = $request->discount?$request->discount:0;
+        $package->discount_type = $request->discount_type?$request->discount_type:'Flat';
+        $package->validity = $request->validity;
+        $package->purchase_limit = $request->purchase_limit;
+        $package->purchase_limit_time = $request->purchase_limit_time;
+        $package->purchase_with_point = $request->purchase_with_point?1:0;
+        $package->gift_it = $request->gift_it?1:0;
+        $package->maximum_order_limit = $request->maximum_order_limit;
         $package->save();
 
         $default_lang = str_replace('_', '-', app()->getLocale());
