@@ -60,6 +60,7 @@ class SubscriptionCreateController extends Controller
             'purchase_limit'=>'required',
             'purchase_limit_time'=>'required',
             'maximum_order_limit'=>'required',
+            'payment_option'=>'required',
         ],[
             'name.required' => translate('messages.Name is required!'),
             'name.0.required' => translate('default_name_is_required'),
@@ -75,6 +76,7 @@ class SubscriptionCreateController extends Controller
             'purchase_limit.required' => translate('purchase_limit_is_required'),
             'purchase_limit_time.required' => translate('purchase_limit_time_is_required'),
             'maximum_order_limit.required' => translate('maximum_order_limit_is_required'),
+            'payment_option.required' => translate('payment_option_is_required'),
             
         ]);
 
@@ -94,6 +96,7 @@ class SubscriptionCreateController extends Controller
         $package->purchase_with_point = $request->purchase_with_point?1:0;
         $package->gift_it = $request->gift_it?1:0;
         $package->maximum_order_limit = $request->maximum_order_limit;
+        $package->payment_option = implode(',',$request->payment_option);
         $package->save();
 
         $default_lang = str_replace('_', '-', app()->getLocale());
@@ -191,6 +194,7 @@ class SubscriptionCreateController extends Controller
             'purchase_limit'=>'required',
             'purchase_limit_time'=>'required',
             'maximum_order_limit'=>'required',
+            'payment_option'=>'required',
         ],[
             'name.required' => translate('messages.Name is required!'),
             'name.0.required' => translate('default_name_is_required'),
@@ -206,6 +210,7 @@ class SubscriptionCreateController extends Controller
             'purchase_limit.required' => translate('purchase_limit_is_required'),
             'purchase_limit_time.required' => translate('purchase_limit_time_is_required'),
             'maximum_order_limit.required' => translate('maximum_order_limit_is_required'),
+            'payment_option.required' => translate('payment_option_is_required'),
             
         ]);
 
@@ -225,6 +230,7 @@ class SubscriptionCreateController extends Controller
         $package->purchase_with_point = $request->purchase_with_point?1:0;
         $package->gift_it = $request->gift_it?1:0;
         $package->maximum_order_limit = $request->maximum_order_limit;
+        $package->payment_option = implode(',',$request->payment_option);
         $package->save();
 
         $default_lang = str_replace('_', '-', app()->getLocale());

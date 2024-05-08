@@ -142,6 +142,7 @@
                                         <option value="USD" {{  isset($package)?($package->currency=='USD'?'selected':''):'' }}>USD</option>
                                     </select>
                                 </div>
+                                
                                 <div class="form-group col-md-3 col-lg-3 mb-0 pt-md-4">
                                     <label class="input-label">{{translate('messages.package_type')}}</label>
                                     <select name="package_type" id="package_type" required class="form-control js-select2-custom"  data-placeholder="{{translate('messages.select_package_type')}}">
@@ -193,6 +194,20 @@
                                 <div class="form-group col-md-3 col-lg-3 mb-0 pt-md-4">
                                     <label class="input-label">{{translate('messages.maximum_order_limit')}}</label>
                                     <input type="text" name="maximum_order_limit" id="maximum_order_limit" required class="form-control" placeholder="{{translate('messages.example-30')}}" value="{{  isset($package)?$package->maximum_order_limit:'' }}">
+                                </div>
+                            
+                                <div class="form-group col-md-6 col-lg-6 mb-0 pt-md-4">
+                                    <label class="input-label">{{translate('messages.payment_option')}}</label>
+                                    <select name="payment_option[]" id="payment_option" required class="form-control js-select2-custom"  data-placeholder="{{translate('messages.select_payment_option')}}" multiple>
+                                        <option value="" disabled>{{translate('messages.select_payment_option')}}</option>
+                                        <option value="manual" {{  isset($package)?(in_array('manual',explode(',',$package->payment_option))?'selected':''):'' }}>{{translate('messages.manual')}}</option>
+                                        <?php
+                                            $payments = DB::table('addon_settings')->where('settings_type','payment_config')->where('is_active',1)->get();
+                                        ?>
+                                        @foreach ($payments as $payment)
+                                            <option value="{{ $payment->key_name }}" {{  isset($package)?(in_array($payment->key_name,explode(',',$package->payment_option))?'selected':''):'' }}>{{ json_decode($payment->additional_data)->gateway_title }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             
