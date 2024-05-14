@@ -21,5 +21,7 @@ Route::prefix('admin')->name('subscription.')->group(function(){
 Route::prefix('vendor')->name('subscription.vendor.')->group(function(){
    Route::controller(VendorSubscriptionController::class)->prefix('packages')->name('packages.')->group(function(){
         Route::get('/','index')->name('index');
+        Route::get('/start-free-trail/{package_id?}','freetrail')->name('freetrail');
+        Route::get('/purchase-list','list')->name('list');
    }); 
 });

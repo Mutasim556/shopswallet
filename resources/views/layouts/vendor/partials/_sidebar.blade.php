@@ -709,8 +709,8 @@
                                         <span class="text-truncate">{{ translate('messages.Packages') }}</span>
                                     </a>
                                 </li>
-                                <li class="nav-item {{ Request::is('store-panel/employee/list') ? 'active' : '' }}">
-                                    <a class="nav-link " href="{{ route('vendor.employee.list') }}"
+                                <li class="nav-item {{ Request::is('subscription/vendor/purchase-list') ? 'active' : '' }}">
+                                    <a class="nav-link " href="{{ route('subscription.vendor.packages.list') }}"
                                         title="{{ translate('messages.Employee_list') }}">
                                         <span class="tio-circle nav-indicator-icon"></span>
                                         <span class="text-truncate">{{ translate('messages.purchase_history') }}</span>

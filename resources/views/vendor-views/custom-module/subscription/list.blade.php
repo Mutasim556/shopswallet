@@ -73,81 +73,127 @@
                     <img src="{{ asset('public/assets/admin/img/categories.png') }}" class="w--20" alt="">
                 </span>
                 <span>
-                    {{ translate('messages.package_list') }} <span class="badge badge-soft-dark ml-2"
-                        id="itemCount">{{ $packages->count() }}</span>
+                    {{ translate('messages.purchase_list') }} <span class="badge badge-soft-dark ml-2"
+                        id="itemCount">{{ $purchases->count() }}</span>
                 </span>
             </h1>
         </div>
         <!-- End Page Header -->
         <div class="row">
-            @foreach ($packages as $package)
-                <div class="col-md-3 col-lg-3 col-sm-12">
-                    <div class="card">
-                        <div
-                            class="card-header py-3 border-0 {{ $package->purchase_type == 'Free' ? 'bg-success' : 'bg-danger' }}">
-                            <h4 class="mx-auto text-light">{{ $package->name }}</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-12 col-lg-12 text-center">
-                                    @if ($package->purchase_type == 'Free')
-                                        <span class="badge badge-success">
-                                            {{ translate('messages.this_package_is_free_for_you') }}
-                                        </span>
-                                        <br>
-                                        <br>
-                                        <span>
-                                            {{ translate('messages.update_your_account_to_access_full_version') }}
-                                        </span><br>
-                                        <b>{{ $package->validity . ' ' . translate('messages.days_unlimited_access') }}</b><br>
-                                        <b>{{ translate('messages.you_can_receive_maximum') . ' ' . $package->maximum_order_limit . ' orders' }}</b><br>
-                                        <span
-                                            style="font-size:11px;color:red">{{ translate('messages.you_can_purchase_it_only_one_time') }}</span><br>
-                                    @else
-                                        @if ($package->discount >= 0)
-                                            <strike style="color: red">{{ $package->price }} </strike> &nbsp;
-                                            <b>
-                                                @if ($package->discount_type == 'Flat')
-                                                    {{ $package->price - $package->discount . ' ' . $package->currency }}
-                                                    <br><span class="badge badge-danger">{{ translate('messages.discount') }} {{ $package->discount." ".$package->currency }}
-                                                        </span>
-                                                @else
-                                                    {{ $package->price - ($package->price * $package->discount) / 100 . ' ' . $package->currency }}
-                                                    <br><span class="badge badge-danger">{{ $package->discount }}%
-                                                        {{ translate('messages.discount') }}</span>
-                                                @endif
-                                            </b>
-                                        @else
-                                            <b>{{ $package->price . ' ' . $package->currency }}</b>
-                                        @endif <br>
-                                        <span>
-                                            {{ translate('messages.update_your_account_to_access_full_version') }}
-                                        </span><br>
-                                        <b>{{ $package->validity . ' ' . translate('messages.days_unlimited_access') }}</b><br>
-                                        <b>{{ translate('messages.you_can_receive_maximum') . ' ' . $package->maximum_order_limit . ' orders' }}</b><br>
-                                        <span
-                                            style="font-size:11px;color:red">{{ translate('messages.you_can_purchase_it') . ' ' . $package->purchase_limit . translate('messages._times_per_months') }}</span><br>
-                                    @endif
-
-
-                                </div>
+            <div class="card mt-3 col-lg-12">
+                <div class="card-header py-2 border-0">
+                    <div class="search--button-wrapper">
+                        <h5 class="card-title">{{ translate('messages.package_list') }}<span
+                                class="badge badge-soft-dark ml-2" id="itemCount">{{ $purchases->total() }}</span></h5>
+                        {{-- <div class="min--240">
+                            <select name="module_id" class="form-control js-select2-custom" onchange="set_filter('{{url()->full()}}',this.value,'module_id')" title="{{translate('messages.select_modules')}}">
+                                <option value="" {{!request('module_id') ? 'selected':''}}>{{translate('messages.all_modules')}}</option>
+                                @foreach (\App\Models\Module::notParcel()->get() as $module)
+                                    <option
+                                        value="{{$module->id}}" {{request('module_id') == $module->id?'selected':''}}>
+                                        {{$module['module_name']}}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div> --}}
+    
+                        <form class="search-form">
+    
+                            <!-- Search -->
+                            <div class="input-group input--group">
+                                <input type="search" name="search" value="{{ request()?->search ?? null }}"
+                                    class="form-control min-height-45"
+                                    placeholder="{{ translate('messages.search_purchases') }}"
+                                    aria-label="{{ translate('messages.ex_:_purchases') }}">
+                                <button type="submit" class="btn btn--secondary min-height-45"><i
+                                        class="tio-search"></i></button>
+                            </div>
+                            <!-- End Search -->
+                        </form>
+                        <!-- Unfold -->
+                        <div class="hs-unfold mr-2">
+                            <a class="js-hs-unfold-invoker btn btn-sm btn-white dropdown-toggle min-height-40"
+                                href="javascript:;"
+                                data-hs-unfold-options='{
+                                        "target": "#usersExportDropdown",
+                                        "type": "css-animation"
+                                    }'>
+                                <i class="tio-download-to mr-1"></i> {{ translate('messages.export') }}
+                            </a>
+    
+                            <div id="usersExportDropdown"
+                                class="hs-unfold-content dropdown-unfold dropdown-menu dropdown-menu-sm-right">
+    
+                                <span class="dropdown-header">{{ translate('messages.download_options') }}</span>
+                                {{-- <a id="export-excel" class="dropdown-item"
+                                    href="{{ route('admin.category.export-purchases', ['type' => 'excel', request()->getQueryString()]) }}">
+                                    <img class="avatar avatar-xss avatar-4by3 mr-2"
+                                        src="{{ asset('public/assets/admin') }}/svg/components/excel.svg"
+                                        alt="Image Description">
+                                    {{ translate('messages.excel') }}
+                                </a>
+                                <a id="export-csv" class="dropdown-item"
+                                    href="{{ route('admin.category.export-purchases', ['type' => 'csv', request()->getQueryString()]) }}">
+                                    <img class="avatar avatar-xss avatar-4by3 mr-2"
+                                        src="{{ asset('public/assets/admin') }}/svg/components/placeholder-csv-format.svg"
+                                        alt="Image Description">
+                                    .{{ translate('messages.csv') }}
+                                </a> --}}
+    
                             </div>
                         </div>
-                        <div class="card-footer page-area bg-white">
-                            <div class="row" style="text-align: center">
-                                <div class="col-lg-12">
-                                    @if ($package->purchase_type == 'Free')
-                                        <a href="{{ route('subscription.vendor.packages.freetrail',$package->id) }}" class="btn btn-sm btn-info">{{ translate('messages.start_free_trail') }}</a>
-                                    @else
-                                        <button id="detailsBtn" class="btn btn-sm btn-primary mx-2" data-toggle="modal" data-target="#exampleModal" data-details="{!! $package->details !!}">{{ translate('messages.details') }}</button>
-                                        <button class="btn btn-sm btn-danger mx-2" class="btn btn-sm btn-primary mx-2" id="purchasebtn" data-toggle="modal" data-target="#purchaseModal" data-name="{{ $package->name }}" data-price="{{ $package->discount_type == 'Flat'?($package->price - $package->discount):($package->price - ($package->price * $package->discount) / 100) }}" data-currency="{{ $package->currency }}" data-payment_option="{{$package->payment_option}}">{{ translate('messages.purchase_now') }}</button>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
+                        <!-- End Unfold -->
                     </div>
                 </div>
-            @endforeach
+                <div class="card-body p-0">
+                    <div class="table-responsive datatable-custom">
+                        <table id="columnSearchDatatable"
+                            class="table table-borderless table-thead-bordered table-align-middle"
+                            data-hs-datatables-options='{
+                                "isResponsive": false,
+                                "isShowPaging": false,
+                                "paging":false,
+                            }'>
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="border-0">{{ translate('sl') }}</th>
+                                    <th class="border-0 w--1">{{ translate('messages.package_name') }}</th>
+                                    <th class="border-0 text-center">{{ translate('messages.module') }}</th>
+                                    <th class="border-0 text-center">{{ translate('messages.paid_amount') }}</th>
+                                    <th class="border-0 text-center">{{ translate('messages.purchase_type') }}</th>
+                                    <th class="border-0 text-center">{{ translate('messages.purchase_date') }}</th>
+                                    <th class="border-0 text-center">{{ translate('messages.expiry_date') }}</th>
+                                    <th class="border-0 text-center">{{ translate('messages.status') }}</th>
+                                    <th class="border-0 text-center">{{ translate('messages.action') }}</th>
+                                </tr>
+                            </thead>
+    
+                            <tbody id="table-div">
+                                @foreach ($purchases as $key => $purchase)
+                                <td class="text-center">{{ $key + 1 }}</td>
+                                <td class="text-center">{{ $purchase->subscription_package->name }}</td>
+                                <td class="text-center">{{ $purchase->subscription_package->module->module_name }}</td>
+                                <td class="text-center">{{ $purchase->paid_amount}}<br>{{ $purchase->subscription_package->purchase_type==''}}</td>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                @if (count($purchases) !== 0)
+                    <hr>
+                @endif
+                <div class="page-area">
+                    {!! $purchases->appends($_GET)->links() !!}
+                </div>
+                @if (count($purchases) === 0)
+                    <div class="empty--data">
+                        <img src="{{ asset('/public/assets/admin/svg/illustrations/sorry.svg') }}" alt="public">
+                        <h5>
+                            {{ translate('no_data_found') }}
+                        </h5>
+                    </div>
+                @endif
+            </div>
 
         </div>
     </div>
