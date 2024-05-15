@@ -11,12 +11,12 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-success py-2">
-                    <h5 class="modal-title" id="exampleModalLabel">{{ translate('messages.more_details') }}</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">{{ translate('messages.details') }}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body px-1">
+                <div class="modal-body px-4">
                     
                 </div>
                 <div class="modal-footer py-2">
@@ -25,46 +25,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="purchaseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header bg-success py-2">
-                    <h5 class="modal-title" id="exampleModalLabel">{{ translate('messages.purchase_details') }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body px-3">
-                    <form action="">
-                        <div class="form-group">
-                            <label for="">{{ translate('messages.package_name') }}</label>
-                            <input type="text" class="form-control" id="package_name" name="package_name" readonly>
-                            <input type="hidden" class="form-control" id="package_id" name="package_id">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="">{{ translate('messages.package_price') }}</label>
-                            <input type="text" class="form-control" id="package_price" name="package_price" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="">{{ translate('messages.currency') }}</label>
-                            <input type="text" class="form-control" id="currency" name="currency" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="">{{ translate('messages.select_payment_option') }}</label>
-                            <select name="payment_option" id="payment_option" required class="form-control js-select2-custom"  data-placeholder="{{translate('messages.select_payment_option')}}" >
-
-                            </select>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer py-2">
-                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">{{ translate('messages.close') }}</button>
-                </div>
-            </div>
-        </div>
-    </div>
+    
     <div class="content container-fluid">
         <!-- Page Header -->
         <div class="page-header">
@@ -83,8 +44,10 @@
             <div class="card mt-3 col-lg-12">
                 <div class="card-header py-2 border-0">
                     <div class="search--button-wrapper">
-                        <h5 class="card-title">{{ translate('messages.package_list') }}<span
-                                class="badge badge-soft-dark ml-2" id="itemCount">{{ $purchases->total() }}</span></h5>
+                        <h5 class="card-title">{{ translate('messages.remaining_balanace') }}<span
+                                class="badge badge-soft-dark ml-2" id="itemCount">{{ translate('messages.Orders ').($vendor_balance?$vendor_balance->total_order_limit-$vendor_balance->total_vendor_order_count:0) }}</span></h5>
+                        <h5 class="card-title">{{ translate('messages.expiry_date') }}<span
+                                    class="badge badge-soft-danger ml-2" id="itemCount">{{ ($vendor_balance?date('Y-m-d h:i A',strtotime($vendor_balance->last_expiry_date)):'N/A') }}</span></h5>
                         {{-- <div class="min--240">
                             <select name="module_id" class="form-control js-select2-custom" onchange="set_filter('{{url()->full()}}',this.value,'module_id')" title="{{translate('messages.select_modules')}}">
                                 <option value="" {{!request('module_id') ? 'selected':''}}>{{translate('messages.all_modules')}}</option>
@@ -170,10 +133,18 @@
     
                             <tbody id="table-div">
                                 @foreach ($purchases as $key => $purchase)
-                                <td class="text-center">{{ $key + 1 }}</td>
-                                <td class="text-center">{{ $purchase->subscription_package->name }}</td>
-                                <td class="text-center">{{ $purchase->subscription_package->module->module_name }}</td>
-                                <td class="text-center">{{ $purchase->paid_amount}}<br>{{ $purchase->subscription_package->purchase_type==''}}</td>
+                                <tr>
+                                    <td class="text-center">{{ $key + 1 }}</td>
+                                    <td class="text-center">{{ $purchase->subscription_package->name }}</td>
+                                    <td class="text-center">{{ $purchase->subscription_package->module->module_name }}</td>
+                                    <td class="text-center">{{ $purchase->paid_amount}}</td>
+                                    <td class="text-center">{{ $purchase->subscription_package->purchase_type}}</td>
+                                    <td class="text-center">{{ $purchase->package_status==1?date('Y-m-d h:i A',strtotime($purchase->purchase_date)):'N/A'}}</td>
+                                    <td class="text-center">{{ $purchase->package_status==1?date('Y-m-d h:i A',strtotime($purchase->expiry_date)):'N/A'}}</td>
+                                    <td class="text-center">{!! $purchase->package_status==1?'<span class="badge badge-success">'.translate('messages.activated').'</span>':'<span class="badge badge-danger">'.translate('messages.pending').'</span>'!!}</td>
+                                    <td class="text-center"><button class="btn btn-xs btn-primary" id="detailsBtn" data-toggle="modal" data-target="#exampleModal" data-details="{{ $purchase->subscription_package->details }}"  data-maximum_order_limit="{{ $purchase->maximum_order_limit }}">{{ translate('messages.Details') }}</button></td>
+                                </tr>
+                                
                                 @endforeach
                             </tbody>
                         </table>
@@ -276,7 +247,19 @@
         //     });
         // });
         $(document).on('click','#detailsBtn',function(){
-            $('#exampleModal .modal-body').empty().append($(this).data('details'));
+            $('#exampleModal .modal-body').empty();
+            var details = $(this).data('details');
+            $('#exampleModal .modal-body').append(`
+                <h4 class="text-center">{{ translate('messages.package_details') }}</h4>
+                <ul>
+                    <li>{{ translate('messages.maximum_order_limit_') }}${ $(this).data('maximum_order_limit')}</li>
+                </ul>
+            `);
+
+            $('#exampleModal .modal-body').append(`
+                <h4 class="text-center">{{ translate('messages.more_details') }}</h4>
+                ${ $(this).data('details')}
+            `);
         });
 
         $(document).on('click','#purchasebtn',function(){

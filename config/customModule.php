@@ -11,6 +11,10 @@ return [
                     'menu_name'=>'Packages',
                     'route_name'=>"subscription.packages.index",
                 ],
+                [
+                    'menu_name'=>'Purchase Request',
+                    'route_name'=>"subscription.packages.purchaserequest",
+                ],
                 
             ]
         ]

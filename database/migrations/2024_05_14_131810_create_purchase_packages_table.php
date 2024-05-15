@@ -21,6 +21,7 @@ return new class extends Migration
             $table->float('paid_amount')->default(0);
             $table->boolean('package_status')->default(0);
             $table->boolean('limit_status')->default(0);
+            $table->integer('maximum_order_limit')->default(0);
             $table->foreignId('admin_id')->nullable()->references('id')->on('admins');
             $table->timestamps();
         });

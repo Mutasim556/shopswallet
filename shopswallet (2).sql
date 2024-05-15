@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 17, 2024 at 12:38 PM
+-- Generation Time: May 15, 2024 at 01:18 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.1.1
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `sisternu_shopswallet`
+-- Database: `shopswallet`
 --
 
 -- --------------------------------------------------------
@@ -84,8 +84,9 @@ INSERT INTO `addon_settings` (`id`, `key_name`, `live_values`, `test_values`, `s
 ('18fbb21f-d6ad-11ed-962c-0c7a158e4469', 'foloosi', '{\"gateway\":\"foloosi\",\"mode\":\"live\",\"status\":\"0\",\"merchant_key\":\"\"}', '{\"gateway\":\"foloosi\",\"mode\":\"test\",\"status\":\"0\",\"merchant_key\":\"\"}', 'payment_config', 'test', 0, NULL, NULL, NULL),
 ('2767d142-d6a1-11ed-962c-0c7a158e4469', 'paytm', '{\"gateway\":\"paytm\",\"mode\":\"live\",\"status\":\"1\",\"merchant_key\":null,\"merchant_id\":null,\"merchant_website_link\":null}', '{\"gateway\":\"paytm\",\"mode\":\"live\",\"status\":\"1\",\"merchant_key\":null,\"merchant_id\":null,\"merchant_website_link\":null}', 'payment_config', 'live', 0, NULL, NULL, '{\"gateway_title\":\"Paytm\",\"gateway_image\":null}'),
 ('3201d2e6-c937-11ed-a424-0c7a158e4469', 'amazon_pay', '{\"gateway\":\"amazon_pay\",\"mode\":\"test\",\"status\":\"0\",\"pass_phrase\": \"\",\"access_code\": \"\",\"merchant_identifier\": \"\"}', '{\"gateway\":\"amazon_pay\",\"mode\":\"test\",\"status\":\"0\",\"pass_phrase\": \"\",\"access_code\": \"\",\"merchant_identifier\": \"\"}', 'payment_config', 'test', 0, NULL, NULL, NULL),
+('42a8cad7-6736-11ee-909d-0c7a158e4469', 'instamojo', '{\"gateway\":\"instamojo\",\"mode\":\"test\",\"status\":\"0\",\"api_key\":\"\"}', '{\"gateway\":\"instamojo\",\"mode\":\"test\",\"status\":\"0\",\"api_key\":\"\"}', 'payment_config', 'test', 0, NULL, NULL, NULL),
 ('4593b25c-d6a1-11ed-962c-0c7a158e4469', 'paytabs', '{\"gateway\":\"paytabs\",\"mode\":\"live\",\"status\":\"1\",\"profile_id\":null,\"server_key\":null,\"base_url\":null}', '{\"gateway\":\"paytabs\",\"mode\":\"live\",\"status\":\"1\",\"profile_id\":null,\"server_key\":null,\"base_url\":null}', 'payment_config', 'live', 0, NULL, '2023-04-09 02:23:25', '{\"gateway_title\":\"Paytabs\",\"gateway_image\":null}'),
-('4e9b8dfb-e7d1-11ed-a559-0c7a158e4469', 'bkash', '{\"gateway\":\"bkash\",\"mode\":\"live\",\"status\":\"1\",\"app_key\":\"5tunt4masn6pv2hnvte1sb5n3j\",\"app_secret\":\"1vggbqd4hqk9g96o9rrrp2jftvek578v7d2bnerim12a87dbrrka\",\"username\":\"sandboxTestUser\",\"password\":\"hWD@8vtzw0\"}', '{\"gateway\":\"bkash\",\"mode\":\"live\",\"status\":\"1\",\"app_key\":\"5tunt4masn6pv2hnvte1sb5n3j\",\"app_secret\":\"1vggbqd4hqk9g96o9rrrp2jftvek578v7d2bnerim12a87dbrrka\",\"username\":\"sandboxTestUser\",\"password\":\"hWD@8vtzw0\"}', 'payment_config', 'live', 0, NULL, '2023-04-08 23:08:40', '{\"gateway_title\":\"Bkash\",\"gateway_image\":null}'),
+('4e9b8dfb-e7d1-11ed-a559-0c7a158e4469', 'bkash', '{\"gateway\":\"bkash\",\"mode\":\"test\",\"status\":0,\"app_key\":\"5tunt4masn6pv2hnvte1sb5n3j\",\"app_secret\":\"1vggbqd4hqk9g96o9rrrp2jftvek578v7d2bnerim12a87dbrrka\",\"username\":\"sandboxTestUser\",\"password\":\"hWD@8vtzw0\"}', '{\"gateway\":\"bkash\",\"mode\":\"test\",\"status\":0,\"app_key\":\"5tunt4masn6pv2hnvte1sb5n3j\",\"app_secret\":\"1vggbqd4hqk9g96o9rrrp2jftvek578v7d2bnerim12a87dbrrka\",\"username\":\"sandboxTestUser\",\"password\":\"hWD@8vtzw0\"}', 'payment_config', 'test', 0, NULL, '2024-05-08 06:30:37', '{\"gateway_title\":\"Bkash\",\"gateway_image\":null}'),
 ('544a24a4-c872-11ed-ac7a-0c7a158e4469', 'fatoorah', '{\"gateway\":\"fatoorah\",\"mode\":\"live\",\"status\":\"0\",\"api_key\":\"\"}', '{\"gateway\":\"fatoorah\",\"mode\":\"test\",\"status\":\"0\",\"api_key\":\"\"}', 'payment_config', 'test', 0, NULL, NULL, NULL),
 ('58c1bc8a-d6ac-11ed-962c-0c7a158e4469', 'ccavenue', '{\"gateway\":\"ccavenue\",\"mode\":\"test\",\"status\":\"0\",\"merchant_id\":\"\",\"working_key\":\"\",\"access_code\":\"\"}', '{\"gateway\":\"ccavenue\",\"mode\":\"test\",\"status\":\"0\",\"merchant_id\":\"\",\"working_key\":\"\",\"access_code\":\"\"}', 'payment_config', 'test', 0, NULL, '2023-04-12 22:24:16', '{\"gateway_title\":\"\",\"gateway_image\":\"\"}'),
 ('5e2d2ef9-d6ab-11ed-962c-0c7a158e4469', 'thawani', '{\"gateway\":\"thawani\",\"mode\":\"live\",\"status\":\"0\",\"public_key\":\"\",\"private_key\":\"\"}', '{\"gateway\":\"thawani\",\"mode\":\"live\",\"status\":\"0\",\"public_key\":\"\",\"private_key\":\"\"}', 'payment_config', 'test', 0, NULL, '2023-04-12 23:14:00', '{\"gateway_title\":\"\",\"gateway_image\":\"\"}'),
@@ -100,6 +101,7 @@ INSERT INTO `addon_settings` (`id`, `key_name`, `live_values`, `test_values`, `s
 ('9162a1dc-cdf1-11ed-affe-0c7a158e4469', 'viva_wallet', '{\"gateway\":\"viva_wallet\",\"mode\":\"test\",\"status\":\"0\",\"client_id\": \"\",\"client_secret\": \"\"}\n', '{\"gateway\":\"viva_wallet\",\"mode\":\"test\",\"status\":\"0\",\"client_id\": \"\",\"client_secret\": \"\"}', 'payment_config', 'test', 0, NULL, NULL, NULL),
 ('998ccc62-d6a0-11ed-962c-0c7a158e4469', 'stripe', '{\"gateway\":\"stripe\",\"mode\":\"live\",\"status\":\"0\",\"api_key\":null,\"published_key\":null}', '{\"gateway\":\"stripe\",\"mode\":\"live\",\"status\":\"0\",\"api_key\":null,\"published_key\":null}', 'payment_config', 'live', 0, NULL, '2023-04-12 22:26:31', '{\"gateway_title\":\"Stripe\",\"gateway_image\":null}'),
 ('a3313755-c95d-11ed-b1db-0c7a158e4469', 'iyzi_pay', '{\"gateway\":\"iyzi_pay\",\"mode\":\"test\",\"status\":\"0\",\"api_key\": \"\",\"secret_key\": \"\",\"base_url\": \"\"}', '{\"gateway\":\"iyzi_pay\",\"mode\":\"test\",\"status\":\"0\",\"api_key\": \"\",\"secret_key\": \"\",\"base_url\": \"\"}', 'payment_config', 'test', 0, NULL, NULL, NULL),
+('a40991e4-6735-11ee-909d-0c7a158e4469', 'phonepe', '{\"gateway\":\"phonepe\",\"mode\":\"test\",\"status\":0,\"merchant_id\":\"\",\"salt_Key\":\"\",\"salt_index\":\"\"}', '{\"gateway\":\"phonepe\",\"mode\":\"test\",\"status\":0,\"merchant_id\":\"\",\"salt_Key\":\"\",\"salt_index\":\"\"}', 'payment_config', 'test', 0, NULL, NULL, NULL),
 ('a76c8993-d299-11ed-b485-0c7a158e4469', 'momo', '{\"gateway\":\"momo\",\"mode\":\"live\",\"status\":\"0\",\"api_key\":\"\",\"api_user\":\"\",\"subscription_key\":\"\"}', '{\"gateway\":\"momo\",\"mode\":\"live\",\"status\":\"0\",\"api_key\":\"\",\"api_user\":\"\",\"subscription_key\":\"\"}', 'payment_config', 'test', 0, NULL, '2023-04-08 22:39:19', NULL),
 ('a8608119-cc76-11ed-9bca-0c7a158e4469', 'moncash', '{\"gateway\":\"moncash\",\"mode\":\"test\",\"status\":\"0\",\"client_id\":\"\",\"secret_key\": \"\"}\n', '{\"gateway\":\"moncash\",\"mode\":\"test\",\"status\":\"0\",\"client_id\":\"\",\"secret_key\": \"\"}\n', 'payment_config', 'test', 0, NULL, NULL, NULL),
 ('ad5af1c1-d6a2-11ed-962c-0c7a158e4469', 'razor_pay', '{\"gateway\":\"razor_pay\",\"mode\":\"live\",\"status\":\"0\",\"api_key\":null,\"api_secret\":null}', '{\"gateway\":\"razor_pay\",\"mode\":\"live\",\"status\":\"0\",\"api_key\":null,\"api_secret\":null}', 'payment_config', 'live', 0, NULL, NULL, '{\"gateway_title\":\"Razor pay\",\"gateway_image\":null}'),
@@ -110,13 +112,14 @@ INSERT INTO `addon_settings` (`id`, `key_name`, `live_values`, `test_values`, `s
 ('c41c0dcd-d119-11ed-9f67-0c7a158e4469', 'maxicash', '{\"gateway\":\"maxicash\",\"mode\":\"test\",\"status\":\"0\",\"merchantId\": \"\",\"merchantPassword\": \"\"}', '{\"gateway\":\"maxicash\",\"mode\":\"test\",\"status\":\"0\",\"merchantId\": \"\",\"merchantPassword\": \"\"}', 'payment_config', 'test', 0, NULL, NULL, NULL),
 ('c9249d17-cd60-11ed-b879-0c7a158e4469', 'pvit', '{\"gateway\":\"pvit\",\"mode\":\"test\",\"status\":\"0\",\"mc_tel_merchant\": \"\",\"access_token\": \"\", \"mc_merchant_code\": \"\"}', '{\"gateway\":\"pvit\",\"mode\":\"test\",\"status\":\"0\",\"mc_tel_merchant\": \"\",\"access_token\": \"\", \"mc_merchant_code\": \"\"}', 'payment_config', 'test', 0, NULL, NULL, NULL),
 ('cb0081ce-d775-11ed-96f4-0c7a158e4469', 'releans', '{\"gateway\":\"releans\",\"mode\":\"live\",\"status\":0,\"api_key\":\"\",\"from\":\"\",\"otp_template\":\"\"}', '{\"gateway\":\"releans\",\"mode\":\"live\",\"status\":0,\"api_key\":\"\",\"from\":\"\",\"otp_template\":\"\"}', 'sms_config', 'live', 0, NULL, '2023-04-10 02:14:44', NULL),
+('cc90e5f2-6735-11ee-909d-0c7a158e4469', 'cashfree', '{\"gateway\":\"cashfree\",\"mode\":\"test\",\"status\":0,\"client_id\":\"\",\"client_secret\":\"\"}', '{\"gateway\":\"cashfree\",\"mode\":\"test\",\"status\":0,\"client_id\":\"\",\"client_secret\":\"\"}', 'payment_config', 'test', 0, NULL, NULL, NULL),
 ('d4f3f5f1-d6a0-11ed-962c-0c7a158e4469', 'flutterwave', '{\"gateway\":\"flutterwave\",\"mode\":\"live\",\"status\":1,\"secret_key\":\"FLWSECK_TEST-ec27426eb062491500a9eb95723b5436-X\",\"public_key\":\"FLWPUBK_TEST-3f6a0b6c3d621c4ecbb9beeff516c92b-X\",\"hash\":\"FLWSECK_TEST951e36220f66\"}', '{\"gateway\":\"flutterwave\",\"mode\":\"live\",\"status\":1,\"secret_key\":\"FLWSECK_TEST-ec27426eb062491500a9eb95723b5436-X\",\"public_key\":\"FLWPUBK_TEST-3f6a0b6c3d621c4ecbb9beeff516c92b-X\",\"hash\":\"FLWSECK_TEST951e36220f66\"}', 'payment_config', 'live', 0, NULL, NULL, '{\"gateway_title\":\"Flutterwave\",\"gateway_image\":null}'),
 ('d822f1a5-c864-11ed-ac7a-0c7a158e4469', 'paystack', '{\"gateway\":\"paystack\",\"mode\":\"live\",\"status\":\"0\",\"callback_url\":null,\"public_key\":null,\"secret_key\":null,\"merchant_email\":null}', '{\"gateway\":\"paystack\",\"mode\":\"live\",\"status\":\"0\",\"callback_url\":null,\"public_key\":null,\"secret_key\":null,\"merchant_email\":null}', 'payment_config', 'live', 0, NULL, NULL, '{\"gateway_title\":\"Paystack\",\"gateway_image\":null}'),
 ('daec8d59-c893-11ed-ac7a-0c7a158e4469', 'xendit', '{\"gateway\":\"xendit\",\"mode\":\"test\",\"status\":\"0\",\"api_key\":\"\"}', '{\"gateway\":\"xendit\",\"mode\":\"test\",\"status\":\"0\",\"api_key\":\"\"}', 'payment_config', 'test', 0, NULL, NULL, NULL),
 ('dc0f5fc9-d6a5-11ed-962c-0c7a158e4469', 'worldpay', '{\"gateway\":\"worldpay\",\"mode\":\"live\",\"status\":\"0\",\"OrgUnitId\":\"\",\"jwt_issuer\":\"\",\"mac\":\"\",\"merchantCode\":\"\",\"xml_password\":\"\"}', '{\"gateway\":\"worldpay\",\"mode\":\"test\",\"status\":\"0\",\"OrgUnitId\":\"\",\"jwt_issuer\":\"\",\"mac\":\"\",\"merchantCode\":\"\",\"xml_password\":\"\"}', 'payment_config', 'test', 0, NULL, NULL, NULL),
 ('e0450278-d8eb-11ed-8249-0c7a158e4469', 'signal_wire', '{\"gateway\":\"signal_wire\",\"mode\":\"live\",\"status\":0,\"project_id\":\"\",\"token\":\"\",\"space_url\":\"\",\"from\":\"\",\"otp_template\":\"\"}', '{\"gateway\":\"signal_wire\",\"mode\":\"live\",\"status\":0,\"project_id\":\"\",\"token\":\"\",\"space_url\":\"\",\"from\":\"\",\"otp_template\":\"\"}', 'sms_config', 'live', 0, NULL, NULL, NULL),
 ('e0450b40-d8eb-11ed-8249-0c7a158e4469', 'paradox', '{\"gateway\":\"paradox\",\"mode\":\"live\",\"status\":0,\"api_key\":\"\"}', '{\"gateway\":\"paradox\",\"mode\":\"live\",\"status\":0,\"api_key\":\"\"}', 'sms_config', 'live', 0, NULL, NULL, NULL),
-('ea346efe-cdda-11ed-affe-0c7a158e4469', 'ssl_commerz', '{\"gateway\":\"ssl_commerz\",\"mode\":\"live\",\"status\":\"0\",\"store_id\":null,\"store_password\":null}', '{\"gateway\":\"ssl_commerz\",\"mode\":\"live\",\"status\":\"0\",\"store_id\":null,\"store_password\":null}', 'payment_config', 'live', 0, NULL, '2023-07-31 13:14:48', '{\"gateway_title\":\"Ssl commerz\",\"gateway_image\":null}'),
+('ea346efe-cdda-11ed-affe-0c7a158e4469', 'ssl_commerz', '{\"gateway\":\"ssl_commerz\",\"mode\":\"test\",\"status\":1,\"store_id\":\"sumit61cf0d05988e9\",\"store_password\":\"sumit61cf0d05988e9@ssl\"}', '{\"gateway\":\"ssl_commerz\",\"mode\":\"test\",\"status\":1,\"store_id\":\"sumit61cf0d05988e9\",\"store_password\":\"sumit61cf0d05988e9@ssl\"}', 'payment_config', 'test', 1, NULL, '2024-05-08 06:36:34', '{\"gateway_title\":\"Ssl commerz\",\"gateway_image\":null}'),
 ('eed88336-d8ec-11ed-8249-0c7a158e4469', 'hubtel', '{\"gateway\":\"hubtel\",\"mode\":\"live\",\"status\":0,\"sender_id\":\"\",\"client_id\":\"\",\"client_secret\":\"\",\"otp_template\":\"\"}', '{\"gateway\":\"hubtel\",\"mode\":\"live\",\"status\":0,\"sender_id\":\"\",\"client_id\":\"\",\"client_secret\":\"\",\"otp_template\":\"\"}', 'sms_config', 'live', 0, NULL, NULL, NULL),
 ('f149c546-d8ea-11ed-8249-0c7a158e4469', 'viatech', '{\"gateway\":\"viatech\",\"mode\":\"live\",\"status\":0,\"api_url\":\"\",\"api_key\":\"\",\"sender_id\":\"\",\"otp_template\":\"\"}', '{\"gateway\":\"viatech\",\"mode\":\"live\",\"status\":0,\"api_url\":\"\",\"api_key\":\"\",\"sender_id\":\"\",\"otp_template\":\"\"}', 'sms_config', 'live', 0, NULL, NULL, NULL),
 ('f149cd9c-d8ea-11ed-8249-0c7a158e4469', '019_sms', '{\"gateway\":\"019_sms\",\"mode\":\"live\",\"status\":0,\"password\":\"\",\"username\":\"\",\"username_for_token\":\"\",\"sender\":\"\",\"otp_template\":\"\"}', '{\"gateway\":\"019_sms\",\"mode\":\"live\",\"status\":0,\"password\":\"\",\"username\":\"\",\"username_for_token\":\"\",\"sender\":\"\",\"otp_template\":\"\"}', 'sms_config', 'live', 0, NULL, NULL, NULL);
@@ -457,7 +460,7 @@ INSERT INTO `business_settings` (`id`, `key`, `value`, `created_at`, `updated_at
 (49, '2factor_sms', '{\"status\":\"0\",\"api_key\":null}', '2022-03-23 15:16:26', '2022-03-23 15:16:26'),
 (50, 'msg91_sms', '{\"status\":\"0\",\"template_id\":null,\"authkey\":null}', '2022-03-23 15:16:33', '2022-03-23 15:16:33'),
 (51, 'free_delivery_over', '250', NULL, NULL),
-(52, 'maintenance_mode', '0', '2021-09-08 15:44:28', '2021-09-08 15:44:28'),
+(52, 'maintenance_mode', '0', '2021-09-08 15:44:28', '2024-04-18 05:58:15'),
 (53, 'app_minimum_version_ios', NULL, '2021-09-21 22:54:10', '2021-09-21 22:54:10'),
 (54, 'app_minimum_version_android', NULL, '2021-09-21 22:54:10', '2021-09-21 22:54:10'),
 (55, 'app_url_ios', NULL, '2021-09-21 22:54:10', '2021-09-21 22:54:10'),
@@ -1659,9 +1662,9 @@ CREATE TABLE `messages` (
 --
 
 INSERT INTO `messages` (`id`, `conversation_id`, `sender_id`, `message`, `file`, `is_seen`, `created_at`, `updated_at`) VALUES
-(1, 1, 1, 'Hi boss any one here', NULL, 1, '2024-01-14 09:49:50', '2024-03-10 02:14:40'),
+(1, 1, 1, 'Hi boss any one here', NULL, 1, '2024-01-14 09:49:50', '2024-04-18 06:45:41'),
 (2, 1, 2, 'yes we are here to help you sir', NULL, 1, '2024-01-15 01:21:44', '2024-02-03 22:58:06'),
-(3, 1, 1, 'My order was cancelled', NULL, 1, '2024-01-15 01:22:44', '2024-03-10 02:14:40'),
+(3, 1, 1, 'My order was cancelled', NULL, 1, '2024-01-15 01:22:44', '2024-04-18 06:45:41'),
 (4, 1, 2, 'yes sir we are checking for that can i keep you on hold for a mint', NULL, 1, '2024-01-15 01:23:39', '2024-02-03 22:58:06'),
 (5, 1, 2, 'sir you miss place the order', NULL, 1, '2024-01-15 01:24:38', '2024-02-03 22:58:06'),
 (6, 2, 3, 'Hi sir', NULL, 1, '2024-01-15 12:12:30', '2024-02-09 05:17:16'),
@@ -1669,7 +1672,7 @@ INSERT INTO `messages` (`id`, `conversation_id`, `sender_id`, `message`, `file`,
 (8, 2, 1, 'Yes 👍', NULL, 1, '2024-01-15 12:13:13', '2024-02-09 05:11:35'),
 (9, 2, 1, 'Hi sir i want to cancel my order', NULL, 1, '2024-01-17 12:40:08', '2024-02-09 05:11:35'),
 (10, 2, 1, 'Hello sir any updates', NULL, 1, '2024-02-03 22:57:45', '2024-02-09 05:11:35'),
-(11, 1, 1, 'Sir shop owner is not ready 😔', NULL, 1, '2024-02-03 22:58:03', '2024-03-10 02:14:40'),
+(11, 1, 1, 'Sir shop owner is not ready 😔', NULL, 1, '2024-02-03 22:58:03', '2024-04-18 06:45:41'),
 (12, 1, 2, 'kkkkk', NULL, 0, '2024-02-07 02:56:01', '2024-02-07 02:56:01'),
 (13, 2, 3, 'hi how are you guys', NULL, 1, '2024-02-09 05:11:48', '2024-02-09 05:17:16'),
 (14, 1, 5, 'test', NULL, 0, '2024-02-22 04:39:42', '2024-02-22 04:39:42');
@@ -1826,7 +1829,10 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (136, '2024_02_29_083045_add_slug_to_service_cities', 47),
 (137, '2024_02_29_062908_create_time_slots_table', 48),
 (139, '2024_03_11_092456_create_services_table', 49),
-(141, '2024_04_17_090230_create_brands_table', 50);
+(141, '2024_04_17_090230_create_brands_table', 50),
+(144, '2024_04_25_084221_create_subscription_packages_table', 51),
+(145, '2024_05_14_131810_create_purchase_packages_table', 52),
+(146, '2024_05_15_065943_create_vendor_package_balances_table', 53);
 
 -- --------------------------------------------------------
 
@@ -1855,7 +1861,7 @@ CREATE TABLE `modules` (
 
 INSERT INTO `modules` (`id`, `module_name`, `module_type`, `thumbnail`, `status`, `stores_count`, `created_at`, `updated_at`, `icon`, `theme_id`, `description`, `all_zone_service`) VALUES
 (1, 'Demo Module', 'grocery', '2023-08-16-64dca575bf3a9.png', 0, 2, '2023-08-15 23:31:17', '2024-01-10 13:58:21', '2023-08-16-64dca575bc1c2.png', 1, '<p>Demo module description.</p>', 0),
-(2, 'Grocery', 'grocery', '2024-02-09-65c616b3d299c.png', 1, 3, '2024-01-10 13:57:56', '2024-02-09 07:04:19', '2024-02-09-65c616b3d1771.png', 1, '<p>Grocery</p>', 0),
+(2, 'Grocery', 'grocery', '2024-02-09-65c616b3d299c.png', 1, 4, '2024-01-10 13:57:56', '2024-04-29 06:48:12', '2024-02-09-65c616b3d1771.png', 1, '<p>Grocery</p>', 0),
 (3, 'E-commerce', 'ecommerce', '2024-01-15-65a4d99a7cb37.png', 1, 0, '2024-01-15 01:07:06', '2024-01-15 01:07:06', '2024-01-15-65a4d99a732c4.png', 1, '<p>commerce</p>', 0),
 (4, 'Food', 'food', '2024-01-15-65a4da7fe0526.png', 1, 0, '2024-01-15 01:10:55', '2024-01-15 01:10:55', '2024-01-15-65a4da7fdc15d.png', 1, '<p>food</p>', 0),
 (5, 'Pharmacy', 'pharmacy', '2024-01-15-65a4dae0bb1c1.png', 1, 0, '2024-01-15 01:12:32', '2024-01-15 01:12:32', '2024-01-15-65a4dae0b646f.png', 1, '<p>pharmacy</p>', 0),
@@ -2537,6 +2543,38 @@ CREATE TABLE `provide_d_m_earnings` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `purchase_packages`
+--
+
+CREATE TABLE `purchase_packages` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `vendor_id` bigint(20) UNSIGNED NOT NULL,
+  `subscription_package_id` bigint(20) UNSIGNED NOT NULL,
+  `purchase_date` datetime NOT NULL,
+  `expiry_date` datetime NOT NULL,
+  `payment_option` varchar(50) NOT NULL,
+  `paid_amount` double(8,2) NOT NULL DEFAULT 0.00,
+  `package_status` tinyint(1) NOT NULL DEFAULT 0,
+  `limit_status` tinyint(1) NOT NULL DEFAULT 0,
+  `maximum_order_limit` int(11) NOT NULL DEFAULT 0,
+  `admin_id` bigint(20) UNSIGNED DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `purchase_packages`
+--
+
+INSERT INTO `purchase_packages` (`id`, `vendor_id`, `subscription_package_id`, `purchase_date`, `expiry_date`, `payment_option`, `paid_amount`, `package_status`, `limit_status`, `maximum_order_limit`, `admin_id`, `created_at`, `updated_at`) VALUES
+(5, 21, 1, '2024-05-15 08:50:23', '2024-06-14 08:50:23', 'manual', 0.00, 1, 0, 10, NULL, '2024-05-15 02:50:23', '2024-05-15 02:50:23'),
+(7, 21, 2, '2024-05-15 08:51:51', '2025-05-15 08:51:51', 'manual', 0.00, 1, 0, 30, NULL, '2024-05-15 02:51:51', '2024-05-15 02:51:51'),
+(11, 21, 2, '2024-05-15 12:06:36', '2025-05-15 14:11:06', 'manual', 1990.00, 1, 0, 30, NULL, '2024-05-15 06:06:36', '2024-05-15 08:11:06'),
+(12, 21, 2, '2024-05-15 14:11:49', '2025-05-15 14:13:23', 'manual', 1990.00, 1, 0, 30, NULL, '2024-05-15 08:11:49', '2024-05-15 08:13:23');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `react_testimonials`
 --
 
@@ -2791,8 +2829,9 @@ INSERT INTO `stores` (`id`, `name`, `phone`, `email`, `logo`, `latitude`, `longi
 (3, 'new Shop', '+97466182120', 'Faizuddin732@gmail.com', '2024-01-12-65a18827c2a51.png', '25.301880689836928', '51.49492944636313', 'madnith khalifa\r\ndoha', NULL, 1.00, NULL, 0, 1, 3, '2024-01-12 12:42:47', '2024-01-26 06:27:02', 1, '{\"1\":0,\"2\":0,\"3\":0,\"4\":0,\"5\":1}', '2024-01-12-65a18827cedca.png', 1, 1, 1, 'Local', 'Retailer', 1.00, 3, 1, 1, ' ', '{\"status\":null,\"code\":null}', 1, 1, 0.00, '20-45 min', 0, 0, 2, 3, 2, 25, 1, 0.000, 0, 'new-shop', 5000.000, 0, NULL, NULL, NULL, 0, NULL),
 (4, 'Royal Crown Grocery Outlet', '+9748700304469', 'admin@gmail.com', '2024-01-15-65a5011e8564e.png', '25.31419419559734', '51.47532652701648', 'Royal Crown Grocery Outlet', NULL, 0.00, NULL, 0, 1, 4, '2024-01-15 03:55:42', '2024-01-26 06:24:46', 0, NULL, '2024-01-15-65a5011e8eb8d.png', 1, 1, 1, 'Local', 'Retailer', 0.00, 3, 1, 1, ' ', NULL, 1, 1, 0.00, '30-60 min', 1, 1, 0, 2, 2, 0, 1, 0.000, 0, 'royal-crown-grocery-outlet-2', NULL, 0, NULL, NULL, NULL, 0, NULL),
 (5, 'Aliya store', '+97430853951', 'techstudio.agency@gamil.com', '2024-02-09-65c622d3c459b.png', '25.26334275181729', '51.524164050479335', '7G7F+8M Doha, Qatar', NULL, 0.00, NULL, 0, 1, 5, '2024-02-09 07:04:19', '2024-04-17 07:22:02', 0, NULL, '2024-02-09-65c622d3ce449.png', 1, 1, 1, 'International', 'Wholeseller', 1.00, 4, 1, 1, ' ', NULL, 1, 1, 0.00, '10-30 min', 1, 1, 0, 0, 2, 0, 0, 0.000, 0, 'aliya-store', NULL, 0, NULL, NULL, NULL, 0, NULL),
-(6, 'Store', '+8801794973738', 'mutasim@gmail.com', '2024-03-10-65ed44c1451fb.png', '23.789553699192552', '90.41199616103852', 'Store', NULL, 0.00, NULL, 0, 1, 6, '2024-03-10 02:27:29', '2024-03-10 02:32:57', 0, NULL, '2024-03-10-65ed44c17f665.png', 1, 1, 1, 'Local', 'Retailer', 1.00, 6, 1, 1, ' ', NULL, 0, 0, 0.00, '30-60 min', 1, 1, 0, 0, 8, 0, 0, 0.000, 0, 'store', NULL, 0, NULL, NULL, NULL, 0, NULL),
-(11, 'Test Api', '+8801724698392', 'test@gmail.com', '2024-03-10-65ed607d1497f.png', '23.78986785054063', '90.41394344478333', 'Test Address Api', NULL, 0.00, NULL, 0, 1, 19, '2024-03-10 04:25:49', '2024-03-13 03:18:52', 0, NULL, 'def.png', 1, 1, 1, 'Local', 'Retailer', 1.00, 6, 1, 1, ' ', NULL, 0, 0, 0.00, '30-60 min', 1, 1, 0, 0, 8, 0, 0, 0.000, 0, 'test-api', NULL, 0, NULL, NULL, NULL, 0, NULL);
+(6, 'Store', '+8801794973737', 'mutasim@gmail.com', '2024-03-10-65ed44c1451fb.png', '23.789553699192552', '90.41199616103852', 'Store', NULL, 0.00, NULL, 0, 1, 6, '2024-03-10 02:27:29', '2024-03-10 02:32:57', 0, NULL, '2024-03-10-65ed44c17f665.png', 1, 1, 1, 'Local', 'Retailer', 1.00, 6, 1, 1, ' ', NULL, 0, 0, 0.00, '30-60 min', 1, 1, 0, 0, 8, 0, 0, 0.000, 0, 'store', NULL, 0, NULL, NULL, NULL, 0, NULL),
+(11, 'Test Api', '+8801724698392', 'test@gmail.com', '2024-03-10-65ed607d1497f.png', '23.78986785054063', '90.41394344478333', 'Test Address Api', NULL, 0.00, NULL, 0, 1, 19, '2024-03-10 04:25:49', '2024-03-13 03:18:52', 0, NULL, 'def.png', 1, 1, 1, 'Local', 'Retailer', 1.00, 6, 1, 1, ' ', NULL, 0, 0, 0.00, '30-60 min', 1, 1, 0, 0, 8, 0, 0, 0.000, 0, 'test-api', NULL, 0, NULL, NULL, NULL, 0, NULL),
+(13, 'Mutasim Naib', '+8801794973738', 'mutasimstore@gmail.com', '2024-04-29-662f6cdc98796.png', '23.788071287273524', '90.41542938857758', 'Noyanogor Mohila Madrasa , Noyanagar , Khilkhet', NULL, 0.00, NULL, 0, 1, 21, '2024-04-29 06:48:12', '2024-04-29 06:48:12', 0, NULL, '2024-04-29-662f6cdc9a8b1.png', 1, 1, 1, 'Local', 'Retailer', 1.00, 6, 1, 1, ' ', NULL, 0, 0, 0.00, '30-60 min', 1, 1, 0, 0, 2, 0, 0, 0.000, 0, 'mutasim-naib', NULL, 0, NULL, NULL, NULL, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -2874,7 +2913,47 @@ INSERT INTO `store_wallets` (`id`, `vendor_id`, `total_earning`, `total_withdraw
 (2, 4, 0.00, 0.00, 0.00, 0.00, '2024-01-15 04:18:55', '2024-01-15 04:18:55'),
 (3, 5, 0.00, 0.00, 0.00, 0.00, '2024-02-09 07:08:37', '2024-02-09 07:08:37'),
 (4, 6, 0.00, 0.00, 0.00, 0.00, '2024-03-10 02:28:00', '2024-03-10 02:28:00'),
-(5, 19, 0.00, 0.00, 0.00, 0.00, '2024-03-13 03:19:00', '2024-03-13 03:19:00');
+(5, 19, 0.00, 0.00, 0.00, 0.00, '2024-03-13 03:19:00', '2024-03-13 03:19:00'),
+(6, 2, 0.00, 0.00, 0.00, 0.00, '2024-04-18 04:05:47', '2024-04-18 04:05:47'),
+(7, 21, 0.00, 0.00, 0.00, 0.00, '2024-05-08 08:00:21', '2024-05-08 08:00:21');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `subscription_packages`
+--
+
+CREATE TABLE `subscription_packages` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `module_id` bigint(20) UNSIGNED NOT NULL,
+  `price` double(8,2) NOT NULL,
+  `currency` text NOT NULL,
+  `package_type` tinyint(1) NOT NULL,
+  `purchase_type` text NOT NULL,
+  `discount` double(8,2) NOT NULL,
+  `discount_type` text NOT NULL,
+  `validity` int(11) NOT NULL,
+  `purchase_limit` int(11) NOT NULL,
+  `purchase_limit_time` varchar(50) NOT NULL,
+  `purchase_with_point` tinyint(4) NOT NULL,
+  `gift_it` tinyint(4) NOT NULL,
+  `maximum_order_limit` int(11) NOT NULL,
+  `details` text NOT NULL,
+  `payment_option` varchar(255) DEFAULT NULL,
+  `status` tinyint(1) NOT NULL DEFAULT 1 COMMENT '1=active 0=inactive',
+  `delete` tinyint(1) NOT NULL DEFAULT 0 COMMENT '1=deleted 0=not deleted',
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `subscription_packages`
+--
+
+INSERT INTO `subscription_packages` (`id`, `name`, `module_id`, `price`, `currency`, `package_type`, `purchase_type`, `discount`, `discount_type`, `validity`, `purchase_limit`, `purchase_limit_time`, `purchase_with_point`, `gift_it`, `maximum_order_limit`, `details`, `payment_option`, `status`, `delete`, `created_at`, `updated_at`) VALUES
+(1, 'Package1', 2, 4000.00, 'BDT', 2, 'Free', 0.00, 'Flat', 30, 1, '-1', 0, 1, 10, '<ol><li>Rule number 1</li><li>Rule number 2</li><li>Rule number 3</li><li>Rule number 4</li><li>Rule number 5</li></ol>', 'manual,ssl_commerz', 1, 0, '2024-04-29 03:58:01', '2024-05-08 07:14:38'),
+(2, 'More Savings', 2, 2000.00, 'BDT', 2, 'Paid', 10.00, 'Flat', 365, 50, '0', 1, 1, 30, '<ol><li>Rule number 1</li><li>Rule number 2</li><li>Rule number 3</li><li>Rule number 4</li><li>Rule number 5</li></ol>', 'manual,ssl_commerz', 1, 0, '2024-05-08 07:28:11', '2024-05-15 02:57:48');
 
 -- --------------------------------------------------------
 
@@ -3160,7 +3239,21 @@ INSERT INTO `translations` (`id`, `translationable_type`, `translationable_id`, 
 (430, 'App\\Models\\Brand', 2, 'en', 'name', 'TEst ACD', NULL, NULL),
 (431, 'App\\Models\\Brand', 2, 'ar', 'name', 'عنوان', NULL, NULL),
 (432, 'App\\Models\\Store', 5, 'en', 'name', 'Aliya store', NULL, NULL),
-(433, 'App\\Models\\Store', 5, 'en', 'address', '7G7F+8M Doha, Qatar', NULL, NULL);
+(433, 'App\\Models\\Store', 5, 'en', 'address', '7G7F+8M Doha, Qatar', NULL, NULL),
+(446, 'App\\Models\\Modules\\Subscription\\SubscriptionPackage', 2, 'en', 'name', 'More Savings', NULL, NULL),
+(447, 'App\\Models\\Modules\\Subscription\\SubscriptionPackage', 2, 'en', 'package_details', NULL, NULL, NULL),
+(448, 'App\\Models\\Modules\\Subscription\\SubscriptionPackage', 2, 'ar', 'name', 'عنوان', NULL, NULL),
+(449, 'App\\Models\\Modules\\Subscription\\SubscriptionPackage', 2, 'ar', 'package_details', '<p>aa</p>', NULL, NULL),
+(450, 'App\\Models\\Modules\\Subscription\\SubscriptionPackage', 1, 'en', 'name', 'Package1', NULL, NULL),
+(451, 'App\\Models\\Modules\\Subscription\\SubscriptionPackage', 1, 'en', 'package_details', '<p>Test</p>', NULL, NULL),
+(452, 'App\\Models\\Modules\\Subscription\\SubscriptionPackage', 1, 'ar', 'name', 'عنوان', NULL, NULL),
+(453, 'App\\Models\\Modules\\Subscription\\SubscriptionPackage', 1, 'ar', 'package_details', '<p>عنوان<br></p>', NULL, NULL),
+(454, 'App\\Models\\Store', 13, 'en', 'name', 'Mutasim Naib', NULL, NULL),
+(455, 'App\\Models\\Store', 13, 'en', 'address', 'Noyanogor Mohila Madrasa , Noyanagar , Khilkhet', NULL, NULL),
+(456, 'App\\Models\\Store', 13, 'ar', 'name', 'Mutasim Naib', NULL, NULL),
+(457, 'App\\Models\\Store', 13, 'ar', 'address', 'Noyanogor Mohila Madrasa , Noyanagar , Khilkhet', NULL, NULL),
+(458, 'App\\Models\\Modules\\Subscription\\SubscriptionPackage', 2, 'en', 'name', 'More Savings', NULL, NULL),
+(459, 'App\\Models\\Modules\\Subscription\\SubscriptionPackage', 2, 'en', 'package_details', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -3339,8 +3432,9 @@ INSERT INTO `vendors` (`id`, `f_name`, `l_name`, `phone`, `email`, `email_verifi
 (3, 'Faizuddin', 'Mohammed', '+97466182120', 'Faizuddin732@gmail.com', NULL, '$2y$10$v0aHE7ladFNCtNq82MmPzO6i1B8Qf8610cW6kS/BL8pDSPb7wDfo6', NULL, '2024-01-12 12:42:47', '2024-02-09 05:11:24', NULL, NULL, NULL, NULL, '2024-02-09-65c6085c4c0d6.png', 1, 'cX1mjRtBQtekhD_52YYbza:APA91bF3j-yUYsfxabEZbXnLb-Ch7MwPKasgjG2lElTY3DigOA08FO9_V_GeFlMfwYXXK07HIR00VIIbSSYyGda4YfcyJq8EBdpxkhQX0-jWHNkvECoMvZ4V7L4h44HCt8WfYfLpgqLn', 'gMh5WqqUEbxsslBi3WoKQEqE5UuPQiKZM5zGAdLtDSaEdLKkhem2qWfjXQBqHQqX3a0QYjrfXcRTxlOWakRAzlSrmue6E7YMwHSHi8cTg6ooaea1Y5loyJAE'),
 (4, 'Aryan', 'Raj', '+9748700304469', 'admin@gmail.com', NULL, '$2y$10$j3Wjsc0/csROK1M8a7yzae7DQUlX6/8h5M15Le.qYzJTIdUcxPs1S', NULL, '2024-01-15 03:55:42', '2024-01-15 03:55:42', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL),
 (5, 'tech', 'studio', '+97430853951', 'techstudio.agency@gamil.com', NULL, '$2y$10$G2Mmr6jh8NPEQgfkhWYgPeUza8afiaKQcRw4rJcM7NgNQhIJFMyEi', NULL, '2024-02-09 07:04:19', '2024-02-09 07:07:44', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL),
-(6, 'Sss', 'mit', '+8801794973738', 'mutasim@gmail.com', NULL, '$2y$10$xRFJO1VtWfjpBPnw51ysdujPE/FWv7wsl0K4WyNGF5.V0A7FJRo02', NULL, '2024-03-10 02:27:29', '2024-03-13 01:46:55', NULL, NULL, NULL, NULL, '2024-03-13-65f12fbfc9618.png', 1, NULL, NULL),
-(19, 'Test Api Owner', 'Last Owner', '+8801724698392', 'test@gmail.com', NULL, '$2y$10$PTNADR5FGz8.SB81LGZb..vNHjfo/QBugJmbgHs7sjQ2OlFTCHWfW', NULL, '2024-03-10 04:25:49', '2024-03-10 04:25:49', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL);
+(6, 'Sss', 'mit', '+8801794973737', 'mutasim@gmail.com', NULL, '$2y$10$xRFJO1VtWfjpBPnw51ysdujPE/FWv7wsl0K4WyNGF5.V0A7FJRo02', NULL, '2024-03-10 02:27:29', '2024-03-13 01:46:55', NULL, NULL, NULL, NULL, '2024-03-13-65f12fbfc9618.png', 1, NULL, NULL),
+(19, 'Test Api Owner', 'Last Owner', '+8801724698392', 'test@gmail.com', NULL, '$2y$10$PTNADR5FGz8.SB81LGZb..vNHjfo/QBugJmbgHs7sjQ2OlFTCHWfW', NULL, '2024-03-10 04:25:49', '2024-03-10 04:25:49', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL),
+(21, 'Mutasim', 'Naib', '+8801794973738', 'mutasimstore@gmail.com', NULL, '$2y$10$.qirITFel1tNTd.kfXjmh.4LdmtwcRSRfxAVa8Po1JvJaG4itxtY.', NULL, '2024-04-29 06:48:12', '2024-04-29 06:48:12', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -3367,6 +3461,38 @@ CREATE TABLE `vendor_employees` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `is_logged_in` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vendor_package_balances`
+--
+
+CREATE TABLE `vendor_package_balances` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `vendor_id` bigint(20) UNSIGNED NOT NULL,
+  `subscription_package_id` bigint(20) UNSIGNED NOT NULL,
+  `purchase_package_id` bigint(20) UNSIGNED NOT NULL,
+  `previous_remaining_order` int(11) NOT NULL DEFAULT 0,
+  `current_pack_order_limit` int(11) NOT NULL DEFAULT 0,
+  `total_order_limit` int(11) NOT NULL DEFAULT 0,
+  `total_vendor_order_count` int(11) NOT NULL DEFAULT 0,
+  `balance_status` tinyint(1) NOT NULL DEFAULT -1 COMMENT '-1=pending_request 0=Usable 1=after_purchase_usable 2=all used',
+  `last_purchase_date` datetime NOT NULL,
+  `last_expiry_date` datetime NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `vendor_package_balances`
+--
+
+INSERT INTO `vendor_package_balances` (`id`, `vendor_id`, `subscription_package_id`, `purchase_package_id`, `previous_remaining_order`, `current_pack_order_limit`, `total_order_limit`, `total_vendor_order_count`, `balance_status`, `last_purchase_date`, `last_expiry_date`, `created_at`, `updated_at`) VALUES
+(5, 21, 1, 5, 0, 10, 10, 0, 0, '2024-05-15 08:50:23', '2024-06-14 08:50:23', '2024-05-15 02:50:23', '2024-05-15 02:50:23'),
+(7, 21, 2, 7, 10, 30, 40, 0, 0, '2024-05-15 08:51:51', '2025-05-15 08:51:51', '2024-05-15 02:51:51', '2024-05-15 02:51:51'),
+(8, 21, 2, 11, 40, 30, 70, 0, 0, '2024-05-15 14:11:06', '2025-05-15 14:11:06', '2024-05-15 08:11:06', '2024-05-15 08:11:06'),
+(9, 21, 2, 12, 70, 30, 100, 0, 0, '2024-05-15 14:13:23', '2025-05-15 14:13:23', '2024-05-15 08:13:23', '2024-05-15 08:13:23');
 
 -- --------------------------------------------------------
 
@@ -4016,6 +4142,15 @@ ALTER TABLE `provide_d_m_earnings`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `purchase_packages`
+--
+ALTER TABLE `purchase_packages`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `purchase_packages_vendor_id_foreign` (`vendor_id`),
+  ADD KEY `purchase_packages_subscription_package_id_foreign` (`subscription_package_id`),
+  ADD KEY `purchase_packages_admin_id_foreign` (`admin_id`);
+
+--
 -- Indexes for table `react_testimonials`
 --
 ALTER TABLE `react_testimonials`
@@ -4098,6 +4233,13 @@ ALTER TABLE `store_wallets`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `subscription_packages`
+--
+ALTER TABLE `subscription_packages`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `subscription_packages_module_id_foreign` (`module_id`);
+
+--
 -- Indexes for table `tags`
 --
 ALTER TABLE `tags`
@@ -4171,6 +4313,15 @@ ALTER TABLE `vendors`
 ALTER TABLE `vendor_employees`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `vendor_employees_email_unique` (`email`);
+
+--
+-- Indexes for table `vendor_package_balances`
+--
+ALTER TABLE `vendor_package_balances`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `vendor_package_balances_vendor_id_foreign` (`vendor_id`),
+  ADD KEY `vendor_package_balances_subscription_package_id_foreign` (`subscription_package_id`),
+  ADD KEY `vendor_package_balances_purchase_package_id_foreign` (`purchase_package_id`);
 
 --
 -- Indexes for table `wallet_bonuses`
@@ -4511,7 +4662,7 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=142;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=147;
 
 --
 -- AUTO_INCREMENT for table `modules`
@@ -4652,6 +4803,12 @@ ALTER TABLE `provide_d_m_earnings`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `purchase_packages`
+--
+ALTER TABLE `purchase_packages`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+
+--
 -- AUTO_INCREMENT for table `react_testimonials`
 --
 ALTER TABLE `react_testimonials`
@@ -4703,7 +4860,7 @@ ALTER TABLE `soft_credentials`
 -- AUTO_INCREMENT for table `stores`
 --
 ALTER TABLE `stores`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `store_configs`
@@ -4721,7 +4878,13 @@ ALTER TABLE `store_schedule`
 -- AUTO_INCREMENT for table `store_wallets`
 --
 ALTER TABLE `store_wallets`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT for table `subscription_packages`
+--
+ALTER TABLE `subscription_packages`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `tags`
@@ -4751,7 +4914,7 @@ ALTER TABLE `track_deliverymen`
 -- AUTO_INCREMENT for table `translations`
 --
 ALTER TABLE `translations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=434;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=460;
 
 --
 -- AUTO_INCREMENT for table `units`
@@ -4781,13 +4944,19 @@ ALTER TABLE `user_notifications`
 -- AUTO_INCREMENT for table `vendors`
 --
 ALTER TABLE `vendors`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `vendor_employees`
 --
 ALTER TABLE `vendor_employees`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `vendor_package_balances`
+--
+ALTER TABLE `vendor_package_balances`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `wallet_bonuses`
@@ -4903,6 +5072,14 @@ ALTER TABLE `parcel_categories`
   ADD CONSTRAINT `parcel_categories_module_id_foreign` FOREIGN KEY (`module_id`) REFERENCES `modules` (`id`);
 
 --
+-- Constraints for table `purchase_packages`
+--
+ALTER TABLE `purchase_packages`
+  ADD CONSTRAINT `purchase_packages_admin_id_foreign` FOREIGN KEY (`admin_id`) REFERENCES `admins` (`id`),
+  ADD CONSTRAINT `purchase_packages_subscription_package_id_foreign` FOREIGN KEY (`subscription_package_id`) REFERENCES `subscription_packages` (`id`),
+  ADD CONSTRAINT `purchase_packages_vendor_id_foreign` FOREIGN KEY (`vendor_id`) REFERENCES `vendors` (`id`);
+
+--
 -- Constraints for table `reviews`
 --
 ALTER TABLE `reviews`
@@ -4927,10 +5104,24 @@ ALTER TABLE `stores`
   ADD CONSTRAINT `stores_module_id_foreign` FOREIGN KEY (`module_id`) REFERENCES `modules` (`id`);
 
 --
+-- Constraints for table `subscription_packages`
+--
+ALTER TABLE `subscription_packages`
+  ADD CONSTRAINT `subscription_packages_module_id_foreign` FOREIGN KEY (`module_id`) REFERENCES `modules` (`id`);
+
+--
 -- Constraints for table `time_slots`
 --
 ALTER TABLE `time_slots`
   ADD CONSTRAINT `time_slots_category_id_foreign` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`);
+
+--
+-- Constraints for table `vendor_package_balances`
+--
+ALTER TABLE `vendor_package_balances`
+  ADD CONSTRAINT `vendor_package_balances_purchase_package_id_foreign` FOREIGN KEY (`purchase_package_id`) REFERENCES `purchase_packages` (`id`),
+  ADD CONSTRAINT `vendor_package_balances_subscription_package_id_foreign` FOREIGN KEY (`subscription_package_id`) REFERENCES `subscription_packages` (`id`),
+  ADD CONSTRAINT `vendor_package_balances_vendor_id_foreign` FOREIGN KEY (`vendor_id`) REFERENCES `vendors` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

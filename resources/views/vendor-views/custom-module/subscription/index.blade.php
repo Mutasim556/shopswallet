@@ -36,7 +36,7 @@
                     </button>
                 </div>
                 <div class="modal-body px-3">
-                    <form action="">
+                    <form action="" id="payment_form" method="post">
                         <div class="form-group">
                             <label for="">{{ translate('messages.package_name') }}</label>
                             <input type="text" class="form-control" id="package_name" name="package_name" readonly>
@@ -57,11 +57,13 @@
 
                             </select>
                         </div>
+                        <div class="modal-footer py-2">
+                            <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">{{ translate('messages.close') }}</button>
+                            <button type="submit" id="submitbutton" class="btn btn-success btn-sm">{{ translate('messages.Submit') }}</button>
+                        </div>
                     </form>
                 </div>
-                <div class="modal-footer py-2">
-                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">{{ translate('messages.close') }}</button>
-                </div>
+                
             </div>
         </div>
     </div>
@@ -140,7 +142,7 @@
                                         <a href="{{ route('subscription.vendor.packages.freetrail',$package->id) }}" class="btn btn-sm btn-info">{{ translate('messages.start_free_trail') }}</a>
                                     @else
                                         <button id="detailsBtn" class="btn btn-sm btn-primary mx-2" data-toggle="modal" data-target="#exampleModal" data-details="{!! $package->details !!}">{{ translate('messages.details') }}</button>
-                                        <button class="btn btn-sm btn-danger mx-2" class="btn btn-sm btn-primary mx-2" id="purchasebtn" data-toggle="modal" data-target="#purchaseModal" data-name="{{ $package->name }}" data-price="{{ $package->discount_type == 'Flat'?($package->price - $package->discount):($package->price - ($package->price * $package->discount) / 100) }}" data-currency="{{ $package->currency }}" data-payment_option="{{$package->payment_option}}">{{ translate('messages.purchase_now') }}</button>
+                                        <button class="btn btn-sm btn-danger mx-2" class="btn btn-sm btn-primary mx-2" id="purchasebtn" data-toggle="modal" data-target="#purchaseModal" data-package_id="{{ $package->id }}" data-name="{{ $package->name }}" data-price="{{ $package->discount_type == 'Flat'?($package->price - $package->discount):($package->price - ($package->price * $package->discount) / 100) }}" data-currency="{{ $package->currency }}" data-payment_option="{{$package->payment_option}}">{{ translate('messages.purchase_now') }}</button>
                                     @endif
                                 </div>
                             </div>
@@ -251,8 +253,38 @@
             })
         });
 
-        $('#purchaseModal .modal-body #payment_option').change(function(){
-
-        })
+        $('#payment_form').submit(function(e){
+            e.preventDefault();
+            $('#submitbutton').text("{{ translate('messages.please_wait .....') }}").addClass('disabled')
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            var formData = new FormData(this);
+            $.post({
+                url: '{{ route('subscription.vendor.packages.purchasepackage') }}',
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                beforeSend: function () {
+                    $('#loading').show();
+                },
+                success: function (data) {
+                    $('#table-div').html(data.view);
+                    $('#itemCount').html(data.count);
+                    $('.page-area').hide();
+                    location.reload();
+                },
+                error : function(err){
+                    location.reload();
+                },
+                complete: function () {
+                    $('#loading').hide();
+                    $('#submitbutton').text("{{ translate('messages.submit') }}").removeClass('disabled')
+                },
+            })
+        })  
     </script>
 @endpush

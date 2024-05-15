@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\CustomModule\Subscription;
 
 use App\Http\Controllers\Controller;
+use App\Models\Modules\Subscription\PurchasePackage;
 use App\Models\Modules\Subscription\SubscriptionPackage;
+use App\Models\Modules\Subscription\VendorPackageBalance;
 use App\Models\Translation;
 use Brian2694\Toastr\Facades\Toastr;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
 
 class SubscriptionCreateController extends Controller
@@ -292,7 +296,55 @@ class SubscriptionCreateController extends Controller
         Toastr::success(translate('messages.category_updated_successfully'));
         return back();
     }
+    /** purchase requests */
+    public function purchaserequest(){
+        $module_type = 'settings';
+        $purchases = PurchasePackage::with('subscription_package','vendor')->where([['package_status',0]])->orderBy('package_status')->paginate(config('default_pagination'));
+        return view('admin-views.custom-modules.subscription.purchase_request',compact('purchases','module_type'));
+    }
+    public function purchaserequestApprove(Request $data){
+        if($data->purchase_request_id){
+            $update =  PurchasePackage::with('subscription_package')->findOrFail($data->purchase_request_id);
+            $update->package_status = 1;
+            $update->expiry_date = Carbon::now()->addDays($update->subscription_package->validity);
+            $update->paid_amount = $data->paid_amount;
+            
 
+            $check_balance = VendorPackageBalance::where('vendor_id',$data->vendor_id)->latest('id')->first();
+            if($check_balance){
+                $insert_balance = new VendorPackageBalance();
+                $insert_balance->vendor_id = $data->vendor_id;
+                $insert_balance->subscription_package_id = $update->subscription_package_id;
+                $insert_balance->purchase_package_id = $update->id;
+                $insert_balance->previous_remaining_order = ($check_balance->balance_status=='1'||$check_balance->balance_status=='0')?$check_balance->total_order_limit-$check_balance->total_vendor_order_count:0;
+
+                $insert_balance->current_pack_order_limit = $update->subscription_package->maximum_order_limit;
+                $insert_balance->total_order_limit = (($check_balance->balance_status=='1'||$check_balance->balance_status=='0')?$check_balance->total_order_limit-$check_balance->total_vendor_order_count:0)+$update->subscription_package->maximum_order_limit;
+
+                $insert_balance->balance_status = 0;
+                $insert_balance->last_purchase_date = Carbon::now();
+                $insert_balance->last_expiry_date = Carbon::now()->addDays($update->subscription_package->validity);
+                $insert_balance->save();
+            }else{
+                $insert_balance = new VendorPackageBalance();
+                $insert_balance->vendor_id = $data->vendor_id;
+                $insert_balance->subscription_package_id = $update->subscription_package_id;
+                $insert_balance->purchase_package_id = $update->id;
+                $insert_balance->previous_remaining_order =0;
+                $insert_balance->current_pack_order_limit = $update->subscription_package->maximum_order_limit;
+                $insert_balance->total_order_limit = $update->subscription_package->maximum_order_limit;
+                $insert_balance->balance_status = 0;
+                $insert_balance->last_purchase_date = Carbon::now();
+                $insert_balance->last_expiry_date = Carbon::now()->addDays($update->subscription_package->validity);
+
+                $insert_balance->save();
+            }
+
+            $update->save();
+            Toastr::success(translate('messages.request_updated_successfully'));
+            return response()->json('ok');
+        }
+    }
     /**
      * Update status
      */
@@ -315,4 +367,7 @@ class SubscriptionCreateController extends Controller
         Toastr::success(translate('messages.package_deleted_successfully'));
         return back();
     }
+
+
+
 }
