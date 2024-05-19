@@ -9,6 +9,8 @@ use App\Models\StoreSchedule;
 use Brian2694\Toastr\Facades\Toastr;
 use App\CentralLogics\Helpers;
 use App\Models\Translation;
+use App\Models\VendorType;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class BusinessSettingsController extends Controller
@@ -210,5 +212,25 @@ class BusinessSettingsController extends Controller
     public function site_direction_vendor(Request $request){
         session()->put('site_direction_vendor', ($request->status == 1?'ltr':'rtl'));
         return response()->json();
+    }
+
+    /** mutasim naib sumit */
+    
+    public function update_vendor_type(Request $data){
+        // dd($data->all());
+        
+        if(VendorType::where([['vendor_id',Auth::guard('vendor')->user()->id],['module_id',$data->module_id]])->first()){
+            $update_or_insert = VendorType::where([['vendor_id',Auth::guard('vendor')->user()->id],['module_id',$data->module_id]])->update(['vendor_type'=>$data->vendor_type,'brand_id'=>implode(',',$data->brands)]);
+        }else{
+            $update_or_insert = new VendorType();
+            $update_or_insert->vendor_id = Auth::guard('vendor')->user()->id;
+            $update_or_insert->module_id = $data->module_id;
+            $update_or_insert->vendor_type = $data->vendor_type;
+            $update_or_insert->brand_id = implode(',',$data->brands);
+            $update_or_insert->save();
+        }
+       
+        Toastr::success(translate('messages.vendor type updated success!'));
+        return back();
     }
 }

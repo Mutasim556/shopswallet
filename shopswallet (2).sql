@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 15, 2024 at 01:18 PM
+-- Generation Time: May 19, 2024 at 01:25 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.1.1
 
@@ -1551,7 +1551,10 @@ INSERT INTO `items` (`id`, `name`, `description`, `image`, `category_id`, `categ
 (5, 'Chill Buy Now', 'Chilli by now', '2024-02-14-65cc831de617e.png', 6, '[{\"id\":\"4\",\"position\":1},{\"id\":\"6\",\"position\":2}]', '[]', '[]', '[]', '[]', 450.00, 0.00, 'percent', 13.00, 'percent', '00:00:00', '23:59:59', 0, 1, 0, '2024-02-14 06:38:45', '2024-02-14 06:38:45', 0, 0.00000000000000, 0, NULL, 2, NULL, 0, 1, '[\"2024-02-14-65cc831de385d.png\"]', '[]', 'xxx', 0, 1, NULL, 1),
 (6, 'King Product Buy Now', 'King Product Buy Now', '2024-02-14-65cc83be79648.png', 3, '[{\"id\":\"1\",\"position\":1},{\"id\":\"2\",\"position\":2},{\"id\":\"3\",\"position\":3}]', '[{\"type\":\"Red\",\"price\":250,\"stock\":11.98}]', '[]', '[\"1\"]', '[{\"name\":\"choice_1\",\"title\":\"Color\",\"options\":[\"Red\"]}]', 250.00, 0.00, 'percent', 0.00, 'percent', '00:00:00', '23:59:59', 0, 1, 2, '2024-02-14 06:41:26', '2024-02-14 06:43:24', 0, 0.00000000000000, 0, NULL, 2, NULL, 11, 1, '[\"2024-02-14-65cc83be75437.png\"]', '[]', 'ccc', 0, 1, NULL, 1),
 (7, 'TEst ACD', 'asdasd', '2024-03-06-65e7eb892770e.png', 13, '[{\"id\":\"11\",\"position\":1},{\"id\":\"12\",\"position\":2},{\"id\":\"13\",\"position\":3}]', '[]', '[]', '[]', '[]', 1.00, 0.00, 'percent', 0.00, 'amount', '00:00:00', '23:59:59', 0, 1, 0, '2024-03-06 01:05:29', '2024-03-06 01:20:48', 0, 0.00000000000000, 0, NULL, 8, NULL, 0, 1, '[\"2024-03-06-65e7eb89258e6.png\"]', '[]', 'xxx-2', 0, 0, NULL, 1),
-(8, 'TEst ACDU', 'zxczxczx', '2024-03-06-65e7f25bd632b.png', 13, '[{\"id\":\"11\",\"position\":1},{\"id\":\"12\",\"position\":2},{\"id\":\"13\",\"position\":3}]', '[]', '[]', '[]', '[]', 1.00, 0.00, 'percent', 0.00, 'amount', '00:00:00', '23:59:59', 0, 1, 0, '2024-03-06 01:34:35', '2024-03-06 03:40:15', 0, 0.00000000000000, 0, NULL, 8, NULL, 0, 1, '[\"2024-03-06-65e7f25bd459a.png\"]', '[]', 'cc', 0, 0, NULL, 1);
+(8, 'TEst ACDU', 'zxczxczx', '2024-03-06-65e7f25bd632b.png', 13, '[{\"id\":\"11\",\"position\":1},{\"id\":\"12\",\"position\":2},{\"id\":\"13\",\"position\":3}]', '[]', '[]', '[]', '[]', 1.00, 0.00, 'percent', 0.00, 'amount', '00:00:00', '23:59:59', 0, 1, 0, '2024-03-06 01:34:35', '2024-03-06 03:40:15', 0, 0.00000000000000, 0, NULL, 8, NULL, 0, 1, '[\"2024-03-06-65e7f25bd459a.png\"]', '[]', 'cc', 0, 0, NULL, 1),
+(9, 'Apple', 'sadasd', '2024-05-19-6649ccb4314e0.png', 3, '[{\"id\":\"1\",\"position\":1},{\"id\":\"2\",\"position\":2},{\"id\":\"3\",\"position\":3}]', '[{\"type\":\"red\",\"price\":100,\"stock\":100}]', '[]', '[\"1\"]', '[{\"name\":\"choice_1\",\"title\":\"Color\",\"options\":[\"red\"]}]', 100.00, 0.00, 'percent', 0.00, 'percent', '00:00:00', '23:59:59', 0, 1, 14, '2024-05-19 06:56:04', '2024-05-19 06:56:04', 0, 0.00000000000000, 0, NULL, 2, 1, 100, NULL, '[\"2024-05-19-6649ccb4244ee.png\"]', '[]', 'vv', 0, 1, 10, 1),
+(10, 'orange', 'sadasd', '2024-05-19-6649de483aa09.png', 3, '[{\"id\":\"1\",\"position\":1},{\"id\":\"2\",\"position\":2},{\"id\":\"3\",\"position\":3}]', '[]', '[]', '[]', '[]', 1.00, 0.00, 'percent', 0.00, 'percent', '00:00:00', '23:59:59', 0, 1, 15, '2024-05-19 08:11:04', '2024-05-19 08:11:04', 0, 0.00000000000000, 0, NULL, 2, 1, 6000, NULL, '[\"2024-05-19-6649de48356b6.png\"]', '[]', 'orange', 0, 1, 10, 1),
+(11, 'Tormuj', 'asasd', '2024-05-19-6649df94b6f4a.png', 3, '[{\"id\":\"1\",\"position\":1},{\"id\":\"2\",\"position\":2},{\"id\":\"3\",\"position\":3}]', '[]', '[]', '[]', '[]', 1.00, 0.00, 'percent', 0.00, 'percent', '00:00:00', '23:59:59', 0, 1, 14, '2024-05-19 08:16:36', '2024-05-19 08:16:36', 0, 0.00000000000000, 0, NULL, 2, 1, 84569, NULL, '[\"2024-05-19-6649df94b5197.png\"]', '[]', 'tormuj', 0, 1, 10, 1);
 
 -- --------------------------------------------------------
 
@@ -1604,6 +1607,15 @@ CREATE TABLE `item_tag` (
   `item_id` bigint(20) UNSIGNED NOT NULL,
   `tag_id` bigint(20) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `item_tag`
+--
+
+INSERT INTO `item_tag` (`id`, `item_id`, `tag_id`) VALUES
+(1, 9, 2),
+(2, 10, 3),
+(3, 11, 4);
 
 -- --------------------------------------------------------
 
@@ -1832,7 +1844,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (141, '2024_04_17_090230_create_brands_table', 50),
 (144, '2024_04_25_084221_create_subscription_packages_table', 51),
 (145, '2024_05_14_131810_create_purchase_packages_table', 52),
-(146, '2024_05_15_065943_create_vendor_package_balances_table', 53);
+(146, '2024_05_15_065943_create_vendor_package_balances_table', 53),
+(147, '2024_05_19_073649_create_vendor_types_table', 54);
 
 -- --------------------------------------------------------
 
@@ -1861,7 +1874,7 @@ CREATE TABLE `modules` (
 
 INSERT INTO `modules` (`id`, `module_name`, `module_type`, `thumbnail`, `status`, `stores_count`, `created_at`, `updated_at`, `icon`, `theme_id`, `description`, `all_zone_service`) VALUES
 (1, 'Demo Module', 'grocery', '2023-08-16-64dca575bf3a9.png', 0, 2, '2023-08-15 23:31:17', '2024-01-10 13:58:21', '2023-08-16-64dca575bc1c2.png', 1, '<p>Demo module description.</p>', 0),
-(2, 'Grocery', 'grocery', '2024-02-09-65c616b3d299c.png', 1, 4, '2024-01-10 13:57:56', '2024-04-29 06:48:12', '2024-02-09-65c616b3d1771.png', 1, '<p>Grocery</p>', 0),
+(2, 'Grocery', 'grocery', '2024-02-09-65c616b3d299c.png', 1, 6, '2024-01-10 13:57:56', '2024-05-19 04:27:43', '2024-02-09-65c616b3d1771.png', 1, '<p>Grocery</p>', 0),
 (3, 'E-commerce', 'ecommerce', '2024-01-15-65a4d99a7cb37.png', 1, 0, '2024-01-15 01:07:06', '2024-01-15 01:07:06', '2024-01-15-65a4d99a732c4.png', 1, '<p>commerce</p>', 0),
 (4, 'Food', 'food', '2024-01-15-65a4da7fe0526.png', 1, 0, '2024-01-15 01:10:55', '2024-01-15 01:10:55', '2024-01-15-65a4da7fdc15d.png', 1, '<p>food</p>', 0),
 (5, 'Pharmacy', 'pharmacy', '2024-01-15-65a4dae0bb1c1.png', 1, 0, '2024-01-15 01:12:32', '2024-01-15 01:12:32', '2024-01-15-65a4dae0b646f.png', 1, '<p>pharmacy</p>', 0),
@@ -2570,7 +2583,8 @@ INSERT INTO `purchase_packages` (`id`, `vendor_id`, `subscription_package_id`, `
 (5, 21, 1, '2024-05-15 08:50:23', '2024-06-14 08:50:23', 'manual', 0.00, 1, 0, 10, NULL, '2024-05-15 02:50:23', '2024-05-15 02:50:23'),
 (7, 21, 2, '2024-05-15 08:51:51', '2025-05-15 08:51:51', 'manual', 0.00, 1, 0, 30, NULL, '2024-05-15 02:51:51', '2024-05-15 02:51:51'),
 (11, 21, 2, '2024-05-15 12:06:36', '2025-05-15 14:11:06', 'manual', 1990.00, 1, 0, 30, NULL, '2024-05-15 06:06:36', '2024-05-15 08:11:06'),
-(12, 21, 2, '2024-05-15 14:11:49', '2025-05-15 14:13:23', 'manual', 1990.00, 1, 0, 30, NULL, '2024-05-15 08:11:49', '2024-05-15 08:13:23');
+(12, 21, 2, '2024-05-15 14:11:49', '2025-05-15 14:13:23', 'manual', 1990.00, 1, 0, 30, NULL, '2024-05-15 08:11:49', '2024-05-15 08:13:23'),
+(13, 21, 2, '2024-05-15 18:20:46', '2025-05-15 18:27:23', 'manual', 990.00, 1, 0, 30, NULL, '2024-05-15 12:20:46', '2024-05-15 12:27:23');
 
 -- --------------------------------------------------------
 
@@ -2831,7 +2845,9 @@ INSERT INTO `stores` (`id`, `name`, `phone`, `email`, `logo`, `latitude`, `longi
 (5, 'Aliya store', '+97430853951', 'techstudio.agency@gamil.com', '2024-02-09-65c622d3c459b.png', '25.26334275181729', '51.524164050479335', '7G7F+8M Doha, Qatar', NULL, 0.00, NULL, 0, 1, 5, '2024-02-09 07:04:19', '2024-04-17 07:22:02', 0, NULL, '2024-02-09-65c622d3ce449.png', 1, 1, 1, 'International', 'Wholeseller', 1.00, 4, 1, 1, ' ', NULL, 1, 1, 0.00, '10-30 min', 1, 1, 0, 0, 2, 0, 0, 0.000, 0, 'aliya-store', NULL, 0, NULL, NULL, NULL, 0, NULL),
 (6, 'Store', '+8801794973737', 'mutasim@gmail.com', '2024-03-10-65ed44c1451fb.png', '23.789553699192552', '90.41199616103852', 'Store', NULL, 0.00, NULL, 0, 1, 6, '2024-03-10 02:27:29', '2024-03-10 02:32:57', 0, NULL, '2024-03-10-65ed44c17f665.png', 1, 1, 1, 'Local', 'Retailer', 1.00, 6, 1, 1, ' ', NULL, 0, 0, 0.00, '30-60 min', 1, 1, 0, 0, 8, 0, 0, 0.000, 0, 'store', NULL, 0, NULL, NULL, NULL, 0, NULL),
 (11, 'Test Api', '+8801724698392', 'test@gmail.com', '2024-03-10-65ed607d1497f.png', '23.78986785054063', '90.41394344478333', 'Test Address Api', NULL, 0.00, NULL, 0, 1, 19, '2024-03-10 04:25:49', '2024-03-13 03:18:52', 0, NULL, 'def.png', 1, 1, 1, 'Local', 'Retailer', 1.00, 6, 1, 1, ' ', NULL, 0, 0, 0.00, '30-60 min', 1, 1, 0, 0, 8, 0, 0, 0.000, 0, 'test-api', NULL, 0, NULL, NULL, NULL, 0, NULL),
-(13, 'Mutasim Naib', '+8801794973738', 'mutasimstore@gmail.com', '2024-04-29-662f6cdc98796.png', '23.788071287273524', '90.41542938857758', 'Noyanogor Mohila Madrasa , Noyanagar , Khilkhet', NULL, 0.00, NULL, 0, 1, 21, '2024-04-29 06:48:12', '2024-04-29 06:48:12', 0, NULL, '2024-04-29-662f6cdc9a8b1.png', 1, 1, 1, 'Local', 'Retailer', 1.00, 6, 1, 1, ' ', NULL, 0, 0, 0.00, '30-60 min', 1, 1, 0, 0, 2, 0, 0, 0.000, 0, 'mutasim-naib', NULL, 0, NULL, NULL, NULL, 0, NULL);
+(13, 'Mutasim Naib', '+8801794973738', 'mutasimstore@gmail.com', '2024-04-29-662f6cdc98796.png', '23.788071287273524', '90.41542938857758', 'Noyanogor Mohila Madrasa , Noyanagar , Khilkhet', NULL, 0.00, NULL, 0, 1, 21, '2024-04-29 06:48:12', '2024-04-29 06:48:12', 0, NULL, '2024-04-29-662f6cdc9a8b1.png', 1, 1, 1, 'Local', 'Retailer', 1.00, 6, 1, 1, ' ', NULL, 0, 0, 0.00, '30-60 min', 1, 1, 0, 0, 2, 0, 0, 0.000, 0, 'mutasim-naib', NULL, 0, NULL, NULL, NULL, 0, NULL),
+(14, 'Mutasim Naib', '+8801724698393', 'mutasimstore2@gmail.com', '2024-05-19-6649a56f2aa9e.png', '23.781306156238372', '90.38488649087114', 'Noyanogor Mohila Madrasa , Noyanagar , Khilkhet', NULL, 0.00, NULL, 0, 1, 22, '2024-05-19 04:08:31', '2024-05-19 04:08:31', 0, NULL, '2024-05-19-6649a56f5c00e.png', 1, 1, 1, 'Local', 'Retailer', 1.00, 5, 1, 1, ' ', NULL, 0, 0, 0.00, '30-60 min', 1, 1, 0, 0, 2, 0, 0, 0.000, 0, 'mutasim-naib-2', NULL, 0, NULL, NULL, NULL, 0, NULL),
+(15, 'Mutasim Naib 3', '+8801724698394', 'mutasimstore3@gmail.com', '2024-05-19-6649a9ef923cc.png', '23.78271992101992', '90.38179658608598', 'Noyanogor Mohila Madrasa , Noyanagar , Khilkhet', NULL, 0.00, NULL, 0, 1, 23, '2024-05-19 04:27:43', '2024-05-19 04:27:43', 0, NULL, '2024-05-19-6649a9ef94231.png', 1, 1, 1, 'Local', 'Retailer', 1.00, 5, 1, 1, ' ', NULL, 0, 0, 0.00, '30-60 min', 1, 1, 0, 0, 2, 0, 0, 0.000, 0, 'mutasim-naib-3', NULL, 0, NULL, NULL, NULL, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -2973,7 +2989,10 @@ CREATE TABLE `tags` (
 --
 
 INSERT INTO `tags` (`id`, `tag`, `created_at`, `updated_at`) VALUES
-(1, 'good', '2024-01-15 12:06:37', '2024-01-15 12:06:37');
+(1, 'good', '2024-01-15 12:06:37', '2024-01-15 12:06:37'),
+(2, 'apple', '2024-05-19 06:56:04', '2024-05-19 06:56:04'),
+(3, 'orange', '2024-05-19 08:11:04', '2024-05-19 08:11:04'),
+(4, 'tormuj', '2024-05-19 08:16:36', '2024-05-19 08:16:36');
 
 -- --------------------------------------------------------
 
@@ -3253,7 +3272,15 @@ INSERT INTO `translations` (`id`, `translationable_type`, `translationable_id`, 
 (456, 'App\\Models\\Store', 13, 'ar', 'name', 'Mutasim Naib', NULL, NULL),
 (457, 'App\\Models\\Store', 13, 'ar', 'address', 'Noyanogor Mohila Madrasa , Noyanagar , Khilkhet', NULL, NULL),
 (458, 'App\\Models\\Modules\\Subscription\\SubscriptionPackage', 2, 'en', 'name', 'More Savings', NULL, NULL),
-(459, 'App\\Models\\Modules\\Subscription\\SubscriptionPackage', 2, 'en', 'package_details', NULL, NULL, NULL);
+(459, 'App\\Models\\Modules\\Subscription\\SubscriptionPackage', 2, 'en', 'package_details', NULL, NULL, NULL),
+(460, 'App\\Models\\Store', 14, 'en', 'name', 'Mutasim Naib', NULL, NULL),
+(461, 'App\\Models\\Store', 14, 'en', 'address', 'Noyanogor Mohila Madrasa , Noyanagar , Khilkhet', NULL, NULL),
+(462, 'App\\Models\\Store', 15, 'en', 'name', 'Mutasim Naib 3', NULL, NULL),
+(463, 'App\\Models\\Store', 15, 'en', 'address', 'Noyanogor Mohila Madrasa , Noyanagar , Khilkhet', NULL, NULL),
+(464, 'App\\Models\\Item', 10, 'en', 'name', 'orange', NULL, NULL),
+(465, 'App\\Models\\Item', 10, 'en', 'description', 'sadasd', NULL, NULL),
+(466, 'App\\Models\\Item', 11, 'en', 'name', 'Tormuj', NULL, NULL),
+(467, 'App\\Models\\Item', 11, 'en', 'description', 'asasd', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -3434,7 +3461,9 @@ INSERT INTO `vendors` (`id`, `f_name`, `l_name`, `phone`, `email`, `email_verifi
 (5, 'tech', 'studio', '+97430853951', 'techstudio.agency@gamil.com', NULL, '$2y$10$G2Mmr6jh8NPEQgfkhWYgPeUza8afiaKQcRw4rJcM7NgNQhIJFMyEi', NULL, '2024-02-09 07:04:19', '2024-02-09 07:07:44', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL),
 (6, 'Sss', 'mit', '+8801794973737', 'mutasim@gmail.com', NULL, '$2y$10$xRFJO1VtWfjpBPnw51ysdujPE/FWv7wsl0K4WyNGF5.V0A7FJRo02', NULL, '2024-03-10 02:27:29', '2024-03-13 01:46:55', NULL, NULL, NULL, NULL, '2024-03-13-65f12fbfc9618.png', 1, NULL, NULL),
 (19, 'Test Api Owner', 'Last Owner', '+8801724698392', 'test@gmail.com', NULL, '$2y$10$PTNADR5FGz8.SB81LGZb..vNHjfo/QBugJmbgHs7sjQ2OlFTCHWfW', NULL, '2024-03-10 04:25:49', '2024-03-10 04:25:49', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL),
-(21, 'Mutasim', 'Naib', '+8801794973738', 'mutasimstore@gmail.com', NULL, '$2y$10$.qirITFel1tNTd.kfXjmh.4LdmtwcRSRfxAVa8Po1JvJaG4itxtY.', NULL, '2024-04-29 06:48:12', '2024-04-29 06:48:12', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL);
+(21, 'Mutasim', 'Naib', '+8801794973738', 'mutasimstore@gmail.com', NULL, '$2y$10$.qirITFel1tNTd.kfXjmh.4LdmtwcRSRfxAVa8Po1JvJaG4itxtY.', NULL, '2024-04-29 06:48:12', '2024-04-29 06:48:12', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL),
+(22, 'Mutasim', 'Naib', '+8801724698393', 'mutasimstore2@gmail.com', NULL, '$2y$10$T7s/obYdkYB3//mfDdUQ2OEYuyU5.HK1YeilO/01THtUP3KpkR2Ia', NULL, '2024-05-19 04:08:31', '2024-05-19 04:08:31', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL),
+(23, 'Mutasim', 'Naib', '+8801724698394', 'mutasimstore3@gmail.com', NULL, '$2y$10$vZytu1KRo.E/NmOToAf/yOSt0uJ9CTPXsRiCDR2XkgA1PBbDcK2gK', NULL, '2024-05-19 04:27:43', '2024-05-19 04:27:43', NULL, NULL, NULL, NULL, NULL, 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -3492,7 +3521,33 @@ INSERT INTO `vendor_package_balances` (`id`, `vendor_id`, `subscription_package_
 (5, 21, 1, 5, 0, 10, 10, 0, 0, '2024-05-15 08:50:23', '2024-06-14 08:50:23', '2024-05-15 02:50:23', '2024-05-15 02:50:23'),
 (7, 21, 2, 7, 10, 30, 40, 0, 0, '2024-05-15 08:51:51', '2025-05-15 08:51:51', '2024-05-15 02:51:51', '2024-05-15 02:51:51'),
 (8, 21, 2, 11, 40, 30, 70, 0, 0, '2024-05-15 14:11:06', '2025-05-15 14:11:06', '2024-05-15 08:11:06', '2024-05-15 08:11:06'),
-(9, 21, 2, 12, 70, 30, 100, 0, 0, '2024-05-15 14:13:23', '2025-05-15 14:13:23', '2024-05-15 08:13:23', '2024-05-15 08:13:23');
+(9, 21, 2, 12, 70, 30, 100, 0, 0, '2024-05-15 14:13:23', '2025-05-15 14:13:23', '2024-05-15 08:13:23', '2024-05-15 08:13:23'),
+(10, 21, 2, 13, 100, 30, 130, 0, 0, '2024-05-15 18:27:23', '2025-05-15 18:27:23', '2024-05-15 12:27:23', '2024-05-15 12:27:23');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vendor_types`
+--
+
+CREATE TABLE `vendor_types` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `vendor_id` bigint(20) UNSIGNED NOT NULL,
+  `module_id` bigint(20) UNSIGNED NOT NULL,
+  `vendor_type` varchar(255) DEFAULT NULL,
+  `brand_id` varchar(255) DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `vendor_types`
+--
+
+INSERT INTO `vendor_types` (`id`, `vendor_id`, `module_id`, `vendor_type`, `brand_id`, `created_at`, `updated_at`) VALUES
+(2, 21, 2, 'manufacturer', '1', '2024-05-19 03:31:08', '2024-05-19 03:31:14'),
+(4, 22, 2, 'wholeseller', '1', '2024-05-19 04:24:56', '2024-05-19 04:24:56'),
+(5, 23, 2, 'retailer', '1', '2024-05-19 04:28:17', '2024-05-19 04:28:17');
 
 -- --------------------------------------------------------
 
@@ -4324,6 +4379,14 @@ ALTER TABLE `vendor_package_balances`
   ADD KEY `vendor_package_balances_purchase_package_id_foreign` (`purchase_package_id`);
 
 --
+-- Indexes for table `vendor_types`
+--
+ALTER TABLE `vendor_types`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `vendor_types_vendor_id_foreign` (`vendor_id`),
+  ADD KEY `vendor_types_module_id_foreign` (`module_id`);
+
+--
 -- Indexes for table `wallet_bonuses`
 --
 ALTER TABLE `wallet_bonuses`
@@ -4626,7 +4689,7 @@ ALTER TABLE `guests`
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `item_campaigns`
@@ -4638,7 +4701,7 @@ ALTER TABLE `item_campaigns`
 -- AUTO_INCREMENT for table `item_tag`
 --
 ALTER TABLE `item_tag`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `jobs`
@@ -4662,7 +4725,7 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=147;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=148;
 
 --
 -- AUTO_INCREMENT for table `modules`
@@ -4806,7 +4869,7 @@ ALTER TABLE `provide_d_m_earnings`
 -- AUTO_INCREMENT for table `purchase_packages`
 --
 ALTER TABLE `purchase_packages`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `react_testimonials`
@@ -4860,7 +4923,7 @@ ALTER TABLE `soft_credentials`
 -- AUTO_INCREMENT for table `stores`
 --
 ALTER TABLE `stores`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `store_configs`
@@ -4890,7 +4953,7 @@ ALTER TABLE `subscription_packages`
 -- AUTO_INCREMENT for table `tags`
 --
 ALTER TABLE `tags`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `temp_products`
@@ -4914,7 +4977,7 @@ ALTER TABLE `track_deliverymen`
 -- AUTO_INCREMENT for table `translations`
 --
 ALTER TABLE `translations`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=460;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=468;
 
 --
 -- AUTO_INCREMENT for table `units`
@@ -4944,7 +5007,7 @@ ALTER TABLE `user_notifications`
 -- AUTO_INCREMENT for table `vendors`
 --
 ALTER TABLE `vendors`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `vendor_employees`
@@ -4956,7 +5019,13 @@ ALTER TABLE `vendor_employees`
 -- AUTO_INCREMENT for table `vendor_package_balances`
 --
 ALTER TABLE `vendor_package_balances`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `vendor_types`
+--
+ALTER TABLE `vendor_types`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `wallet_bonuses`
@@ -5122,6 +5191,13 @@ ALTER TABLE `vendor_package_balances`
   ADD CONSTRAINT `vendor_package_balances_purchase_package_id_foreign` FOREIGN KEY (`purchase_package_id`) REFERENCES `purchase_packages` (`id`),
   ADD CONSTRAINT `vendor_package_balances_subscription_package_id_foreign` FOREIGN KEY (`subscription_package_id`) REFERENCES `subscription_packages` (`id`),
   ADD CONSTRAINT `vendor_package_balances_vendor_id_foreign` FOREIGN KEY (`vendor_id`) REFERENCES `vendors` (`id`);
+
+--
+-- Constraints for table `vendor_types`
+--
+ALTER TABLE `vendor_types`
+  ADD CONSTRAINT `vendor_types_module_id_foreign` FOREIGN KEY (`module_id`) REFERENCES `modules` (`id`),
+  ADD CONSTRAINT `vendor_types_vendor_id_foreign` FOREIGN KEY (`vendor_id`) REFERENCES `vendors` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

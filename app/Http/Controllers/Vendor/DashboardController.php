@@ -8,8 +8,11 @@ use App\Models\Item;
 use App\Models\Order;
 use App\Models\Vendor;
 use App\Models\OrderTransaction;
+use App\Models\Store;
+use App\Models\VendorType;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -53,7 +56,32 @@ class DashboardController extends Controller
         ->get();
         $data['top_sell'] = $top_sell;
         $data['most_rated_items'] = $most_rated_items;
-        return view('vendor-views.dashboard', compact('data', 'earning', 'commission', 'params')); 
+        $stores = [];
+        if(Auth::guard('vendor')->user()->vendor_type!=null){
+            $stores['wholeseller']=0;
+            $stores['retailer']=0;
+            $wholesellers = VendorType::where([['module_id',Store::with('module')->where('id',Helpers::get_store_data()->id)->first()->module->id],['vendor_type','wholeseller']])->select('brand_id')->get();
+            $retailers = VendorType::where([['module_id',Store::with('module')->where('id',Helpers::get_store_data()->id)->first()->module->id],['vendor_type','retailer']])->select('brand_id')->get();
+            // dd($wholesellers);
+            if(count($wholesellers)>0){
+                foreach(explode(',',Auth::guard('vendor')->user()->vendor_type->brand_id) as $brand){
+                    foreach($wholesellers as $wholeseller){
+                        if(in_array($brand,explode(',',$wholeseller->brand_id))){
+                            $stores['wholeseller'] = $stores['wholeseller']+1;
+                        }
+                    }
+                    foreach($retailers as $retailer){
+                        if(in_array($brand,explode(',',$retailer->brand_id))){
+                            $stores['retailer'] = $stores['retailer']+1;
+                        }
+                    }
+                }
+            }
+            
+            
+        }
+        // dd($stores);
+        return view('vendor-views.dashboard', compact('data', 'earning', 'commission', 'params','stores')); 
     }
 
     public function store_data()

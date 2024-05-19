@@ -23,6 +23,7 @@ return [
         'common_condition'=>false,
         'basic'=>false,
         'description'=>'In this type, You can set delivery slot start after x minutes from current time, No available time for items and has stock for items.',
+        'vendor_type'=>true
     ],
 
     'food'=>[

@@ -60,6 +60,21 @@
             </div>
         </div>
 
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row gx-2 gx-lg-3 mb-2">
+                    <div class="col-md-9">
+                        <h4><i class="tio-chart-bar-4 fz-30px"></i>{{translate('messages.my_stores')}} <span class="bage badge-primary px-2 py-1 rounded">{{ Auth::guard('vendor')->user()->vendor_type!=null?Auth::guard('vendor')->user()->vendor_type->vendor_type:'N/A' }}</span></h4>
+                    </div>
+                    
+                </div>
+                <div class="py-2"></div>
+                <div class="row g-2" id="order_stats">
+                    @include('vendor-views.partials._vendor_stores',['data'=>$data])
+                </div>
+            </div>
+        </div>
+
         <div class="row gx-2 gx-lg-3">
             <div class="col-lg-12 mb-3 mb-lg-12">
                 <!-- Card -->
@@ -197,6 +212,8 @@
         </div>
         <!-- End Page Header -->
         @endif
+
+        
     </div>
 @endsection
 

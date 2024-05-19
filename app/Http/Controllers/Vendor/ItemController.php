@@ -40,7 +40,7 @@ class ItemController extends Controller
         $conditions = CommonCondition::all();
         $module_data = config('module.' . Helpers::get_store_data()->module->module_type);
         // dd($module_data);
-        return view('vendor-views.product.index', compact('categories', 'module_data', 'conditions'));
+        return view('vendor-views.product.index', compact('categories', 'module_data', 'conditions')); 
     }
 
     public function store(Request $request)
@@ -240,7 +240,7 @@ class ItemController extends Controller
 
             $food = new Item;
             $food->name = $request->name[array_search('default', $request->lang)];
-
+            $food->brand_id = $request->brand_id?$request->brand_id:null;
             $category = [];
             if ($request->category_id != null) {
                 array_push($category, [

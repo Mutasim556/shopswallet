@@ -465,7 +465,28 @@
                                             </select>
                                         </div>
                                     </div>
+                                    @if(\App\CentralLogics\Helpers::get_vendor_module_id()=='grocery')
+                                    <div class="col-sm-6 col-lg-4">
+                                        <div class="form-group mb-0">
+                                            <label class="input-label"
+                                                for="exampleFormControlSelect1">{{ translate('messages.brnads') }}<span
+                                                    class="input-label-secondary"></span></label>
+                                            <select name="brand_id" id="brand_id"
+                                                class="form-control js-select2-custom"
+                                                required>
+                                                <?php
+                                                    $brands = DB::table('brands')->where('module_id',\App\CentralLogics\Helpers::get_store_data()->module_id)->get();
+                                                ?>
 
+                                                @foreach($brands as $brand)
+                                                    <option value="{{ $brand->id }}">{{ $brand->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    @else
+                                    @endif
+                                    
 
                                     @if ($module_data['unit'])
                                         <div class="col-sm-6 col-lg-4">

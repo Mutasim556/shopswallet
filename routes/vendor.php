@@ -212,7 +212,7 @@ Route::group(['namespace' => 'Vendor', 'as' => 'vendor.'], function () {
             Route::post('add-payment-ref-code/{id}', 'OrderController@add_payment_ref_code')->name('add-payment-ref-code');
             Route::post('update-order-amount', 'OrderController@edit_order_amount')->name('update-order-amount');
             Route::post('update-discount-amount', 'OrderController@edit_discount_amount')->name('update-discount-amount');
-            Route::post('add-order-proof/{id}', 'OrderController@add_order_proof')->name('add-order-proof');
+            Route::post('add-order-proof/{id}', 'OrderController@add_order_proof')->name('add-order-proof'); 
             Route::get('remove-proof-image', 'OrderController@remove_proof_image')->name('remove-proof-image');
             Route::get('export-orders/{file_type}/{status}/{type}', 'OrderController@export_orders')->name('export');
 
@@ -226,7 +226,16 @@ Route::group(['namespace' => 'Vendor', 'as' => 'vendor.'], function () {
             Route::post('update-setup/{store}', 'BusinessSettingsController@store_setup')->name('update-setup');
             Route::post('update-meta-data/{store}', 'BusinessSettingsController@updateStoreMetaData')->name('update-meta-data');
             Route::get('toggle-settings-status/{store}/{status}/{menu}', 'BusinessSettingsController@store_status')->name('toggle-settings');
+            /** mutasim naib sumit */
+            Route::post('update-vendor-type','BusinessSettingsController@update_vendor_type')->name('update_vendor_type');
         });
+
+        /**mutasim naib sumit */
+
+        Route::group(['prefix' => 'my-stores', 'as' => 'my-stores.', 'middleware' => ['module:my_store']], function () {
+            Route::get('/{type?}','MystroreController@myShops')->name('my_stores');
+        });
+
 
         Route::group(['prefix' => 'profile', 'as' => 'profile.', 'middleware' => ['module:bank_info']], function () {
             Route::get('view', 'ProfileController@view')->name('view');
