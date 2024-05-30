@@ -431,7 +431,7 @@
                                 @if ($item->store)
                                 <a href="{{route('admin.store.view', $item->store->id)}}" class="table-rest-info" alt="view store"> {{  Str::limit($item->store->name, 20, '...') }}</a>
                                 @else
-                                {{  translate('messages.store deleted!') }}
+                                {{  translate('messages.N/A') }}
                                 @endif
 
                             </td>

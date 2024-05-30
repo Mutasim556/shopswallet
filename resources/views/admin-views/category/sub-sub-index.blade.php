@@ -68,7 +68,7 @@
                         <input type="hidden" name="lang[]" value="default">
                     @endif
                     @php( $mod_check = DB::table('modules')->where('id', session()->get('dash_params')['module_id'])->first())
-                    @if ($mod_check->module_type == 'services' || $mod_check->module_type == 'booking')
+                    @if ($mod_check && ($mod_check->module_type == 'services' || $mod_check->module_type == 'booking'))
                         <div class="form-group">
                             <label class="input-label" for="exampleFormControlSelect1">Categories
                                 <span class="input-label-secondary">*</span></label>

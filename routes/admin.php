@@ -95,6 +95,12 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('edit/{id}/{type?}', 'ItemController@edit')->name('edit');
             Route::post('update/{id}', 'ItemController@update')->name('update');
             Route::get('list', 'ItemController@list')->name('list');
+            Route::get('country-origin', 'ItemController@countryorigin')->name('country-origin');
+            Route::post('country-origin', 'ItemController@countryoriginstore')->name('country-origin');
+
+            Route::get('country-origin/edit/{id}', 'ItemController@countryoriginedit')->name('country-origin-edit');
+            Route::post('country-origin/update/{id}', 'ItemController@countryoriginupdate')->name('country-origin-update');
+
             // Route::get('request-list', 'ItemController@request_list')->name('request_list');
             Route::delete('delete/{id}', 'ItemController@delete')->name('delete');
             Route::get('status/{id}/{status}', 'ItemController@status')->name('status');

@@ -3580,4 +3580,8 @@
   'ex_:_brand_name' => 'Ex : brand name',
   'Want to delete this brand ?' => 'Want to delete this brand  ',
   'brands' => 'Brands',
+  'country_of_origin' => 'Country of origin',
+  'add_new_country_of_origin' => 'Add new country of origin',
+  'ex_:_new_origin' => 'Ex : new origin',
+  'country-origin' => 'Country-origin',
 );

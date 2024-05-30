@@ -471,6 +471,12 @@
                                 <span class="text-truncate">{{ translate('messages.list') }}</span>
                             </a>
                         </li>
+                        <li class="nav-item {{ Request::is('admin/item/country-origin') || (Request::is('admin/item/country-origin/*') && (strpos(request()->fullUrl(), 'temp_product=1') == false && strpos(request()->fullUrl(), 'product_gellary=1') == false  ) ) ? 'active' : '' }}">
+                            <a class="nav-link " href="{{ route('admin.item.country-origin') }}" title="{{ translate('messages.country-origin') }}">
+                                <span class="tio-circle nav-indicator-icon"></span>
+                                <span class="text-truncate">{{ translate('messages.country_of_origin') }}</span>
+                            </a>
+                        </li>
                         {{-- @if (\App\CentralLogics\Helpers::get_mail_status('product_gallery')) --}}
                         <li class="nav-item {{  Request::is('admin/item/product-gallery') ? 'active' : '' }}">
                             <a class="nav-link " href="{{ route('admin.item.product_gallery') }}" title="{{ translate('messages.Product_Gallery') }}">

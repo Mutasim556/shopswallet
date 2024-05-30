@@ -232,4 +232,6 @@ class Item extends Model
         return $slug;
     }
 
+    
+
 }

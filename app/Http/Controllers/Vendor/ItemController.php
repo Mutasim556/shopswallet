@@ -1815,4 +1815,7 @@ class ItemController extends Controller
 
         return view('vendor-views.product.flash_sale.list', compact('items'));
     }
+
+
+    
 }

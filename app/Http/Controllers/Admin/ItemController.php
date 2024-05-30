@@ -25,7 +25,9 @@ use App\CentralLogics\ProductLogic;
 use App\Models\PharmacyItemDetails;
 use App\Http\Controllers\Controller;
 use App\Models\Brand;
+use App\Models\Origin;
 use App\Models\Service;
+use App\Models\Speciality;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
@@ -45,7 +47,8 @@ class ItemController extends Controller
 
     public function store(Request $request)
     {
-
+       
+        //  dd($request->all());
         $validator = Validator::make($request->all(), [
             'name.0' => 'required',
             'name.*' => 'max:191',
@@ -53,10 +56,11 @@ class ItemController extends Controller
             'image' => 'required_unless:product_gellary,1',
             'price' => 'required|numeric|between:.01,999999999999.99',
             'discount' => 'required|numeric|min:0',
-            'store_id' => 'required',
+            // 'store_id' => 'required',
             'description.*' => 'max:1000',
             'name.0' => 'required',
             'description.0' => 'required',
+            'speciality'=>'required_if:special,1'
         ], [
             'description.*.max' => translate('messages.description_length_warning'),
             'name.0.required' => translate('messages.item_name_required'),
@@ -64,7 +68,10 @@ class ItemController extends Controller
             'image.required_unless' => translate('messages.Image_is_required'),
             'name.0.required' => translate('default_name_is_required'),
             'description.0.required' => translate('default_description_is_required'),
+            'speciality.required_if' => translate('speciality_is_required'),
         ]);
+
+       
         if ($request['discount_type'] == 'percent') {
             $dis = ($request['price'] / 100) * $request['discount'];
         } else {
@@ -104,6 +111,7 @@ class ItemController extends Controller
                 $images[]=$newFileName;
             }
         }
+        // dd($request->all());
         $tag_ids = [];
         if ($request->tags != null) {
             $tags = explode(",", $request->tags);
@@ -146,6 +154,10 @@ class ItemController extends Controller
         $item->category_id = $request->sub_sub_category_id ? $request->sub_sub_category_id : ($request->sub_category_id ? $request->sub_category_id : $request->category_id);
 
         $item->description =  $request->description[array_search('default', $request->lang)];
+        
+        $item->disclaimer =  $request->disclaimer[array_search('default', $request->lang)];
+
+        // dd($item);
 
         $choice_options = [];
         if ($request->has('choice')) {
@@ -247,6 +259,8 @@ class ItemController extends Controller
         $item->add_ons = $request->has('addon_ids') ? json_encode($request->addon_ids) : json_encode([]);
         $item->store_id = $request->store_id;
         $item->maximum_cart_quantity = $request->maximum_cart_quantity;
+        $item->special = $request->special?$request->special:0;
+        $item->origin_id = $request->country_of_origin?$request->country_of_origin:0;
         $item->veg = $request->veg;
         $item->module_id = Config::get('module.current_module_id');
         $item->brand_id = $request->brand?$request->brand:null;
@@ -266,8 +280,16 @@ class ItemController extends Controller
             $item_details->save();
         }
 
+        if ($module_type == 'grocery' && isset($request->special)) {
+            $speciality = new Speciality();
+            $speciality->item_id=$item->id;
+            $speciality->speciality=implode(',',$request->speciality);
+            $speciality->save();
+        }
+
         Helpers::add_or_update_translations(request: $request, key_data: 'name', name_field: 'name', model_name: 'Item', data_id: $item->id, data_value: $item->name);
         Helpers::add_or_update_translations(request: $request, key_data: 'description', name_field: 'description', model_name: 'Item', data_id: $item->id, data_value: $item->description);
+        Helpers::add_or_update_translations(request: $request, key_data: 'disclaimer', name_field: 'disclaimer', model_name: 'Item', data_id: $item->id, data_value: $item->disclaimer);
 
         return response()->json(['success' => translate('messages.product_added_successfully')], 200);
     }
@@ -1913,5 +1935,106 @@ class ItemController extends Controller
         return view('admin-views.product.product_gallery', compact('items', 'store', 'category', 'type'));
     }
 
+    public function countryorigin(){
+        $origins = Origin::with('module')->where('module_id',Config::get('module.current_module_id'))->paginate(config('default_pagination'));;
+        return view('admin-views.product.country_origin',compact('origins'));
+    }
 
+    public function countryoriginstore(Request $request){
+        $request->validate([
+            'name' => 'required|unique:brands|max:100',
+            'name.0' => 'required',
+        ], [
+            'name.required' => translate('messages.Name is required!'),
+            'name.0.required'=>translate('default_data_is_required'),
+        ]);
+
+
+        $origin = new Origin();
+        $origin->name = $request->name[array_search('default', $request->lang)];
+        $origin->module_id=Config::get('module.current_module_id');
+        $origin->save();
+
+        $data = [];
+        $default_lang = str_replace('_', '-', app()->getLocale());
+        foreach ($request->lang as $index => $key) {
+            if($default_lang == $key && !($request->name[$index])){
+                if ($key != 'default') {
+                    array_push($data, array(
+                        'translationable_type' => 'App\Models\Origin',
+                        'translationable_id' => $origin->id,
+                        'locale' => $key,
+                        'key' => 'name',
+                        'value' => $origin->name,
+                    ));
+                }
+            }else{
+                if ($request->name[$index] && $key != 'default') {
+                    array_push($data, array(
+                        'translationable_type' => 'App\Models\Origin',
+                        'translationable_id' => $origin->id,
+                        'locale' => $key,
+                        'key' => 'name',
+                        'value' => $request->name[$index],
+                    ));
+                }
+            }
+        }
+
+        Translation::insert($data);
+
+        Toastr::success(translate('messages.origin_added_successfully'));
+        return back();
+    }
+
+    public function countryoriginedit(Request $data){
+        $origin = Origin::findOrFail($data->id);
+        return view('admin-views.product.country_origin_edit',compact('origin'));
+    }
+
+
+    public function countryoriginupdate(Request $request,$id){
+        $request->validate([
+            'name' => 'required|max:100|unique:brands,name,'.$id,
+            'name.0' => 'required',
+        ], [
+            'name.required' => translate('messages.Name is required!'),
+            'name.0.required'=>translate('default_data_is_required'),
+        ]);
+
+        $origin = Origin::findOrFail($id);
+        $origin->name = $request->name[array_search('default', $request->lang)];
+        $origin->save();
+        $default_lang = str_replace('_', '-', app()->getLocale());
+        foreach ($request->lang as $index => $key) {
+            if($default_lang == $key && !($request->name[$index])){
+                if ($key != 'default') {
+                    Translation::updateOrInsert(
+                        [
+                            'translationable_type' => 'App\Models\Origin',
+                            'translationable_id' => $origin->id,
+                            'locale' => $key,
+                            'key' => 'name'
+                        ],
+                        ['value' => $origin->name]
+                    );
+                }
+            }else{
+
+                if ($request->name[$index] && $key != 'default') {
+                    Translation::updateOrInsert(
+                        [
+                            'translationable_type' => 'App\Models\Origin',
+                            'translationable_id' => $origin->id,
+                            'locale' => $key,
+                            'key' => 'name'
+                        ],
+                        ['value' => $request->name[$index]]
+                    );
+                }
+            }
+        }
+        Toastr::success(translate('messages.origin_updated_successfully'));
+        return back();
+    }
 }
