@@ -2037,4 +2037,13 @@ class ItemController extends Controller
         Toastr::success(translate('messages.origin_updated_successfully'));
         return back();
     }
+
+    public function countryorigindelete($id){
+        $origin = Origin::withoutGlobalScope('translate')->find($id);
+        $origin?->translations()->delete();
+        $origin->delete();
+
+        Toastr::success(translate('messages.origin_deleted_successfully'));
+        return back();
+    }
 }

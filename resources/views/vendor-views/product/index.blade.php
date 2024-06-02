@@ -333,8 +333,12 @@
                                             <label class="input-label"
                                                 for="exampleFormControlInput1">{{ translate('messages.short_description') }}
                                                 ({{ translate('messages.default') }})</label>
-                                            <textarea type="text" name="description[]" class="form-control min-h-90px ckeditor"></textarea>
+                                            <textarea type="text" name="description[]" class="form-control min-h-90px summernote"></textarea>
                                         </div>
+
+                                        <label class="input-label mt-2" for="exampleFormControlInput1">{{ translate('messages.disclaimer') }}
+                                            ({{ translate('messages.default') }})</label>
+                                        <textarea id="summernote" name="disclaimer[]" class="form-control summernote"></textarea>
                                     </div>
                                     @foreach (json_decode($language) as $lang)
                                         <div class="d-none lang_form" id="{{ $lang }}-form">
@@ -353,7 +357,12 @@
                                                 <label class="input-label"
                                                     for="exampleFormControlInput1">{{ translate('messages.short_description') }}
                                                     ({{ strtoupper($lang) }})</label>
-                                                <textarea type="text" name="description[]" class="form-control min-h-90px ckeditor"></textarea>
+                                                <textarea type="text" name="description[]" class="form-control min-h-90px summernote"></textarea>
+                                            </div>
+                                            <div class="form-group mb-0">
+                                                <label class="input-label mt-2" for="exampleFormControlInput1">{{ translate('messages.disclaimer') }}
+                                                    ({{ strtoupper($lang) }})</label>
+                                                <textarea id="summernote" name="disclaimer[]" class="form-control summernote"></textarea>
                                             </div>
                                         </div>
                                     @endforeach
@@ -370,7 +379,12 @@
                                         <div class="form-group mb-0">
                                             <label class="input-label"
                                                 for="exampleFormControlInput1">{{ translate('messages.short_description') }}</label>
-                                            <textarea type="text" name="description[]" class="form-control min-h-90px ckeditor"></textarea>
+                                            <textarea type="text" name="description[]" class="form-control min-h-90px summernote"></textarea>
+                                        </div>
+
+                                        <div class="form-group mb-0">
+                                            <label class="input-label mt-2" for="exampleFormControlInput1">{{ translate('messages.disclaimer') }}</label>
+                                            <textarea id="summernote" name="disclaimer[]" class="form-control summernote"></textarea>
                                         </div>
                                     </div>
                                 @endif
@@ -465,7 +479,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    @if(\App\CentralLogics\Helpers::get_vendor_module_id()=='grocery')
+                                    @if(\App\CentralLogics\Helpers::get_vendor_module_id()=='grocery') 
                                     <div class="col-sm-6 col-lg-4">
                                         <div class="form-group mb-0">
                                             <label class="input-label"
@@ -590,6 +604,19 @@
                                                 id="cart_quantity">
                                         </div>
                                     </div>
+                                    @if (\App\CentralLogics\Helpers::get_vendor_module_id()=='grocery')
+                                        <div class="col-sm-6 col-lg-3" id="origin">
+                                            <div class="form-group mb-0">
+                                                <label class="input-label text-capitalize" for="origin">{{ translate('messages.country_of_origin')
+                                                    }}</label>
+                                                <select name="country_of_origin" id="country_of_origin" data-placeholder="{{ translate('messages.Select_country_of_origin') }}" class="form-control js-select2-custom" required>
+                                                    @foreach (\App\Models\Origin::where([['module_id',\App\CentralLogics\Helpers::get_store_data()->module_id],['status',1]])->orderBy('name')->get() as $origin)
+                                                    <option value="{{ $origin->id }}">{{ $origin->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    @endif
                                     <div class="col-sm-6 col-lg-4" id="organic">
                                         <div class="form-check mb-0 p-6">
                                             <input class="form-check-input" name="organic" type="checkbox"
@@ -599,6 +626,17 @@
                                             </label>
                                         </div>
                                     </div>
+                                    @if (\App\CentralLogics\Helpers::get_vendor_module_id()=='grocery')
+                                    <div class="col-sm-6 col-lg-3" id="special">
+                                        <div class="form-check mb-0 p-6">
+                                            <input class="form-check-input" id="is_special" name="special" type="checkbox" value="1"
+                                                id="flexCheckDefault" >
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                {{ translate('messages.is_special') }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @endif
                                     @if ($module_data['basic'])
                                         <div class="col-sm-6 col-lg-4" id="basic">
                                             <div class="form-check mb-0 p-6">
@@ -641,6 +679,38 @@
                             </div>
                         </div>
                     </div>
+                    @if (\App\CentralLogics\Helpers::get_vendor_module_id()=='grocery')     
+                    <div class="col-md-12" id="special_div" style="display:none;">
+                        <div class="card shadow--card-2 border-0">
+                            <div class="card-header">
+                                <h5 class="card-title">
+                                    <span class="card-header-icon"><i class="tio-dollar-outlined"></i></span>
+                                    <span>{{ translate('Specialities') }}</span>
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-2">
+                                    <div class="col-sm-12 col-12">
+                                        <div class="form-group mb-0">
+                                            <label class="input-label" for="exampleFormControlInput1">{{
+                                                translate('messages.select_speciality') }}</label>
+                                            <select name="speciality[]" id="speciality"
+                                            class="form-control js-select2-custom" multiple="multiple">
+                                                <option value="Organic">{{ translate('Organic') }}</option>
+                                                <option value="Gluten Free">{{ translate('Gluten Free') }}</option>
+                                                <option value="Sugar Free">{{ translate('Sugar Free') }}</option>
+                                                <option value="Vegan">{{ translate('Vegan') }}</option>
+                                                <option value="Lactose Free">{{ translate('Lactose Free') }}</option>
+                                                <option value="Plant Based">{{ translate('Plant Based') }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                     <div class="col-md-12" id="attribute_section">
                         <div class="card shadow--card-2 border-0">
                             <div class="card-header">
@@ -804,7 +874,7 @@
                         // ['insert', ['link']],
                         ['view', ['fullscreen', 'codeview', 'help']]
                     ],
-                    placeholder: '{{ translate("messages.service_details") }}'
+                    // placeholder: '{{ translate("messages.service_details") }}'
                 });
             });
         });
@@ -1265,5 +1335,17 @@
             $('#' + x + "_div").removeClass('d-none');
             $('#' + y + "_div").addClass('d-none');
         }
+
+
+
+        $(document).on('change','#is_special',function(){
+            if($(this).is(":checked")){
+                $('#special_div').slideDown(500);
+            }else{
+                $('#special_div').slideUp(500);
+            }
+        })
     </script>
+
+    
 @endpush

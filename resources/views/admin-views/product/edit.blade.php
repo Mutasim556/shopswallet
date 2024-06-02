@@ -294,6 +294,26 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="form-group mb-0">
+                                    <label class="input-label" for="brand">{{
+                                        translate('messages.brand') }}<span class="input-label-secondary"
+                                            title="{{ translate('messages.brand') }}"><img
+                                                src="{{ asset('/public/assets/admin/img/info-circle.svg') }}"
+                                                alt="{{ translate('messages.category_required_warning') }}"></span></label>
+                                    <select name="brand" class="js-data-example-ajax form-control"
+                                        data-placeholder="{{ translate('messages.select_brand') }}"
+                                        id="brand">
+                                        @if ($product->brand_id)
+                                        <?php
+                                        $brand = \App\Models\Brand::findOrFail($product->brand_id);
+                                        ?>
+                                        <option value="{{ $product->brand_id }}">{{ $brand->name }}</option>
+                                        @endif
+                                        
+                                    </select>
+                                </div>
+                            </div>
                             @else
                             {{-- <div class="col-sm-6 col-lg-3 d-none">
                                 <div class="form-group mb-0">
@@ -1156,14 +1176,21 @@
             $('#basic').hide();
         }
     }
-
+    var brand_category_id = 0;
+    var edit_brand_id = {{ $product->brand_id?$product->brand_id:0 }};
     function categoryChange(id) {
         parent_category_id = id;
+        brand_category_id = id;   
         console.log(parent_category_id);
     }
     function SubcategoryChange(id) {
-        selected_sub_category_id = id;            
+        selected_sub_category_id = id;   
+        brand_category_id = id;           
         console.log(selected_sub_category_id);            
+    }
+
+    function SubsubcategoryChange(id) {
+        brand_category_id = id;    
     }
 
     function foodModalClose() {
@@ -1237,6 +1264,30 @@
             }
         }
     });
+
+    $('#brand').select2({
+        ajax: {
+            url: '{{ route('admin.item.get-brands') }}',
+            data: function(params) {
+                return {
+                    module_id:{{Config::get('module.current_module_id')}},
+                    category_id: brand_category_id,
+                };
+          },
+            processResults: function(data) {
+                console.log(data)
+                return {
+                    results: data                    
+                };
+            },
+            __port: function(params, success, failure) {
+                var $request = $.ajax(params);
+                $request.then(success);
+                $request.fail(failure);
+                return $request;
+            }
+        }
+    }).val({{ $product->brand_id?$product->brand_id:0 }});
 
     $('#category_id').select2({
         ajax: {
@@ -1565,6 +1616,12 @@
     })
 
 
-
+    $(document).on('change','#is_special',function(){
+            if($(this).is(":checked")){
+                $('#special_div').slideDown(500);
+            }else{
+                $('#special_div').slideUp(500);
+            }
+        })
 </script>
 @endpush

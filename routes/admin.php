@@ -100,6 +100,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
 
             Route::get('country-origin/edit/{id}', 'ItemController@countryoriginedit')->name('country-origin-edit');
             Route::post('country-origin/update/{id}', 'ItemController@countryoriginupdate')->name('country-origin-update');
+            Route::delete('country-origin/delete/{id}', 'ItemController@countryorigindelete')->name('country-origin-delete');
 
             // Route::get('request-list', 'ItemController@request_list')->name('request_list');
             Route::delete('delete/{id}', 'ItemController@delete')->name('delete');

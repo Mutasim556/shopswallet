@@ -186,16 +186,16 @@
                                                     href="{{ route('admin.item.country-origin-edit', [$origin['id']]) }}"
                                                     title="{{ translate('messages.edit') }}"><i class="tio-edit"></i>
                                                 </a>
-                                                {{-- <a class="btn action-btn btn--danger btn-outline-danger"
+                                                <a class="btn action-btn btn--danger btn-outline-danger"
                                                     href="javascript:"
-                                                    onclick="form_alert('brand-{{ $brand['id'] }}','{{ translate('Want to delete this brand ?') }}')"
+                                                    onclick="form_alert('origin-{{ $origin['id'] }}','{{ translate('Want to delete this origin ?') }}')"
                                                     title="{{ translate('messages.delete') }}"><i
                                                         class="tio-delete-outlined"></i>
                                                 </a>
-                                                <form action="{{ route('admin.brand.delete', [$brand['id']]) }}"
-                                                    method="post" id="brand-{{ $brand['id'] }}">
+                                                <form action="{{ route('admin.item.country-origin-delete', [$origin['id']]) }}"
+                                                    method="post" id="origin-{{ $origin['id'] }}">
                                                     @csrf @method('delete')
-                                                </form> --}}
+                                                </form>
                                             </div>
                                         </td>
                                     </tr>

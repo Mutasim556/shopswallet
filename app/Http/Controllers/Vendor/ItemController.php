@@ -22,6 +22,7 @@ use App\CentralLogics\ProductLogic;
 use App\Models\PharmacyItemDetails;
 use App\Http\Controllers\Controller;
 use App\Models\Service;
+use App\Models\Speciality;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\File;
 use Rap2hpoutre\FastExcel\FastExcel;
@@ -39,7 +40,7 @@ class ItemController extends Controller
         $categories = Category::where(['position' => 0])->module(Helpers::get_store_data()->module_id)->get();
         $conditions = CommonCondition::all();
         $module_data = config('module.' . Helpers::get_store_data()->module->module_type);
-        // dd($module_data);
+        // dd(Helpers::get_store_data()->module_id);
         return view('vendor-views.product.index', compact('categories', 'module_data', 'conditions')); 
     }
 
@@ -68,12 +69,13 @@ class ItemController extends Controller
                 'service_details.0' => 'required|max:1000',
                 // 'description.0' => 'required',
                 'discount' => 'required|numeric|min:0',
+               
             ], [
                 // 'name.0.required' => translate('messages.item_default_name_required'),
                 'service_details.0.required' => translate('messages.service_default_details_required'),
                 'category_id.required' => translate('messages.category_required'),
                 'sub_sub_category_id.required' => translate('messages.child_category_required'),
-                // 'description.*.max' => translate('messages.description_length_warning'),
+                // 'description.*.max' => translate('messages.description_length_warning')
             ]);
 
             if ($request['discount_type'] == 'percent') {
@@ -175,11 +177,13 @@ class ItemController extends Controller
                 'description.*' => 'max:1000',
                 'description.0' => 'required',
                 'discount' => 'required|numeric|min:0',
+                'speciality'=>'required_if:special,1'
             ], [
                 'name.0.required' => translate('messages.item_default_name_required'),
                 'description.0.required' => translate('messages.item_default_description_required'),
                 'category_id.required' => translate('messages.category_required'),
                 'description.*.max' => translate('messages.description_length_warning'),
+                'speciality.required_if' => translate('speciality_is_required'),
             ]);
 
             if ($request['discount_type'] == 'percent') {
@@ -271,6 +275,7 @@ class ItemController extends Controller
 
             $food->category_ids = json_encode($category);
             $food->description = $request->description[array_search('default', $request->lang)];
+            $food->disclaimer =  $request->disclaimer[array_search('default', $request->lang)];
 
             $choice_options = [];
             if ($request->has('choice')) {
@@ -388,6 +393,9 @@ class ItemController extends Controller
             $food->add_ons = $request->has('addon_ids') ? json_encode($request->addon_ids) : json_encode([]);
             $food->store_id = Helpers::get_store_id();
             $food->module_id = Helpers::get_store_data()->module_id;
+            $food->origin_id = $request->country_of_origin?$request->country_of_origin:0;
+            $food->special = $request->special?$request->special:0;
+            $food->brand_id = $request->brand?$request->brand:null;
             $food->images = $images;
             $food->stock = $request->current_stock ?? 0;
             $module_type = Helpers::get_store_data()->module->module_type;
@@ -405,8 +413,16 @@ class ItemController extends Controller
                 $item_details->save();
             }
 
+
+            if ($module_type == 'grocery' && isset($request->special)) {
+                $speciality = new Speciality();
+                $speciality->item_id=$food->id;
+                $speciality->speciality=implode(',',$request->speciality);
+                $speciality->save();
+            }
             Helpers::add_or_update_translations(request: $request, key_data: 'name', name_field: 'name', model_name: 'Item', data_id: $food->id, data_value: $food->name);
             Helpers::add_or_update_translations(request: $request, key_data: 'description', name_field: 'description', model_name: 'Item', data_id: $food->id, data_value: $food->description);
+            Helpers::add_or_update_translations(request: $request, key_data: 'disclaimer', name_field: 'disclaimer', model_name: 'Item', data_id: $food->id, data_value: $food->disclaimer);
 
 
             $product_approval_datas = \App\Models\BusinessSetting::where('key', 'product_approval_datas')->first()?->value ?? '';
@@ -543,12 +559,14 @@ class ItemController extends Controller
                 'service_details.0' => 'required|max:1000',
                 // 'description.0' => 'required',
                 'discount' => 'required|numeric|min:0',
+               
             ], [
                 // 'name.0.required' => translate('messages.item_default_name_required'),
                 'service_details.0.required' => translate('messages.service_default_details_required'),
                 'category_id.required' => translate('messages.category_required'),
                 'sub_sub_category_id.required' => translate('messages.child_category_required'),
                 // 'description.*.max' => translate('messages.description_length_warning'),
+               
             ]);
 
             if ($request['discount_type'] == 'percent') {
@@ -641,11 +659,13 @@ class ItemController extends Controller
                 'description.*' => 'max:1000',
                 'description.0' => 'required',
                 'discount' => 'required|numeric|min:0',
+                'speciality'=>'required_if:special,1',
             ], [
                 'name.0.required' => translate('messages.item_default_name_required'),
                 'description.0.required' => translate('messages.item_default_description_required'),
                 'category_id.required' => translate('messages.category_required'),
                 'description.*.max' => translate('messages.description_length_warning'),
+                'speciality.required_if' => translate('speciality_is_required'),
             ]);
 
             if ($request['discount_type'] == 'percent') {
@@ -707,6 +727,7 @@ class ItemController extends Controller
 
             $p->category_ids = json_encode($category);
             $p->description = $request->description[array_search('default', $request->lang)];
+            $p->description = $request->disclaimer[array_search('default', $request->lang)];
 
             $choice_options = [];
             if ($request->has('choice')) {
@@ -811,6 +832,10 @@ class ItemController extends Controller
             $p->stock = $request->current_stock ?? 0;
             $p->organic = $request->organic ?? 0;
 
+            $p->origin_id = $request->country_of_origin?$request->country_of_origin:0;
+            $p->special = $request->special?$request->special:0;
+            $p->brand_id = $request->brand?$request->brand:null;
+
 
 
 
@@ -847,8 +872,20 @@ class ItemController extends Controller
             $p->save();
             $p->tags()->sync($tag_ids);
 
+
+            if (Helpers::get_store_data()->module->module_type == 'grocery' && isset($request->special)) {
+                $speciality = Speciality::where('item_id',$p->id)->first();
+                if($speciality){
+                    $speciality->item_id=$p->id;
+                    $speciality->speciality=implode(',',$request->speciality);
+                    $speciality->save();
+                }
+                
+            }
+
             Helpers::add_or_update_translations(request: $request, key_data: 'name', name_field: 'name', model_name: 'Item', data_id: $p->id, data_value: $p->name);
             Helpers::add_or_update_translations(request: $request, key_data: 'description', name_field: 'description', model_name: 'Item', data_id: $p->id, data_value: $p->description);
+            Helpers::add_or_update_translations(request: $request, key_data: 'disclaimer', name_field: 'disclaimer', model_name: 'Item', data_id: $p->id, data_value: $p->disclaimer);
 
             return response()->json(['success' => translate('messages.product_updated_successfully')], 200);
         }
@@ -1760,11 +1797,14 @@ class ItemController extends Controller
 
     public function product_gallery(Request $request)
     {
+       
         $key = explode(' ', $request['search']);
         $category_id = $request->query('category_id', 'all');
         $type = $request->query('type', 'all');
         $settings = Helpers::get_mail_status('product_gallery');
-        $settings_access = Helpers::get_mail_status('access_all_products');
+        $settings_access =Helpers::get_store_data()->module->module_type==='grocery'?1:Helpers::get_mail_status('access_all_products');
+
+        // dd(Helpers::get_store_data()->module->module_type);
 
         $items = Item::when($settings_access == 1, function ($q) {
             $q->withoutGlobalScope(StoreScope::class);
@@ -1782,6 +1822,7 @@ class ItemController extends Controller
                     }
                 });
             })
+            
             ->type($type)
             ->inRandomOrder()
             ->module(Helpers::get_store_data()->module_id)

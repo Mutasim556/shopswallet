@@ -53,7 +53,7 @@
                     value="{{ $route ?? route('vendor.item.update',[$product['id']]) }}">
                     <input type="hidden" value="{{ $product['id'] ?? null }}" name="service_id">
                     <div class="col-md-12">
-                        <div class="card">
+                        <div class="card"> 
                             <div class="card-header">
                                 <h5 class="card-title">
                                     <span class="card-header-icon">
@@ -403,8 +403,11 @@
                                             <label class="input-label"
                                                 for="exampleFormControlInput1">{{ translate('messages.short_description') }}
                                                 ({{ translate('messages.default') }})</label>
-                                            <textarea type="text" name="description[]" class="form-control ckeditor min--height-200">{!! $product->getRawOriginal('description') !!}</textarea>
+                                            <textarea type="text" name="description[]" class="form-control summernote min--height-200">{!! $product->getRawOriginal('description') !!}</textarea>
                                         </div>
+                                        <label class="input-label mt-2" for="exampleFormControlInput1">{{ translate('messages.disclaimer') }}
+                                            ({{ translate('messages.default') }})</label>
+                                        <textarea id="summernote" name="disclaimer[]" class="form-control summernote">{!! $product?->getRawOriginal('disclaimer') !!}</textarea>
                                     </div>
                                     @foreach (json_decode($language) as $lang)
                                         <?php
@@ -436,7 +439,12 @@
                                                 <label class="input-label"
                                                     for="exampleFormControlInput1">{{ translate('messages.short_description') }}
                                                     ({{ strtoupper($lang) }})</label>
-                                                <textarea type="text" name="description[]" class="form-control ckeditor min--height-200">{!! $translate[$lang]['description'] ?? '' !!}</textarea>
+                                                <textarea type="text" name="description[]" class="form-control summernote min--height-200">{!! $translate[$lang]['description'] ?? '' !!}</textarea>
+                                            </div>
+                                            <div class="form-group mb-0">
+                                                <label class="input-label mt-2" for="exampleFormControlInput1">{{ translate('messages.disclaimer') }}
+                                                    ({{ strtoupper($lang) }})</label>
+                                                <textarea id="summernote" name="disclaimer[]" class="form-control summernote">{!! $translate[$lang]['disclaimer'] ?? '' !!}</textarea>
                                             </div>
                                         </div>
                                     @endforeach
@@ -454,7 +462,11 @@
                                         <div class="form-group pt-2 mb-0">
                                             <label class="input-label"
                                                 for="exampleFormControlInput1">{{ translate('messages.short_description') }}</label>
-                                            <textarea type="text" name="description[]" class="form-control ckeditor min--height-200">{!! $product['description'] !!}</textarea>
+                                            <textarea type="text" name="description[]" class="form-control summernote min--height-200">{!! $product['description'] !!}</textarea>
+                                        </div>
+                                        <div class="form-group mb-0">
+                                            <label class="input-label mt-2" for="exampleFormControlInput1">{{ translate('messages.disclaimer') }}</label>
+                                            <textarea id="summernote" name="disclaimer[]" class="form-control summernote">{!! $product['disclaimer'] !!}</textarea>
                                         </div>
                                     </div>
                                 @endif
@@ -559,7 +571,14 @@
                                                 data-id="{{ count($product_category) >= 2 ? $product_category[1]->id : '' }}"
                                                 class="form-control js-select2-custom"
                                                 onchange="getRequest('{{ url('/') }}/store-panel/item/get-categories?parent_id='+this.value,'sub-sub-categories')">
-
+                                                @if ($product_category[1]->id)
+                                                    <?php 
+                                                        $category = \App\Models\Category::where(['parent_id' => 1])->where('id',$product_category[1]->id)->module(\App\CentralLogics\Helpers::get_store_data()->module_id)->first();
+                                                    ?>
+                                                    <option value="{{ $product_category[1]->id }}" >
+                                                        {{ $category->name}}</option>
+                                                @endif
+                                                
                                             </select>
                                         </div>
                                     </div>
@@ -574,13 +593,39 @@
                                                 data-id="{{ count($product_category) >= 2 ? $product_category[1]->id : '' }}"
                                                 class="form-control js-select2-custom"
                                                 onchange="getRequest('{{ url('/') }}/store-panel/item/get-categories?parent_id='+this.value,'sub-sub-sub-categories')">
-
+                                                @if ($product_category[2]->id)
+                                                    <?php 
+                                                        $category = \App\Models\Category::where(['parent_id' => 2])->where('id',$product_category[2]->id)->module(\App\CentralLogics\Helpers::get_store_data()->module_id)->first();
+                                                    ?>
+                                                    <option value="{{ $product_category[2]->id }}" >
+                                                        {{ $category->name}}</option>
+                                                @endif
                                             </select>
                                         </div>
                                     </div>
 
 
+                                    @if(\App\CentralLogics\Helpers::get_vendor_module_id()=='grocery') 
+                                    <div class="col-sm-6 col-lg-4">
+                                        <div class="form-group mb-0">
+                                            <label class="input-label"
+                                                for="exampleFormControlSelect1">{{ translate('messages.brnads') }}<span
+                                                    class="input-label-secondary"></span></label>
+                                            <select name="brand_id" id="brand_id"
+                                                class="form-control js-select2-custom"
+                                                required>
+                                                <?php
+                                                    $brands = DB::table('brands')->where('module_id',\App\CentralLogics\Helpers::get_store_data()->module_id)->get();
+                                                ?>
 
+                                                @foreach($brands as $brand)
+                                                    <option value="{{ $brand->id }}" {{ $product['brand_id']?($product['brand_id']==$brand->id?'selected':''):'' }}>{{ $brand->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    @else
+                                    @endif
 
                                     @if ($module_data['common_condition'])
                                         <div class="col-sm-6 col-lg-4">
@@ -691,6 +736,20 @@
                                                 value="{{ $product->maximum_cart_quantity }}" id="cart_quantity">
                                         </div>
                                     </div>
+                                    @if (\App\CentralLogics\Helpers::get_vendor_module_id()=='grocery')
+                                        <div class="col-sm-6 col-lg-3" id="origin">
+                                            <div class="form-group mb-0">
+                                                <label class="input-label text-capitalize" for="origin">{{ translate('messages.country_of_origin')
+                                                    }}</label>
+                                                <select name="country_of_origin" id="country_of_origin" data-placeholder="{{ translate('messages.Select_country_of_origin') }}" class="form-control js-select2-custom" required>
+                                                    <option value="">{{ translate('select origin') }}</option>
+                                                    @foreach (\App\Models\Origin::where([['module_id',\App\CentralLogics\Helpers::get_store_data()->module->id],['status',1]])->orderBy('name')->get() as $origin)
+                                                    <option value="{{ $origin->id }}" {{ $product->origin_id==$origin->id?'selected':'' }}>{{ $origin->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    @endif
                                     <div class="col-sm-6 col-lg-4" id="organic">
                                         <div class="form-check mb-0 p-6">
                                             <input class="form-check-input" name="organic" type="checkbox"
@@ -701,6 +760,18 @@
                                             </label>
                                         </div>
                                     </div>
+
+                                    @if (\App\CentralLogics\Helpers::get_vendor_module_id()=='grocery')
+                                    <div class="col-sm-6 col-lg-3" id="special">
+                                        <div class="form-check mb-0 p-6">
+                                            <input class="form-check-input" id="is_special" name="special" type="checkbox" value="1"
+                                                id="flexCheckDefault" {{ $product->special==1?'checked':'' }}>
+                                            <label class="form-check-label" for="flexCheckDefault">
+                                                {{ translate('messages.is_special') }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    @endif
                                     @if ($module_data['basic'])
                                         <div class="col-sm-6 col-lg-4" id="basic">
                                             <div class="form-check mb-0 p-6">
@@ -761,6 +832,45 @@
                         </div>
                     </div>
                 </div>
+                @if (\App\CentralLogics\Helpers::get_vendor_module_id()=='grocery')     
+                    <div class="col-md-12" id="special_div" style="display:{{ $product->special==1?'block':'none' }};">
+                        <div class="card shadow--card-2 border-0">
+                            <div class="card-header">
+                                <h5 class="card-title">
+                                    <span class="card-header-icon"><i class="tio-dollar-outlined"></i></span>
+                                    <span>{{ translate('Specialities') }}</span>
+                                </h5>
+                            </div>
+                            <?php 
+                                $speciality = null;
+                                if( $product->special==1){
+                                    $speciality = \App\Models\Speciality::where('item_id',$product['id'])->first();
+                                    $sparr = explode(',',$speciality->speciality);
+                                }
+                            ?>
+                            <div class="card-body">
+                                <div class="row g-2">
+                                    <div class="col-sm-12 col-12">
+                                        <div class="form-group mb-0">
+                                            <label class="input-label" for="exampleFormControlInput1">{{
+                                                translate('messages.select_speciality') }}</label>
+                                            <select name="speciality[]" id="speciality"
+                                            class="form-control js-select2-custom" multiple="multiple">
+                                                <option value="Organic" {{ $speciality!=null?(in_array('Organic',$sparr)?'selected':''):'' }}>{{ translate('Organic') }}</option>
+                                                <option value="Gluten Free" {{ $speciality!=null?(in_array('Gluten Free',$sparr)?'selected':''):'' }}>{{ translate('Gluten Free') }}</option>
+                                                <option value="Sugar Free" {{ $speciality!=null?(in_array('Sugar Free',$sparr)?'selected':''):'' }}>{{ translate('Sugar Free') }}</option>
+                                                <option value="Vegan" {{ $speciality!=null?(in_array('Vegan',$sparr)?'selected':''):'' }}>{{ translate('Vegan') }}</option>
+                                                <option value="Lactose Free" {{ $speciality!=null?(in_array('Lactose Free',$sparr)?'selected':''):'' }}>{{ translate('Lactose Free') }}</option>
+                                                <option value="Plant Based" {{ $speciality!=null?(in_array('Plant Based',$sparr)?'selected':''):'' }}>{{ translate('Plant Based') }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
                 <div class="col-md-12" id="attribute_section">
                     <div class="card">
                         <div class="card-header">
@@ -909,7 +1019,7 @@
                     <div class="btn--container justify-content-end">
                         <button type="reset" id="reset_btn"
                             class="btn btn--reset">{{ translate('messages.reset') }}</button>
-                        <button type="submit" class="btn btn--primary">{{ translate('messages.update') }}</button>
+                        <button type="submit" class="btn btn--primary">{{ request()->product_gellary == 1?translate('messages.submit'):translate('messages.update') }}</button>
                     </div>
                 </div>
             </div>
@@ -1385,5 +1495,13 @@
         $('#' + x + "_div").removeClass('d-none');
         $('#' + y + "_div").addClass('d-none');
     }
+
+    $(document).on('change','#is_special',function(){
+            if($(this).is(":checked")){
+                $('#special_div').slideDown(500);
+            }else{
+                $('#special_div').slideUp(500);
+            }
+        })
 </script>
 @endpush

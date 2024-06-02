@@ -3945,4 +3945,7 @@
   'Plant Based' => 'Plant Based',
   'disclaimer' => 'Disclaimer',
   'speciality_is_required' => 'Speciality is required',
+  'Want to delete this origin ?' => 'Want to delete this origin  ',
+  'origin_deleted_successfully' => 'Origin deleted successfully',
+  'select origin' => 'Select origin',
 );
