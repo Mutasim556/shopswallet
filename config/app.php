@@ -179,6 +179,8 @@ return [
         Laravelpkg\Laravelchk\LaravelchkServiceProvider::class,
         // FruitCake\Cors\CorsServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
+
+        Spatie\Permission\PermissionServiceProvider::class,
     ],
 
     /*

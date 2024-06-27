@@ -39,9 +39,12 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
         Route::post('unit/search', 'UnitController@search')->middleware('module:unit')->name('unit.search');
         Route::get('unit/export/{type}', 'UnitController@export')->middleware('module:unit')->name('unit.export');
 
-
+        /** Mutasim Naib Sumit */
         /**Service routes */
         require __DIR__.'/services/services.php';
+
+
+        
         /**End Service Route */
 
 
@@ -638,6 +641,10 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
                 Route::post('upload', 'AddonController@upload')->name('upload');
                 Route::post('delete', 'AddonController@delete_theme')->name('delete');
             });
+
+            /** Employee management routes */
+        
+            require __DIR__.'/custom/employee_management.php';
 
         });
         Route::group(['prefix' => 'business-settings', 'as' => 'business-settings.'], function () {

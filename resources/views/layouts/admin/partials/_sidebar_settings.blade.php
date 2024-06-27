@@ -244,6 +244,7 @@
                     </a>
                 </li>
                 @endif
+                
 
                 <!-- Dashboards -->
                 <li class="navbar-vertical-aside-has-menu {{Request::is('admin/business-settings/system-addon')?'show active':''}}">
@@ -257,7 +258,35 @@
                 </li>
                 <!-- End Dashboards -->
 
-
+                <!-- Employee Management -->
+                <li class="nav-item">
+                    <small
+                        class="nav-subtitle">{{translate('messages.employee_menu')}}</small>
+                    <small class="tio-more-horizontal nav-subtitle-replacer"></small>
+                </li>
+                <li class="navbar-vertical-aside-has-menu {{Request::is('admin/business-settings/employee/*') || Request::is('admin/business-settings/employee/*')?'active':''}}">
+                    <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:" >
+                        <i class="tio-user nav-icon"></i>
+                        <span  class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('employee_management')}}</span>
+                    </a>
+                    <ul class="js-navbar-vertical-aside-submenu nav nav-sub" style="display: {{Request::is('admin/business-settings/employee/*') || Request::is('admin/business-settings/employee/*')?'block':'none'}}">
+                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/business-settings/employee/employee-list')  ? 'active' :''}}">
+                            <a class="js-navbar-vertical-aside-menu-link nav-link "
+                            href="{{ route('admin.business-settings.employee.employeeList') }}" title="{{ translate('Employee') }}">
+                                <span class="tio-circle nav-indicator-icon"></span>
+                                <span class="text-truncate">{{ translate('Employee') }}</span>
+                            </a>
+                        </li>
+                        <li class="navbar-vertical-aside-has-menu {{Request::is('admin/business-settings/employee/employee-role-list')  ? 'active' :''}}">
+                            <a class="js-navbar-vertical-aside-menu-link nav-link "
+                            href="{{ route('admin.business-settings.employee.employeeRoleList') }}" title="{{ translate('role_and_permission') }}">
+                                <span class="tio-circle nav-indicator-icon"></span>
+                                <span class="text-truncate">{{ translate('role_and_permission') }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- End Employee Management -->
                 @if(count(config('addon_admin_routes'))>0)
                     <li class="nav-item">
                         <small

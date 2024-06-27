@@ -48,6 +48,7 @@ return array(
     'c379e2a4ec3735f6c4915556c8c81813' => $vendorDir . '/rap2hpoutre/fast-excel/src/functions/fastexcel.php',
     '13906c19e3d8fcd1341b24ed4d51cf72' => $vendorDir . '/razorpay/razorpay/Deprecated.php',
     '320163ac6b93aebe3dc25b60a0533d56' => $vendorDir . '/spatie/laravel-ignition/src/helpers.php',
+    '377b22b161c09ed6e5152de788ca020a' => $vendorDir . '/spatie/laravel-permission/src/helpers.php',
     'bab4ed692c1fd3872849227e2a85791e' => $vendorDir . '/unicodeveloper/laravel-paystack/src/Support/helpers.php',
     '16d3ec47d2903cc43d72d417a7ecd0e2' => $baseDir . '/app/CentralLogics/banner.php',
     '143d7cc63cdd2e67cd66e97a5b9c7638' => $baseDir . '/app/CentralLogics/category.php',
@@ -64,4 +65,5 @@ return array(
     '3978977233d7377d8d9cbaf96050aac3' => $baseDir . '/app/Library/Constants.php',
     '32a69cc4947e62231ac75c7ad2de2072' => $baseDir . '/app/Library/Constant.php',
     'b852f4c436e0be2ff8fee0424b56d206' => $baseDir . '/app/Library/Responses.php',
+    '5b285480b705d293545b9ad84786fc55' => $baseDir . '/app/RoleHelper/role_helper.php',
 );
