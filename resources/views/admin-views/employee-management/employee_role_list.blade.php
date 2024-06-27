@@ -47,7 +47,7 @@
                             <div class="form-group col-lg-12">
 
                                 <button class="btn btn-danger text-white font-weight-medium waves-effect text-start"
-                                    data-bs-dismiss="modal" style="float: right"
+                                    data-dismiss="modal" style="float: right"
                                     type="button">{{ translate('Close') }}</button>
                                 <button class="btn btn-primary mx-2" style="float: right"
                                     type="submit">{{ translate('Submit') }}</button>
@@ -306,5 +306,43 @@
             $('#viewer').attr('src', "{{ asset('public/assets/admin/img/900x400/img1.jpg') }}");
         })
 
+    </script>
+
+
+    <script>
+        $(document).on('submit','#add_role_form',function(e){
+            e.preventDefault();
+            $("#add_role_form button[type=submit]").css({"pointer-events":"none"}).addClass('disabled').text("{{ translate('Submitting') }}....");
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: '{{ route("admin.business-settings.employee.employeeRoleAdd") }}',
+                method:"post",
+                data: $('#add_role_form').serialize(),
+                success: function (data) {
+                    $("#add_role_form button[type=submit]").css({"pointer-events":"auto"}).removeClass('disabled').text("{{ translate('Submit') }}");
+                    swal({
+                        icon: "success",
+                        title: '{{ translate('Congratulations') }}',
+                        text: '{{ translate('role created successfully') }}',
+                        confirmButtonText: "Ok",
+                    }).then(function(){
+                        location.reload();
+                    });
+                },
+                error: function(err){
+                    swal({
+                        icon: "error",
+                        title: '{{ translate('Opps') }}',
+                        text: err.responseJSON.message,
+                        confirmButtonText: "Ok",
+                    })
+                    $("#add_role_form button[type=submit]").css({"pointer-events":"auto"}).removeClass('disabled').text("{{ translate('Submit') }}");
+                }
+            });
+        })
     </script>
 @endpush

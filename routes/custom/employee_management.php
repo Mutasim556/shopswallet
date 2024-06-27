@@ -13,5 +13,6 @@ Route::prefix('employee')->name('employee.')->group(function(){
 
     Route::controller(EmployeeRoleController::class)->group(function(){
         Route::get('/employee-role-list','employeeRoleList')->name('employeeRoleList');
+        Route::post('/employee-role-add','employeeRoleAdd')->name('employeeRoleAdd');
     });
 });

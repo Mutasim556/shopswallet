@@ -3961,4 +3961,11 @@
   'Role Name' => 'Role Name',
   'permissions' => 'Permissions',
   'All Permission' => 'All Permission',
+  'Submitting' => 'Submitting',
+  'Congratulations' => 'Congratulations',
+  'role created successfully' => 'Role created successfully',
+  'Opps' => 'Opps',
+  '+err.responseJSON.errors.message+' => '+err.responseJSON.errors.message+',
+  'Role name is required' => 'Role name is required',
+  'Role name must be unique' => 'Role name must be unique',
 );
