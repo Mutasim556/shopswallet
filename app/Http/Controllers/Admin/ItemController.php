@@ -867,9 +867,9 @@ class ItemController extends Controller
     { 
         
         $brands = Brand::where('module_id',$request->module_id);
-        if($request->category_id!=0){
-            $brands = $brands->where('category_id',$request->category_id);
-        }
+        // if($request->category_id!=0){
+        //     $brands = $brands->where('category_id',$request->category_id);
+        // }
         $brands =  $brands
             ->get()
             ->map(function ($brand) {

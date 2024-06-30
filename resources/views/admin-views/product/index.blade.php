@@ -994,13 +994,13 @@
         }
         function SubcategoryChange(id) {
             selected_sub_category_id = id;    
-            brand_category_id = id;        
+            // brand_category_id = id;        
             console.log(selected_sub_category_id);
             
         }
 
         function SubsubcategoryChange(id) {
-            brand_category_id = id;    
+            // brand_category_id = id;    
         }
 
         $(document).on('ready', function() {
@@ -1200,7 +1200,7 @@
             data: function(params) {
                 return {
                     module_id:{{Config::get('module.current_module_id')}},
-                    category_id: brand_category_id,
+                    category_id: $('#category_id').val(),
                 };
           },
             processResults: function(data) {

@@ -49,7 +49,7 @@ class BrandController extends Controller
 
         $brand = new Brand();
         $brand->name = $request->name[array_search('default', $request->lang)];
-        $brand->category_id=$request->sub_sub_category_id?$request->sub_sub_category_id:($request->sub_category_id?$request->sub_category_id:$request->category_id);
+        $brand->category_id=$request->category_id;
         $brand->module_id=Config::get('module.current_module_id');
         $brand->save();
 
