@@ -64,6 +64,54 @@
     </div>
 
     {{-- Add role Modal End --}}
+    <div class="modal fade" id="edit-role-modal" tabindex="-1" aria-labelledby="bs-example-modal-lg" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-center" style="border-bottom:1px dashed gray">
+                    <h4 class="modal-title" id="myLargeModalLabel">
+                        {{ translate('Edit Role') }}
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <p class="px-5 text-danger"><i>{{ translate('The field labels marked with * are required input fields.') }}</i>
+                </p>
+                <div class="modal-body" style="margin-top: -20px">
+                    <form action="" id="edit_role_form">
+                        @csrf
+                        <input type="hidden" id="role_id" name="role_id" value="">
+                        <div class="row">
+                            <div class="col-lg-12 mt-2">
+                                <label for="role_name"><strong>{{ translate('Role Name') }} *</strong></label>
+                                <input type="text" class="form-control" name="role_name" id="role_name">
+                                <span class="text-danger err-mgs"></span>
+                            </div>
+                            <div id="edit_permission">
+                               <span class="px-3">{{ translate('Getting Permissons') }} ......</span>
+                            </div>
+
+                        </div>
+
+                        <div class="row mt-4 mb-2">
+                            <div class="form-group col-lg-12">
+
+                                <button class="btn btn-danger text-white font-weight-medium waves-effect text-start"
+                                    data-dismiss="modal" style="float: right"
+                                    type="button">{{ __('Close') }}</button>
+                                <button class="btn btn-primary mx-2" style="float: right"
+                                    type="submit">{{ __('Submit') }}</button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
     <div class="content container-fluid">
         <!-- Page Header -->
         <div class="page-header">
@@ -165,7 +213,7 @@
 
                         <tbody id="table-div">
                             @foreach ($roles as $key => $role)
-                                <tr>
+                                <tr id="tr-{{ $role->id }}" data-id="{{ $role->id }}">
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $role->id }}</td>
                                     <td>
@@ -186,22 +234,20 @@
                                     
                                     
                                     <td>
-                                        {{-- <div class="btn--container justify-content-center">
-                                            <a class="btn action-btn btn--primary btn-outline-primary"
-                                                href="{{ route('subscription.packages.index', [$package['id']]) }}"
-                                                title="{{ translate('messages.edit_package') }}"><i
-                                                    class="tio-edit"></i>
-                                            </a>
-                                            <a class="btn action-btn btn--danger btn-outline-danger" href="javascript:"
-                                                onclick="form_alert('category-{{ $package['id'] }}','{{ translate('Want to delete this package ?') }}')"
-                                                title="{{ translate('messages.delete_category') }}"><i
-                                                    class="tio-delete-outlined"></i>
-                                            </a>
-                                            <form action="{{ route('subscription.packages.delete', [$package['id']]) }}"
-                                                method="post" id="category-{{ $package['id'] }}">
-                                                @csrf @method('delete')
-                                            </form>
-                                        </div> --}}
+                                        @if ($role->name==='Master admin')
+                                            <span class="badge badge-danger">{{ translate('No Action') }}</span>
+                                        @else
+                                            @if (hasPermission(['role-update']))
+                                                <button id="edit_button" data-toggle="modal" style="cursor: pointer;" data-target="#edit-role-modal" class="btn btn-primary px-1 py-1"><i class="tio-edit"></i></button>
+                                            @endif
+                                            @if (hasPermission(['role-delete']))
+                                                <button class="btn btn-danger px-1 py-1" href="javascript:" onclick="form_alert('food-{{$role->id}}','{{translate('messages.Want_to_delete_this_item')}}')" title="{{translate('messages.delete_item')}}"><i class="tio-delete-outlined"></i></button>
+                                                <form action="{{route("admin.business-settings.employee.employeeRoleEdit",[$role->id])}}"
+                                                        method="post" id="food-{{$role->id}}">
+                                                    @csrf @method('delete')
+                                                </form>
+                                            @endif
+                                        @endif 
                                     </td>
                                 </tr>
                             @endforeach
@@ -344,5 +390,176 @@
                 }
             });
         })
+
+
+        $(document).on('click','#edit_button',function(){
+            let edit_id = $(this).closest('tr').data('id');
+            $.ajax({
+                method : 'get',
+                url : '{{ route("admin.business-settings.employee.employeeRoleEdit") }}/'+edit_id,
+                success :function(data){
+                    $('#edit_role_form #role_name').val(data.role.name);
+                    $('#edit_role_form #role_id').val(data.role.id);
+                    $('#edit_role_form #edit_permission').empty();
+                    $.each(data.permissions,function(group,permission){
+                        let permissionList =[];
+                        $.each(permission,function(idx,item){
+                            let check = '';
+                            if(data.rolePermissions.includes(item.name)){
+                                check = 'checked';
+                            }
+                            permissionList = permissionList+`<input data-status="" id="permission-switch" type="checkbox" data-toggle="switchery" data-color="green" data-secondary-color="red" data-size="small" value="${item.name}" name="permissions[]" ${check}/>
+                            <span class="mx-2">${item.name}</span>`;
+                        })
+                        $('#edit_role_form #edit_permission').append(`
+                        <div class="col-lg-12 mt-4">
+                            <label for="user_permission">${group}</label><br>
+                            ${permissionList}
+                        </div>
+                    `);
+                    })
+                    $('#edit_role_form [data-toggle="switchery"]').each(function(idx, obj) {
+                        new Switchery($(this)[0], $(this).data());
+                    });
+                },
+                error : function(err){
+                    $('button[type=submit]', '#edit_role_form').html('Submit');
+                    $('button[type=submit]', '#edit_role_form').removeClass('disabled');
+                    var err_message = err.responseJSON.message.split("(");
+                    if(err.status===403){
+                        swal({
+                            icon: "warning",
+                            title: "Warning !",
+                            text: err_message[0],
+                            confirmButtonText: "Ok",
+                        }).then(function(){
+                            $('button[type=button]', '#edit_role_form').click();
+                        });
+                        
+                    }
+                    $('#edit_role_form .err-mgs').each(function(id,val){
+                        $(this).prev('input').removeClass('border-danger is-invalid')
+                        $(this).prev('textarea').removeClass('border-danger is-invalid')
+                        $(this).empty();
+                    })
+                    $.each(err.responseJSON.errors,function(idx,val){
+                        $('#edit_role_form #'+idx).addClass('border-danger is-invalid')
+                        $('#edit_role_form #'+idx).next('.err-mgs').empty().append(val);
+                    })
+                }
+            });
+        });
+
+        //update data
+        $('#edit_role_form').submit(function (e) {
+            e.preventDefault();
+            $('button[type=submit]', this).html('Submitting....');
+            $('button[type=submit]', this).addClass('disabled');
+            var trid = '#tr-'+$('#role_id', this).val();
+            $.ajax({
+                type: "post",
+                url: '{{ route("admin.business-settings.employee.employeeRoleEdit") }}',
+                data: $(this).serialize(),
+                dataType: 'JSON',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (data) {
+                    $('button[type=submit]', '#edit_role_form').html('Submit');
+                    $('button[type=submit]', '#edit_role_form').removeClass('disabled');
+                    $('td:nth-child(2)',trid).html(data.role.id);
+                    $('td:nth-child(3)',trid).html(data.role.name);
+                    let permission = [];
+                    $.each(data.rolePermissions,function(idx,val){
+                        permission = permission+'<span class="badge badge-success mr-1">'+val+'</span>';
+                    });
+
+                    $('td:nth-child(4)',trid).html(permission.length>0?permission:'<span class="badge badge-danger">no permission</span>');
+                    swal({
+                        icon: "success",
+                        title: data.title,
+                        text: data.text,
+                        confirmButtonText: data.confirmButtonText,
+                    }).then(function () {
+                        $('#edit_role_form .err-mgs').each(function(id,val){
+                            $(this).prev('input').removeClass('border-danger is-invalid')
+                            $(this).prev('textarea').removeClass('border-danger is-invalid')
+                            $(this).empty();
+                        })
+                        $('#edit_role_form').trigger('reset');
+                        $('button[type=button]', '#edit_role_form').click();
+                    });
+                },
+                error: function (err) {
+                    $('button[type=submit]', '#edit_role_form').html('Submit');
+                    $('button[type=submit]', '#edit_role_form').removeClass('disabled');
+                    $('#edit_role_form .err-mgs').each(function(id,val){
+                        $(this).prev('input').removeClass('border-danger is-invalid')
+                        $(this).prev('textarea').removeClass('border-danger is-invalid')
+                        $(this).empty();
+                    })
+                    $.each(err.responseJSON.errors,function(idx,val){
+                        $('#edit_role_form #'+idx).addClass('border-danger is-invalid')
+                        $('#edit_role_form #'+idx).next('.err-mgs').empty().append(val);
+                    })
+                }
+            });
+        });
+
+        //delete data
+        $(document).on('click','#delete_button',function(){
+            var delete_id = $(this).closest('tr').data('id');
+            swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this role",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        type: "delete",
+                        url: 'role/'+delete_id,
+                        data: {
+                            _token : $("input[name=_token]").val(),
+                        },
+                        success: function (data) {
+                            swal({
+                                icon: "success",
+                                title: data.title,
+                                text: data.text,
+                                confirmButtonText: data.confirmTextButton,
+                            }).then(function () {
+                                $('#tr-'+delete_id).hide(300,function(){$(this).remove()});
+                            });
+                        },
+                        error: function (err) {
+                            var err_message = err.responseJSON.message.split("(");
+                            if(err.status===403){
+                                swal({
+                                    icon: "warning",
+                                    title: "Warning !",
+                                    text: err_message[0],
+                                    confirmButtonText: "Ok",
+                                }).then(function(){
+                                    $('button[type=button]', '#edit_user_form').click();
+                                });
+                                
+                            }else{
+                                swal({
+                                    icon: "warning",
+                                    title: "Warning !",
+                                    text: err_message[0],
+                                    confirmButtonText: "Ok",
+                                });
+                            }
+                        }
+                    });
+                
+                } else {
+                    swal("Delete request canceld successfully");
+                }
+            })
+        });
     </script>
 @endpush

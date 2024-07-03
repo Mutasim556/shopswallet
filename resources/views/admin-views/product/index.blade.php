@@ -1199,6 +1199,7 @@
             url: '{{ url('/') }}/admin/item/get-brands',
             data: function(params) {
                 return {
+                    q: params.term,
                     module_id:{{Config::get('module.current_module_id')}},
                     category_id: $('#category_id').val(),
                 };

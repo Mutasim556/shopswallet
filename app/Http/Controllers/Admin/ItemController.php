@@ -865,8 +865,13 @@ class ItemController extends Controller
     }
     public function get_brands(Request $request)
     { 
-        
-        $brands = Brand::where('module_id',$request->module_id);
+        $key = explode(' ', $request['q']);
+        $brands = Brand::where('module_id',$request->module_id)
+                    ->when(isset($key), function ($q) use ($key) {
+                        foreach ($key as $value) {
+                            $q->where('name', 'like', "%{$value}%");
+                        }
+                    });
         // if($request->category_id!=0){
         //     $brands = $brands->where('category_id',$request->category_id);
         // }
