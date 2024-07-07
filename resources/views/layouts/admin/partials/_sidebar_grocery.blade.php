@@ -452,39 +452,51 @@
                 @endif --}}
                 <!-- End AddOn -->
                 <!-- Food -->
-                @if (\App\CentralLogics\Helpers::module_permission_check('item'))
+                @if (\App\CentralLogics\Helpers::module_permission_check('item') && hasPermission(['grocery-product-index','grocery-product-create','grocery-product-update','grocery-product-delete','country-origin-index','country-origin-create','country-origin-update','country-origin-delete']))
                 <li class="navbar-vertical-aside-has-menu {{ Request::is('admin/item*') ? 'active' : '' }}">
                     <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle" href="javascript:" title="{{ translate('Product Setup') }}">
                         <i class="tio-premium-outlined nav-icon"></i>
                         <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate text-capitalize">{{ translate('Product Setup') }}</span>
                     </a>
                     <ul class="js-navbar-vertical-aside-submenu nav nav-sub" style="display:{{ Request::is('admin/item*') ? 'block' : 'none' }}">
+                        @if (hasPermission(['grocery-product-create']))
                         <li class="nav-item {{ Request::is('admin/item/add-new') || (Request::is('admin/item/edit/*') && strpos(request()->fullUrl(), 'product_gellary=1') !== false  )  ? 'active' : '' }}">
                             <a class="nav-link " href="{{ route('admin.item.add-new') }}" title="{{ translate('messages.add_new') }}">
                                 <span class="tio-circle nav-indicator-icon"></span>
                                 <span class="text-truncate">{{ translate('messages.add_new') }}</span>
                             </a>
                         </li>
+                        @endif
+                        
+                        @if (hasPermission(['grocery-product-index']))
                         <li class="nav-item {{ Request::is('admin/item/list') || (Request::is('admin/item/edit/*') && (strpos(request()->fullUrl(), 'temp_product=1') == false && strpos(request()->fullUrl(), 'product_gellary=1') == false  ) ) ? 'active' : '' }}">
                             <a class="nav-link " href="{{ route('admin.item.list') }}" title="{{ translate('messages.food_list') }}">
                                 <span class="tio-circle nav-indicator-icon"></span>
                                 <span class="text-truncate">{{ translate('messages.list') }}</span>
                             </a>
                         </li>
+                        @endif
+
+                        @if (hasPermission(['country-origin-index','country-origin-create','country-origin-update','country-origin-delete']))
                         <li class="nav-item {{ Request::is('admin/item/country-origin') || (Request::is('admin/item/country-origin/*') && (strpos(request()->fullUrl(), 'temp_product=1') == false && strpos(request()->fullUrl(), 'product_gellary=1') == false  ) ) ? 'active' : '' }}">
                             <a class="nav-link " href="{{ route('admin.item.country-origin') }}" title="{{ translate('messages.country-origin') }}">
                                 <span class="tio-circle nav-indicator-icon"></span>
                                 <span class="text-truncate">{{ translate('messages.country_of_origin') }}</span>
                             </a>
                         </li>
+                        @endif
                         {{-- @if (\App\CentralLogics\Helpers::get_mail_status('product_gallery')) --}}
+
+                        @if (hasPermission(['grocery-product-create']))
                         <li class="nav-item {{  Request::is('admin/item/product-gallery') ? 'active' : '' }}">
                             <a class="nav-link " href="{{ route('admin.item.product_gallery') }}" title="{{ translate('messages.Product_Gallery') }}">
                                 <span class="tio-circle nav-indicator-icon"></span>
                                 <span class="text-truncate">{{ translate('messages.Product_Gallery') }}</span>
                             </a>
                         </li>
-                        {{-- @endif --}}
+                        @endif
+
+                        
                         @if (\App\CentralLogics\Helpers::get_mail_status('product_approval'))
                         <li class="nav-item {{ Request::is('admin/item/new/item/list') || (Request::is('admin/item/edit/*') && strpos(request()->fullUrl(), 'temp_product=1') !== false  ) ? 'active' : '' }}">
                             <a class="nav-link " href="{{ route('admin.item.approval_list') }}" title="{{ translate('messages.New_Item_Request') }}">

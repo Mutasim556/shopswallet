@@ -56,7 +56,7 @@
                                             <select class="form-control js-select2-custom w-100" name="role_id" id="role_id" required>
                                                 <option value="" selected disabled>{{translate('messages.select_Role')}}</option>
                                                 @foreach($roles as $role)
-                                                    <option value="{{$role->id}}">{{$role->name}}</option>
+                                                    <option value="{{$role->name}}">{{$role->name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -165,8 +165,9 @@
                 <p class="px-5 text-danger"><i>{{ translate('The field labels marked with * are required input fields.') }}</i>
                 </p>
                 <div class="modal-body" style="margin-top: -20px">
-                    <form method="POST" action="{{ route('admin.business-settings.employee.employeeStore') }}" enctype="multipart/form-data" id="add_user_form">
+                    <form method="POST" action="{{ route('admin.business-settings.employee.employeeUpdate') }}" enctype="multipart/form-data" id="edit_user_form">
                         @csrf
+                        <input type="hidden" id="user_id" name="user_id" >
                         <div class="row g-3">
                             <div class="col-md-12">
                                 <div class="row g-3">
@@ -200,7 +201,7 @@
                                             <select class="form-control js-select2-custom w-100" name="role_id" id="role_id" required>
                                                 <option value="" selected disabled>{{translate('messages.select_Role')}}</option>
                                                 @foreach($roles as $role)
-                                                    <option value="{{$role->id}}">{{$role->name}}</option>
+                                                    <option value="{{$role->name}}">{{$role->name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -231,6 +232,62 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
+    <div class="modal fade" id="add-specific-user-permission-modal" tabindex="-1" aria-labelledby="bs-example-modal-lg" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-center" style="border-bottom:1px dashed gray">
+                    <h4 class="modal-title" id="myLargeModalLabel">
+                        {{ __('admin_local.Add Specific Permission') }}
+                    </h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <p class="px-3 text-danger"><i>{{ __('admin_local.The field labels marked with * are required input fields.') }}</i>
+                </p>
+                <div class="modal-body" style="margin-top: -20px">
+                    <form method="POST" id="add_specific_user_permission_form" action="{{ route('admin.business-settings.employee.giveUserPermission') }}">
+                        @csrf
+                        <div class="row">
+                            <div class="col-lg-12 mt-2">
+                                <label for="user_id"><strong>{{ __('admin_local.Select User') }} *</strong></label>
+                                <select class="form-control js-select2-custom" name="user_id" id="user_id">
+                                    <option value="">{{ translate('Select Please') }}</option>
+                                    @foreach($employees as $user)
+                                        <?php
+                                            if($user->getRoleNames()->first()=='Master admin'){
+                                                continue;
+                                            }
+                                        ?>
+                                        <option value="{{ $user->id }}">{{ $user->f_name." ".$user->l_name }} ( {{ $user->email }} )</option>
+                                    @endforeach
+                                </select>
+                                <span class="text-danger err-mgs"></span>
+                            </div>
+                            
+                        </div>
+                        <div class="row" id="role_and_permission">
+
+                        </div>
+
+                        <div class="row mt-4 mb-2">
+                            <div class="form-group col-lg-12">
+
+                                <button class="btn btn-danger text-white font-weight-medium waves-effect text-start"
+                                    data-dismiss="modal" style="float: right"
+                                    type="button">{{ translate('Close') }}</button>
+                                <button class="btn btn-primary mx-2" style="float: right"
+                                    type="submit">{{ translate('Submit') }}</button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
     <div class="content container-fluid">
         <!-- Page Header -->
         <div class="page-header">
@@ -248,9 +305,9 @@
                 </div>
                 @endif
                 @if (hasPermission(['employee-create']))
-                <div class="col-md-3">
+                <div class="col-md-3 mx-2">
                     <button class="btn btn-success" type="btn" data-toggle="modal"
-                    data-target="#add-user-modal">+  {{ translate('Give employee a specific permission') }}</button>
+                    data-target="#add-specific-user-permission-modal">+  {{ translate('Give employee a specific permission') }}</button>
                 </div>
                 @endif
             </h1>
@@ -337,15 +394,15 @@
 
                         <tbody id="table-div">
                             @foreach ($employees as $key => $employee)
-                                <tr>
+                                <tr id="tr-{{ $employee->id }}" data-id="{{ $employee->id }}">
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $employee->id }}</td>
-                                    <td>{{ $employee->name }}</td>
+                                    <td>{{ $employee->f_name." ".$employee->l_name }}</td>
                                     <td>{{ $employee->email }}</td>
                                     <td>{{ $employee->phone }}</td>
                                     <td>{{ $employee->getRoleNames()->first() }}</td>
                                     <td>
-                                        @if ($employee->getRoleNames()->first()==='Master admin')
+                                        @if ($employee->getRoleNames()->first()==='Master admin' && auth()->guard('admin')->user()->id==$employee->id)
                                             <span class="badge badge-danger">{{ translate('No Action') }}</span>
                                         @else
                                             @if (hasPermission(['role-update']))
@@ -353,7 +410,7 @@
                                             @endif
                                             @if (hasPermission(['role-delete']))
                                                 <button class="btn btn-danger px-1 py-1" href="javascript:" onclick="form_alert('employee-{{$employee->id}}','{{translate('messages.Want_to_delete_this_item')}}')" title="{{translate('messages.delete_item')}}"><i class="tio-delete-outlined"></i></button>
-                                                <form action="{{route("admin.business-settings.employee.employeeRoleEdit",[$employee->id])}}"
+                                                <form action="{{route("admin.business-settings.employee.employeeDestroy",[$employee->id])}}"
                                                         method="post" id="employee-{{$employee->id}}">
                                                     @csrf @method('delete')
                                                 </form>
@@ -414,8 +471,14 @@
         $(document).on('ready', function() {
             // INITIALIZATION OF SELECT2
             // =======================================================
-            $('.js-select2-custom').each(function() {
+            $('#add-specific-user-permission-modal .js-select2-custom').each(function() {
                 var select2 = $.HSCore.components.HSSelect2.init($(this));
+            });
+            $('#edit-user-modal .js-select2-custom').each(function() {
+                var select4 = $.HSCore.components.HSSelect2.init($(this));
+            });
+            $('#add-user-modal .js-select2-custom').each(function() {
+                var select3 = $.HSCore.components.HSSelect2.init($(this));
             });
 
             $('.js-validate').each(function() {
@@ -506,6 +569,10 @@
             width: 'resolve'
         });
 
+        
+
+
+
 
         // $('#add_user_form').submit(function(e){
         //     e.preventDefault();
@@ -513,6 +580,96 @@
         //     var formData = new FormData(this);
         //     console.log(formData);
         // })
+
+
+        // Show data on edit modal
+        $(document).on('click', '#edit_button', function () {
+            $('#edit_user_form').trigger('reset');
+            let user_id = $(this).closest('tr').data('id');
+            $.ajax({
+                type: "get",
+                url: "employee-edit/"+user_id,
+                dataType: 'JSON',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (data) {
+                    $('#edit_user_form #user_id').val(data.user.id);
+                    $('#edit_user_form #fname').val(data.user.f_name);
+                    $('#edit_user_form #lname').val(data.user.l_name);
+                    $('#edit_user_form #zone_id').val(data.user.zone_id);
+                    $('#edit_user_form #user_role').val(data.role).trigger('change');
+                    $('#edit_user_form #phone').val(data.user.phone);
+                },
+                error: function (err) {
+                    // console.log('Hello');
+                    var err_message = err.responseJSON.message.split("(");
+                    if(err.status===403){
+                        swal({
+                            icon: "warning",
+                            title: "Warning !",
+                            text: err_message[0],
+                            confirmButtonText: "Ok",
+                        }).then(function(){
+                            $('button[type=button]', '#edit_user_form').click();
+                        });
+                        
+                    }else{
+                        swal({
+                            icon: "warning",
+                            title: "Warning !",
+                            text: err_message[0],
+                            confirmButtonText: "Ok",
+                        });
+                    }
+                    
+                    
+                    
+                }
+            });
+
+        })
+
+
+        //specific permission
+        $('#add_specific_user_permission_form #user_id').change(function(){
+            if($(this).val()==''){
+                $('#add_specific_user_permission_form #role_and_permission').empty();
+            }else{
+                $('#add_specific_user_permission_form #role_and_permission').empty().append("{{ translate('getting_permissions.....') }}")
+                $.ajax({
+                    method:'GET',
+                    url : 'get-employee-with-permission/'+$(this).val(),
+                    success : function(data){
+                        $('#add_specific_user_permission_form #role_and_permission').empty();
+                        $.each(data.permissions,function(group,permission){
+                            let permissionList =[];
+                            $.each(permission,function(idx,item){
+                                let check = '';
+                                console.log('');
+                                if(data.userPermissions.includes(item.name)){
+                                    check = 'checked';
+                                }
+                                permissionList = permissionList+`<input data-status="" id="permission-switch" type="checkbox" data-toggle="switchery" data-color="green" data-secondary-color="red" data-size="small" value="${item.name}" name="permissions[]" ${check}/>
+                                <span class="mx-2">${item.name}</span>`;
+                            });
+                            $('#add_specific_user_permission_form #role_and_permission').append(`
+                                <div class="col-lg-12 mt-4">
+                                    <label for="user_permission">${group}</label><br>
+                                    ${permissionList}
+                                </div>
+                            `);
+                        });
+                        $('#add_specific_user_permission_form [data-toggle="switchery"]').each(function(idx, obj) {
+                            new Switchery($(this)[0], $(this).data());
+                        });
+                    },
+                    error : function(err){
+
+                    }
+                });
+            }
+        });
 
     </script>
 @endpush

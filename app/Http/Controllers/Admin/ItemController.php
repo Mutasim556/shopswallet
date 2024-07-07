@@ -39,6 +39,20 @@ use Illuminate\Support\Facades\Validator;
 
 class ItemController extends Controller
 {
+    public function __construct()
+    { 
+        $this->middleware('permission:grocery-product-create,admin')->only(['index','store']);
+        $this->middleware('permission:grocery-product-index,admin')->only(['list','edit','status','update']);
+        $this->middleware('permission:grocery-product-update,admin')->only(['edit','status','update']);
+        $this->middleware('permission:grocery-product-delete,admin')->only('delete');
+
+        $this->middleware('permission:country-origin-create,admin')->only(['countryoriginstore']);
+        $this->middleware('permission:country-origin-index,admin')->only(['countryorigin','countryoriginedit','countryoriginupdate','countryorigindelete']);
+        $this->middleware('permission:country-origin-update,admin')->only(['countryoriginedit','countryoriginupdate']);
+        $this->middleware('permission:country-origin-delete,admin')->only('countryorigindelete');
+        // $this->middleware('permission:specific-permission-create,admin')->only(['getUserPermission','giveUserPermission']);
+        
+    }
     public function index(Request $request)
     {
         $categories = Category::where(['position' => 0])->get();

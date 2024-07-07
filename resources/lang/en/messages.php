@@ -3984,4 +3984,9 @@
   'employee_details' => 'Employee details',
   'Edit User' => 'Edit User',
   'Give employee a specific permission' => 'Give employee a specific permission',
+  'getting_permissions.....' => 'Getting permissions.....',
+  'permission_sync_successfully' => 'Permission sync successfully',
+  'Forbidden' => 'Forbidden',
+  'User does not have the right permissions.' => 'User does not have the right permissions.',
+  'no_permission' => 'No permission',
 );

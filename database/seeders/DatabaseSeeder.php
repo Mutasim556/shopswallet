@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         //     UserSeeder::class
         // ]);
 
-        $this->call(AdminSeeder::class);
+        // $this->call(AdminSeeder::class);
+        $this->call(PermissionSeeder::class);
     }
 }

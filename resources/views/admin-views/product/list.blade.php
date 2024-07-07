@@ -442,18 +442,27 @@
                             </td>
                             @endif
                             <td>
+                                @if (hasPermission(['grocery-product-update']))
                                 <label class="toggle-switch toggle-switch-sm" for="stocksCheckbox{{$item->id}}">
                                     <input type="checkbox" onclick="location.href='{{route('admin.item.status',[$item['id'],$item->status?0:1])}}'"class="toggle-switch-input" id="stocksCheckbox{{$item->id}}" {{$item->status?'checked':''}}>
                                     <span class="toggle-switch-label mx-auto">
                                         <span class="toggle-switch-indicator"></span>
                                     </span>
                                 </label>
+                                @else
+                                <span class="badge badge-danger py-1">{{ translate('no_permission') }}</span>
+                                @endif
+                                
                             </td>
                             <td>
+                                @if (hasPermission(['grocery-product-update','grocery-product-delete']))
                                 <div class="btn--container justify-content-center">
+                                    @if (hasPermission(['grocery-product-update']))
                                     <a class="btn action-btn btn--primary btn-outline-primary"
                                         href="{{route('admin.item.edit',[$item['id']])}}" title="{{translate('messages.edit_item')}}"><i class="tio-edit"></i>
                                     </a>
+                                    @endif
+                                    @if (hasPermission(['grocery-product-delete']))
                                     <a class="btn  action-btn btn--danger btn-outline-danger" href="javascript:"
                                         onclick="form_alert('food-{{$item['id']}}','{{translate('messages.Want_to_delete_this_item')}}')" title="{{translate('messages.delete_item')}}"><i class="tio-delete-outlined"></i>
                                     </a>
@@ -461,7 +470,11 @@
                                             method="post" id="food-{{$item['id']}}">
                                         @csrf @method('delete')
                                     </form>
+                                    @endif
                                 </div>
+                                @else
+                                <span class="badge badge-danger py-1">{{ translate('no_permission') }}</span>
+                                @endif
                             </td>
                         </tr>
                     @endforeach

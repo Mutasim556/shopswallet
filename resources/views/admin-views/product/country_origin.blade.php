@@ -8,6 +8,7 @@
 @section('content')
     <div class="content container-fluid">
         <!-- Page Header -->
+        @if (hasPermission(['country-origin-create']))
         <div class="page-header">
             <h1 class="page-header-title">
                 <span class="page-header-icon">
@@ -18,11 +19,14 @@
                 </span>
             </h1>
         </div>
+        @endif
         @php($language = \App\Models\BusinessSetting::where('key', 'language')->first())
         @php($language = $language->value ?? null)
         @php($default_lang = str_replace('_', '-', app()->getLocale()))
         <!-- End Page Header -->
         <div class="row g-3">
+            @if (hasPermission(['country-origin-create']))
+           
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
@@ -89,7 +93,7 @@
                     </div>
                 </div>
             </div>
-
+            @endif
             <div class="col-12">
                 <div class="card">
                     <div class="card-header py-2 border-0">
@@ -181,22 +185,33 @@
                                             {{ $origin->module->module_name }}
                                         </td>
                                         <td>
+                                            
                                             <div class="btn--container justify-content-center">
-                                                <a class="btn action-btn btn--primary btn-outline-primary"
-                                                    href="{{ route('admin.item.country-origin-edit', [$origin['id']]) }}"
-                                                    title="{{ translate('messages.edit') }}"><i class="tio-edit"></i>
-                                                </a>
-                                                <a class="btn action-btn btn--danger btn-outline-danger"
-                                                    href="javascript:"
-                                                    onclick="form_alert('origin-{{ $origin['id'] }}','{{ translate('Want to delete this origin ?') }}')"
-                                                    title="{{ translate('messages.delete') }}"><i
-                                                        class="tio-delete-outlined"></i>
-                                                </a>
-                                                <form action="{{ route('admin.item.country-origin-delete', [$origin['id']]) }}"
-                                                    method="post" id="origin-{{ $origin['id'] }}">
-                                                    @csrf @method('delete')
-                                                </form>
+                                                @if (hasPermission(['country-origin-update','country-origin-delete']))
+                                                    @if (hasPermission(['country-origin-update']))
+                                                    <a class="btn action-btn btn--primary btn-outline-primary"
+                                                        href="{{ route('admin.item.country-origin-edit', [$origin['id']]) }}"
+                                                        title="{{ translate('messages.edit') }}"><i class="tio-edit"></i>
+                                                    </a>
+                                                    @endif
+                                                    @if (hasPermission(['country-origin-delete']))
+                                                    <a class="btn action-btn btn--danger btn-outline-danger"
+                                                        href="javascript:"
+                                                        onclick="form_alert('origin-{{ $origin['id'] }}','{{ translate('Want to delete this origin ?') }}')"
+                                                        title="{{ translate('messages.delete') }}"><i
+                                                            class="tio-delete-outlined"></i>
+                                                    </a>
+                                                    <form action="{{ route('admin.item.country-origin-delete', [$origin['id']]) }}"
+                                                        method="post" id="origin-{{ $origin['id'] }}">
+                                                        @csrf @method('delete')
+                                                    </form>
+                                                    
+                                                    @endif
+                                                @else
+                                                    <span class="badge badge-danger py-1 text-center">{{ translate('no_permission') }}</span>
+                                                @endif
                                             </div>
+                                            
                                         </td>
                                     </tr>
                                 @endforeach
