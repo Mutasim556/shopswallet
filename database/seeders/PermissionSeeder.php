@@ -30,5 +30,11 @@ class PermissionSeeder extends Seeder
         Permission::create(['guard_name'=>'admin','name'=>'country-origin-update','group_name'=>'Grocery Country-Origin Permissions']);
         Permission::create(['guard_name'=>'admin','name'=>'country-origin-delete','group_name'=>'Grocery Country-Origin Permissions']);
 
+        //grocery categories
+        Permission::create(['guard_name'=>'admin','name'=>'country-origin-index','group_name'=>'Grocery Country-Origin Permissions']);
+        Permission::create(['guard_name'=>'admin','name'=>'country-origin-create','group_name'=>'Grocery Country-Origin Permissions']);
+        Permission::create(['guard_name'=>'admin','name'=>'country-origin-update','group_name'=>'Grocery Country-Origin Permissions']);
+        Permission::create(['guard_name'=>'admin','name'=>'country-origin-delete','group_name'=>'Grocery Country-Origin Permissions']);
+
     }
 }
