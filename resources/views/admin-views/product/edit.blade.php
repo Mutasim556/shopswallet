@@ -91,6 +91,13 @@
                                     value="{{ $product?->getRawOriginal('name') }}" required
                                     oninvalid="document.getElementById('en-link').click()">
                             </div>
+                            <div class="form-group">
+                                <label class="input-label" for="primary_link">{{ translate('messages.Primary Link') }}
+                                </label>
+                                <input type="text" name="primary_link" id="primary_link" class="form-control"
+                                    placeholder="{{ translate('messages.URL') }}" value="{{ $product['primary_link'] }}"
+                                    oninvalid="document.getElementById('en-link').click()">
+                            </div>
                             <input type="hidden" name="lang[]" value="default">
                             <div class="form-group pt-2 mb-0">
                                 <label class="input-label" for="exampleFormControlInput1">{{

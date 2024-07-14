@@ -92,6 +92,13 @@
                                     placeholder="{{ translate('messages.new_item') }}" required
                                     oninvalid="document.getElementById('en-link').click()">
                             </div>
+                            <div class="form-group">
+                                <label class="input-label" for="primary_link">{{ translate('messages.Primary Link') }}
+                                </label>
+                                <input type="text" name="primary_link" id="primary_link" class="form-control"
+                                    placeholder="{{ translate('messages.URL') }}" 
+                                    oninvalid="document.getElementById('en-link').click()">
+                            </div>
                             <input type="hidden" name="lang[]" value="default">
                             <div class="form-group mb-0">
                                 <label class="input-label" for="exampleFormControlInput1">{{
@@ -103,7 +110,7 @@
 
                             <label class="input-label mt-2" for="exampleFormControlInput1">{{ translate('messages.disclaimer') }}
                                 ({{ translate('messages.default') }})</label>
-                            <textarea id="summernote" name="disclaimer[]" class="form-control summernote"></textarea>
+                            <textarea id="summernote" name="disclaimer[]" class="form-control summernote">{{ translate('The products details, information, ingredients, nutritional guides and dietary/allergy may change continually thus we recommend reading the products label. Bulk discounts shown are subject to continuous price changes and may not reflect the up to date selling price of individual units. Webginet Enterprise Pvt Ltd does not warrant the accuracy of the information in this website and is not responsible for any damages arising therefrom.') }}</textarea>
                         </div>
                         @foreach (json_decode($language) as $lang)
                         <div class="d-none lang_form" id="{{ $lang }}-form">

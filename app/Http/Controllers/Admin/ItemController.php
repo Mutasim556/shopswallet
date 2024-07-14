@@ -64,7 +64,7 @@ class ItemController extends Controller
        
         //  dd($request->all());
         $validator = Validator::make($request->all(), [
-            'name.0' => 'required',
+            'name.0' => 'required|unique:items,name',
             'name.*' => 'max:191',
             'category_id' => 'required',
             'image' => 'required_unless:product_gellary,1',
@@ -275,6 +275,7 @@ class ItemController extends Controller
         $item->maximum_cart_quantity = $request->maximum_cart_quantity;
         $item->special = $request->special?$request->special:0;
         $item->origin_id = $request->country_of_origin?$request->country_of_origin:0;
+        $item->primary_link = $request->primary_link;
         $item->veg = $request->veg;
         $item->module_id = Config::get('module.current_module_id');
         $item->brand_id = $request->brand?$request->brand:null;
@@ -680,6 +681,7 @@ class ItemController extends Controller
             $item->store_id = $request->store_id;
             $item->maximum_cart_quantity = $request->maximum_cart_quantity;
             // $item->module_id= $request->module_id;
+            $item->primary_link = $request->primary_link;
             $item->stock = $request->current_stock ?? 0;
             $item->organic = $request->organic ?? 0;
             $item->veg = $request->veg;

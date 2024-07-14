@@ -3989,4 +3989,7 @@
   'Forbidden' => 'Forbidden',
   'User does not have the right permissions.' => 'User does not have the right permissions.',
   'no_permission' => 'No permission',
+  'The products details, information, ingredients, nutritional guides and dietary/allergy may change continually thus we recommend reading the products label. Bulk discounts shown are subject to continuous price changes and may not reflect the up to date selling price of individual units. Webginet Enterprise Pvt Ltd does not warrant the accuracy of the information in this website and is not responsible for any damages arising therefrom.' => 'The products details  information  ingredients  nutritional guides and dietary/allergy may change continually thus we recommend reading the products label. Bulk discounts shown are subject to continuous price changes and may not reflect the up to date selling price of individual units. Webginet Enterprise Pvt Ltd does not warrant the accuracy of the information in this website and is not responsible for any damages arising therefrom.',
+  'Primary Link' => 'Primary Link',
+  'URL' => 'URL',
 );
