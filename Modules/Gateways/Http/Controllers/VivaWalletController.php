@@ -34,13 +34,13 @@ class VivaWalletController extends Controller
             $this->config_values = json_decode($config->test_values);
         }
 
-        if ($config) {
-            $this->client_id = $this->config_values->client_id;
-            $this->client_secret = $this->config_values->client_secret;
-            $this->source_code = $this->config_values->source_code;
-            $this->config_mode = ($config->mode == 'test') ? 'test' : 'live';
-            $this->token = base64_encode($this->client_id . ':' . $this->client_secret);
-        }
+        // if ($config) {
+        //     $this->client_id = $this->config_values->client_id;
+        //     $this->client_secret = $this->config_values->client_secret;
+        //     $this->source_code = $this->config_values->source_code;
+        //     $this->config_mode = ($config->mode == 'test') ? 'test' : 'live';
+        //     $this->token = base64_encode($this->client_id . ':' . $this->client_secret);
+        // }
 
         $this->payment = $payment;
     }

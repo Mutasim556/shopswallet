@@ -32,11 +32,11 @@ class InstamojoPaymentController extends Controller
             $this->config_values = json_decode($config->test_values);
         }
 
-        if ($config) {
-            $this->base_url = ($config->mode == 'test') ? 'https://test.instamojo.com' : 'https://api.instamojo.com';
-            $this->client_id = $this->config_values->client_id;
-            $this->client_secret = $this->config_values->client_secret;
-        }
+        // if ($config) {
+        //     $this->base_url = ($config->mode == 'test') ? 'https://test.instamojo.com' : 'https://api.instamojo.com';
+        //     $this->client_id = $this->config_values->client_id;
+        //     $this->client_secret = $this->config_values->client_secret;
+        // }
         $this->payment = $payment;
     }
 
