@@ -21,6 +21,6 @@ class Translation extends Model
 
     public function translationable()
     {
-        return $this->morphTo();
+        return $this->morphTo(); 
     }
 }

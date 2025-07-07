@@ -88,7 +88,7 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <small>{{translate('*Select Module Here')}}</small>
+                                <small>{{translate('*Select Module Here')}}</small> 
                             </div>
                         </div>
                         <form action="{{route('admin.business-settings.update-fcm-messages')}}" method="post"

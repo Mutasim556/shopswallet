@@ -530,7 +530,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::POST('email-setup/{type}/{tab?}', 'BusinessSettingsController@update_email_index')->name('email-setup');
             Route::get('email-status/{type}/{tab}/{status}', 'BusinessSettingsController@update_email_status')->name('email-status');
 
-            Route::get('toggle-settings/{key}/{value}', 'BusinessSettingsController@toggle_settings')->name('toggle-settings');
+            Route::get('toggle-settings/{key}/{value}', 'BusinessSettingsController@toggle_settings')->name('toggle-settings'); 
             Route::get('site_direction', 'BusinessSettingsController@site_direction')->name('site_direction');
 
 

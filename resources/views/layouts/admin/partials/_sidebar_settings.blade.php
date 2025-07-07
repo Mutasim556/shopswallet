@@ -287,7 +287,7 @@
                     </ul>
                 </li>
                 <!-- End Employee Management -->
-                @if(count(config('addon_admin_routes'))>0)
+                @if(count(config('addon_admin_routes'))>0) 
                     <li class="nav-item">
                         <small
                             class="nav-subtitle">{{translate('messages.addon_menus')}}</small>
